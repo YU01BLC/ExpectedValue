@@ -1,0 +1,394 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+---
+description: Reactプロジェクトのコーディング規約・設計ガイドライン
+globs: src/**/*
+---
+
+# 設計・構造ガイドライン
+
+- コンポーネントファイルは最大300行以内
+- ロジックの責務を明確に分離する
+- UIロジックはUIと密結合、業務ロジックはUIと疎結合
+- hooksの中にロジックを持たせない
+- Feature型ベースでディレクトリ管理
+- 再利用可能コンポーネントはFeature型のcomponents/atoms配下で管理
+
+## OK例
+```jsx
+const clickEvent = () => {
+  window.alert('hello world')
+}
+const styleProperty = {
+  display: 'flex',
+  height: '100vh'
+}
+return (
+  <Box sx={styleProperty}>
+    <Text onClick={clickEvent}>click!</Text>
+  </Box>
+)
+```
+
+## NG例
+```jsx
+return (
+  <Box sx={{ display: 'flex', height: '100vh' }}>
+    <Text onClick={() => { window.alert('hello world') }}>click!</Text>
+  </Box>
+)
+```
+
+# 関数定義
+- 原則アロー関数で定義
+- オブジェクトのメソッドはfunction構文で定義
+- 関数コンポーネントはReact.FCを使わずにアロー関数で定義する
+
+# 可読性ガイドライン
+
+- 抽象的な命名（data, value, item等）は避ける
+  - 一時的な受け皿としてのみ抽象名を使用し、すぐに具体名へ
+  - 抽象名をそのまま出力・返却・永続化する場合はNG
+  - 例: console.log(data), return item, localStorage.setItem('key', value) など
+- マジックナンバーを使用しない
+- 省略形（flg, func等）は禁止
+- camelCaseで命名
+- bool値の変数名はcan/has/isプレフィックスが付いている
+- 否定系の名前（isNotValid等）はNG
+
+## 命名OK例
+```jsx
+const data = await fetch();
+setUserList(data);
+```
+
+## 命名NG例
+```jsx
+const data = await fetch(); // 以降もdataのまま利用
+```
+
+# コメント
+- 関数説明はTSDoc形式で記載
+
+# テストガイドライン
+
+- カバレッジ80%以上
+- テストケースにはGIVEN/WHEN/THENを記載
+- 機能・コンポーネント視点でケース作成
+  - テストケースが複雑な場合は関数分割で対応
+- 1ロジック1テストを遵守
+  - 他関数を参照する場合は引数の数・値も担保し、出力や副作用は参照先のテストで担保
+- userEventを使用し、fireEventは禁止
+  - 実際のユーザー操作により近い形でテストを実行する
+- i18nテストでは本物のインスタンスを使用
+  - モックではなく`@i18n`から実際のインスタンスをインポート
+  - テキスト定義の変更に対して堅牢なテストを実現
+  - `I18nextProvider`でコンポーネントをラップして使用
+- MUIコンポーネントのモックは避ける
+  - 実際のコンポーネントを使用することで、アップデートによる変更を検知可能
+  - モックを使用すると、アップデートによる変更を検知できなくなる
+  - 必要な場合は最小限のモックにとどめる
+- テーマのモックは避ける
+  - 実際のテーマ設定（`@renderer/theme/theme`）を使用する
+  - カスタムテーマの定義やモックは避ける
+  - テーマの変更に追従できるよう、実際の設定を参照する
+- AIがテスト作成を実行する前に、テストケースを提示してユーザに承認をもらうこと。
+- テストファイルの表示確認ではハードコードテキストを使用する
+  - テスト対象の表示確認は実際にUIに表示される文字列を使用して行う
+  - screen.getByText('切り替える')のようにハードコードされた文字列で確認する
+  - i18nの翻訳キー（t('locationSelect.switch')）をテストで使用しない
+
+## i18nテストOK例
+```tsx
+import i18n from '@i18n';
+
+describe('多言語対応コンポーネント', () => {
+  it('正しく翻訳が表示されること', () => {
+    render(
+      <I18nextProvider i18n={i18n}>
+        <MyComponent />
+      </I18nextProvider>
+    );
+    expect(screen.getByText('実際の翻訳キー')).toBeInTheDocument();
+  });
+});
+```
+
+## i18nテストNG例
+```tsx
+// NG: モックi18nインスタンスを作成
+const createTestI18n = (initialLanguage = 'ja') => {
+  const i18n = i18next.createInstance();
+  i18n.init({
+    resources: {
+      ja: { translation: { key: 'モック翻訳' } }
+    }
+  });
+  return i18n;
+};
+```
+
+## MUIテストOK例
+```tsx
+describe('MenuComponent', () => {
+  it('メニューが正しく表示されること', () => {
+    render(
+      <ThemeProvider theme={theme}>
+        <Menu open={true}>
+          <MenuItem>メニュー項目1</MenuItem>
+          <MenuItem>メニュー項目2</MenuItem>
+        </Menu>
+      </ThemeProvider>
+    );
+    expect(screen.getByRole('menu')).toBeInTheDocument();
+  });
+});
+```
+
+## MUIテストNG例
+```tsx
+// NG: MUIコンポーネントをモック
+vi.mock('@mui/material', async () => {
+  const actual = await vi.importActual('@mui/material');
+  return {
+    ...actual,
+    Menu: ({ children, open }: any) => (
+      open ? <div role="menu">{children}</div> : null
+    ),
+    MenuItem: ({ children }: any) => (
+      <div role="menuitem">{children}</div>
+    ),
+  };
+});
+```
+
+## テストOK例
+```jsx
+// logMessageのテスト
+describe('logMessage関数', () => {
+  it('console.logが指定された引数で1回呼ばれること', () => {
+    // GIVEN
+    const consoleSpy = vi.spyOn(console, 'log');
+    // WHEN
+    logMessage('test');
+    // THEN
+    expect(consoleSpy).toHaveBeenCalledWith('test');
+    expect(consoleSpy).toHaveBeenCalledTimes(1);
+  });
+});
+// handleClickのテスト
+describe('handleClick関数', () => {
+  it('handleClick実行時にlogMessage関数が"hello world"で1回呼ばれること', () => {
+    // GIVEN
+    const messageSpy = vi.spyOn(functions, 'logMessage');
+    // WHEN
+    handleClick();
+    // THEN
+    expect(messageSpy).toHaveBeenCalledWith('hello world');
+    expect(messageSpy).toHaveBeenCalledTimes(1);
+  });
+});
+
+// userEventのテスト（推奨）
+describe('ボタンクリック処理', () => {
+  it('ボタンクリック時にhandleClickが呼ばれること', async () => {
+    // GIVEN
+    const user = userEvent.setup();
+    const mockHandleClick = vi.fn();
+    render(<Button onClick={mockHandleClick}>Click Me</Button>);
+    
+    // WHEN
+    await user.click(screen.getByRole('button'));
+    
+    // THEN
+    expect(mockHandleClick).toHaveBeenCalledOnce();
+  });
+});
+
+// ハードコードテキストを使用したテスト（推奨）
+describe('LocationSelectコンポーネント', () => {
+  it('切り替えボタンが正しく表示されること', () => {
+    // GIVEN
+    render(<LocationSelect />);
+    
+    // THEN - 実際に表示される文字列で確認
+    expect(screen.getByText('切り替える')).toBeInTheDocument();
+  });
+});
+```
+
+## テストNG例
+```jsx
+describe('handleClick関数', () => {
+  it('handleClick実行時にconsole.logが出力されること', () => {
+    const consoleSpy = vi.spyOn(console, 'log');
+    handleClick();
+    expect(consoleSpy).toHaveBeenCalledWith('hello world');
+  });
+});
+
+// fireEventの使用（禁止）
+describe('ボタンクリック処理', () => {
+  it('ボタンクリック時にhandleClickが呼ばれること', () => {
+    const mockHandleClick = vi.fn();
+    render(<Button onClick={mockHandleClick}>Click Me</Button>);
+    
+    // NG: fireEventは使用禁止
+    fireEvent.click(screen.getByRole('button'));
+    
+    expect(mockHandleClick).toHaveBeenCalledOnce();
+  });
+});
+
+// 翻訳キーを使用したテスト（禁止）
+describe('LocationSelectコンポーネント', () => {
+  it('切り替えボタンが表示されること', () => {
+    // NG: 翻訳キー使用
+    const { t } = useTranslation('home');
+    render(<LocationSelect />);
+    expect(screen.getByText(t('locationSelect.switch'))).toBeInTheDocument();
+  });
+});
+```
+
+# セキュリティ・堅牢性
+
+- any型禁止
+- interface/typeの使い分け（Props/Stateはinterface）
+- biome/lintエラー禁止
+- コンソール/ターミナルのerror/warning禁止
+
+# 実装上の注意点
+
+- グローバル変数禁止、Zustandのみ許可
+- 子が親のuseStateセッターを直接呼ぶのは制限（副作用や複雑なロジックがある場合はコールバック関数経由）
+  - セッター関数を渡して更新して良いケース：  
+    - 副作用が発生しない  
+    - 状態の更新ロジックがシンプル  
+    - 複数の状態や処理が発生する場合はコールバック関数経由
+- propsでのデータ受け渡しはコンポーネント ↔︎ 関数 1往復のみ許容（NG: コンポーネント ↔︎ 関数 ↔︎ 関数）
+- 3段階以上の条件分岐ネスト禁止
+- 冗長ロジックの回避
+
+# 非同期処理
+- Suspense必須
+- データ取得コンポーネントは必ず<Suspense>でラップ
+- フォールバックUIはロード状態を明示的に表現
+- use()またはuseActionStateで非同期処理を管理
+- 未処理のPromiseをコンポーネント内で直接待機禁止
+
+## NG例
+```jsx
+const data = await fetchData();
+```
+
+## OK例
+```jsx
+const data = use(fetchData()); // React 19のuse()でラップ
+```
+
+# フォームアクション規約
+- useActionStateの適用
+- フォーム状態とサーバーアクションを統合管理
+- エラー処理を組み込み
+
+# 楽観的更新
+- 不正な楽観的更新の伝播防止
+- ネットワークエラー時の状態整合性維持
+
+# 多言語対応ガイドライン
+
+- すべての表示テキストは翻訳キーを使用
+- 画像のalt属性も翻訳キーを使用
+- 翻訳キーは機能単位で階層化
+- 翻訳ファイルは言語ごとに分割
+- useTranslationでnamespaceを指定（エディタ上で名前が解決されるようになります）
+
+## OK例
+```tsx
+const { t } = useTranslation('header'); // namespaceを指定
+return <img alt={t('alt.home')} src={homeIcon} />;
+```
+
+## NG例
+```tsx
+const { t } = useTranslation(); // namespace未指定
+return <img alt={t('alt.home')} src={homeIcon} />;
+```
+
+## NG例
+```tsx
+return <img alt="ホーム" src={homeIcon} />;
+```
+
+# テーマ管理ガイドライン
+
+- カラーコードは直接指定せず、テーマから取得
+- カラーコードはpaletteで一元管理
+- ダークモード/ライトモードの切り替えはテーマで制御
+- カスタムカラーはpaletteを拡張して定義
+- fontSizeはsxではなくvariantで指定（元々の指定サイズに一致したvariantを使用）
+
+## fontSizeの指定
+
+- `src/renderer/theme/theme.ts`を参照すること
+- Typographyの`variant`propで指定する
+
+## OK例
+```tsx
+sx={{
+  color: theme.palette.primary.main,
+  background: theme.palette.sidebar.hover.light,
+}}
+
+// fontSizeはvariantで指定（元々のサイズに合わせる）
+<Typography variant="bodyLg">16px相当のテキスト</Typography>
+<Typography variant="bodyMd">14px相当のテキスト</Typography>
+<Button variant="contained">ボタン</Button>
+
+// CSS最適化OK例（不要な指定を避ける）
+<Box sx={{ display: 'flex' }}>  // flexはデフォルトでrow
+  <Typography>テキスト</Typography>  // colorは親から継承
+</Box>
+```
+
+## NG例
+```tsx
+sx={{
+  color: '#000000',
+  background: '#EFEFEF',
+  fontSize: '16px', // 直接指定はNG
+}}
+
+// sxでのfontSize指定もNG
+sx={{
+  fontSize: '16px',
+}}
+
+// サイズが一致しないvariant指定もNG
+<Typography variant="bodyMd">16px相当のテキスト</Typography> // 14pxになってしまう
+
+// CSS最適化NG例（不要な指定）
+<Box sx={{ display: 'flex', flexDirection: 'row' }}>  // rowはデフォルト値
+  <Typography sx={{ color: theme.palette.text.primary }}>テキスト</Typography>  // 親から継承可能
+</Box>
+```
+
+## コンポーネント定義OK例
+```tsx
+const MyComponent = ({ propA, propB }: Props) => {
+  return <div>{propA}</div>;
+};
+```
+
+## コンポーネント定義NG例
+```tsx
+const MyComponent: React.FC<Props> = ({ propA, propB }) => {
+  return <div>{propA}</div>;
+};
+```
+
+
