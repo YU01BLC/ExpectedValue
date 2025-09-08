@@ -1,107 +1,123 @@
 ---
-description: 
-globs: 
+description:
+globs:
 alwaysApply: true
 ---
+
 ---
-description: Reactプロジェクトのコーディング規約・設計ガイドライン
-globs: src/**/*
+
+description: React プロジェクトのコーディング規約・設計ガイドライン
+globs: src/\*_/_
+
 ---
 
 # 設計・構造ガイドライン
 
-- コンポーネントファイルは最大300行以内
+- プロジェクトのディレクトリ構成は`doc/directoryStructure.md`に準拠すること
+- コンポーネントファイルは最大 300 行以内
 - ロジックの責務を明確に分離する
-- UIロジックはUIと密結合、業務ロジックはUIと疎結合
-- hooksの中にロジックを持たせない
-- Feature型ベースでディレクトリ管理
-- 再利用可能コンポーネントはFeature型のcomponents/atoms配下で管理
+- UI ロジックは UI と密結合、業務ロジックは UI と疎結合
+- hooks の中にロジックを持たせない
+- Feature 型ベースでディレクトリ管理
+- 再利用可能コンポーネントは Feature 型の components/atoms 配下で管理
 
-## OK例
+## OK 例
+
 ```jsx
 const clickEvent = () => {
-  window.alert('hello world')
-}
+  window.alert('hello world');
+};
 const styleProperty = {
   display: 'flex',
-  height: '100vh'
-}
+  height: '100vh',
+};
 return (
   <Box sx={styleProperty}>
     <Text onClick={clickEvent}>click!</Text>
   </Box>
-)
+);
 ```
 
-## NG例
+## NG 例
+
 ```jsx
 return (
   <Box sx={{ display: 'flex', height: '100vh' }}>
-    <Text onClick={() => { window.alert('hello world') }}>click!</Text>
+    <Text
+      onClick={() => {
+        window.alert('hello world');
+      }}
+    >
+      click!
+    </Text>
   </Box>
-)
+);
 ```
 
 # 関数定義
+
 - 原則アロー関数で定義
-- オブジェクトのメソッドはfunction構文で定義
-- 関数コンポーネントはReact.FCを使わずにアロー関数で定義する
+- オブジェクトのメソッドは function 構文で定義
+- 関数コンポーネントは React.FC を使わずにアロー関数で定義する
 
 # 可読性ガイドライン
 
-- 抽象的な命名（data, value, item等）は避ける
+- 抽象的な命名（data, value, item 等）は避ける
   - 一時的な受け皿としてのみ抽象名を使用し、すぐに具体名へ
-  - 抽象名をそのまま出力・返却・永続化する場合はNG
+  - 抽象名をそのまま出力・返却・永続化する場合は NG
   - 例: console.log(data), return item, localStorage.setItem('key', value) など
 - マジックナンバーを使用しない
-- 省略形（flg, func等）は禁止
-- camelCaseで命名
-- bool値の変数名はcan/has/isプレフィックスが付いている
-- 否定系の名前（isNotValid等）はNG
+- 省略形（flg, func 等）は禁止
+- camelCase で命名
+- bool 値の変数名は can/has/is プレフィックスが付いている
+- 否定系の名前（isNotValid 等）は NG
 
-## 命名OK例
+## 命名 OK 例
+
 ```jsx
 const data = await fetch();
 setUserList(data);
 ```
 
-## 命名NG例
+## 命名 NG 例
+
 ```jsx
 const data = await fetch(); // 以降もdataのまま利用
 ```
 
 # コメント
-- 関数説明はTSDoc形式で記載
+
+- 関数説明は TSDoc 形式で記載
 
 # テストガイドライン
 
-- カバレッジ80%以上
-- テストケースにはGIVEN/WHEN/THENを記載
+- カバレッジ 80%以上
+- テストケースには GIVEN/WHEN/THEN を記載
 - 機能・コンポーネント視点でケース作成
   - テストケースが複雑な場合は関数分割で対応
-- 1ロジック1テストを遵守
+- 1 ロジック 1 テストを遵守
   - 他関数を参照する場合は引数の数・値も担保し、出力や副作用は参照先のテストで担保
-- userEventを使用し、fireEventは禁止
+- userEvent を使用し、fireEvent は禁止
   - 実際のユーザー操作により近い形でテストを実行する
-- i18nテストでは本物のインスタンスを使用
+- i18n テストでは本物のインスタンスを使用
   - モックではなく`@i18n`から実際のインスタンスをインポート
   - テキスト定義の変更に対して堅牢なテストを実現
   - `I18nextProvider`でコンポーネントをラップして使用
-- MUIコンポーネントのモックは避ける
-  - 実際のコンポーネントを使用することで、アップデートによる変更を検知可能
-  - モックを使用すると、アップデートによる変更を検知できなくなる
-  - 必要な場合は最小限のモックにとどめる
+- shadcn/ui コンポーネントのモックは避ける
+  - 実際のコンポーネントを使用してリグレッションを検知する
+  - 必要な場合は最小限のモックにとどめる（Radix のポータル等）
 - テーマのモックは避ける
   - 実際のテーマ設定（`@renderer/theme/theme`）を使用する
   - カスタムテーマの定義やモックは避ける
   - テーマの変更に追従できるよう、実際の設定を参照する
-- AIがテスト作成を実行する前に、テストケースを提示してユーザに承認をもらうこと。
+- AI がテスト作成を実行する前に、テストケースを提示してユーザに承認をもらうこと。
 - テストファイルの表示確認ではハードコードテキストを使用する
-  - テスト対象の表示確認は実際にUIに表示される文字列を使用して行う
+  - テスト対象の表示確認は実際に UI に表示される文字列を使用して行う
   - screen.getByText('切り替える')のようにハードコードされた文字列で確認する
-  - i18nの翻訳キー（t('locationSelect.switch')）をテストで使用しない
+  - i18n の翻訳キー（t('locationSelect.switch')）をテストで使用しない
 
-## i18nテストOK例
+## i18n テスト OK 例
+
 ```tsx
 import i18n from '@i18n';
 
@@ -117,55 +133,43 @@ describe('多言語対応コンポーネント', () => {
 });
 ```
 
-## i18nテストNG例
+## i18n テスト NG 例
+
 ```tsx
 // NG: モックi18nインスタンスを作成
 const createTestI18n = (initialLanguage = 'ja') => {
   const i18n = i18next.createInstance();
   i18n.init({
     resources: {
-      ja: { translation: { key: 'モック翻訳' } }
-    }
+      ja: { translation: { key: 'モック翻訳' } },
+    },
   });
   return i18n;
 };
 ```
 
-## MUIテストOK例
+## shadcn/ui テスト OK 例
+
 ```tsx
-describe('MenuComponent', () => {
-  it('メニューが正しく表示されること', () => {
-    render(
-      <ThemeProvider theme={theme}>
-        <Menu open={true}>
-          <MenuItem>メニュー項目1</MenuItem>
-          <MenuItem>メニュー項目2</MenuItem>
-        </Menu>
-      </ThemeProvider>
-    );
-    expect(screen.getByRole('menu')).toBeInTheDocument();
+describe('Button', () => {
+  it('variant=default で表示されること', () => {
+    render(<Button>送信</Button>);
+    expect(screen.getByRole('button', { name: '送信' })).toBeInTheDocument();
   });
 });
 ```
 
-## MUIテストNG例
+## shadcn/ui テスト NG 例
+
 ```tsx
-// NG: MUIコンポーネントをモック
-vi.mock('@mui/material', async () => {
-  const actual = await vi.importActual('@mui/material');
-  return {
-    ...actual,
-    Menu: ({ children, open }: any) => (
-      open ? <div role="menu">{children}</div> : null
-    ),
-    MenuItem: ({ children }: any) => (
-      <div role="menuitem">{children}</div>
-    ),
-  };
-});
+// NG: shadcn/ui をモック
+vi.mock('@/components/ui/button', () => ({
+  Button: ({ children }: any) => <button>{children}</button>,
+}));
 ```
 
-## テストOK例
+## テスト OK 例
+
 ```jsx
 // logMessageのテスト
 describe('logMessage関数', () => {
@@ -199,10 +203,10 @@ describe('ボタンクリック処理', () => {
     const user = userEvent.setup();
     const mockHandleClick = vi.fn();
     render(<Button onClick={mockHandleClick}>Click Me</Button>);
-    
+
     // WHEN
     await user.click(screen.getByRole('button'));
-    
+
     // THEN
     expect(mockHandleClick).toHaveBeenCalledOnce();
   });
@@ -213,14 +217,15 @@ describe('LocationSelectコンポーネント', () => {
   it('切り替えボタンが正しく表示されること', () => {
     // GIVEN
     render(<LocationSelect />);
-    
+
     // THEN - 実際に表示される文字列で確認
     expect(screen.getByText('切り替える')).toBeInTheDocument();
   });
 });
 ```
 
-## テストNG例
+## テスト NG 例
+
 ```jsx
 describe('handleClick関数', () => {
   it('handleClick実行時にconsole.logが出力されること', () => {
@@ -235,10 +240,10 @@ describe('ボタンクリック処理', () => {
   it('ボタンクリック時にhandleClickが呼ばれること', () => {
     const mockHandleClick = vi.fn();
     render(<Button onClick={mockHandleClick}>Click Me</Button>);
-    
+
     // NG: fireEventは使用禁止
     fireEvent.click(screen.getByRole('button'));
-    
+
     expect(mockHandleClick).toHaveBeenCalledOnce();
   });
 });
@@ -256,88 +261,106 @@ describe('LocationSelectコンポーネント', () => {
 
 # セキュリティ・堅牢性
 
-- any型禁止
-- interface/typeの使い分け（Props/Stateはinterface）
-- biome/lintエラー禁止
-- コンソール/ターミナルのerror/warning禁止
+- any 型禁止
+- interface/type の使い分け（Props/State は interface）
+- biome/lint エラー禁止
+- コンソール/ターミナルの error/warning 禁止
 
 # 実装上の注意点
 
-- グローバル変数禁止、Zustandのみ許可
-- 子が親のuseStateセッターを直接呼ぶのは制限（副作用や複雑なロジックがある場合はコールバック関数経由）
-  - セッター関数を渡して更新して良いケース：  
-    - 副作用が発生しない  
-    - 状態の更新ロジックがシンプル  
+- グローバル変数禁止、Zustand のみ許可
+- 子が親の useState セッターを直接呼ぶのは制限（副作用や複雑なロジックがある場合はコールバック関数経由）
+  - セッター関数を渡して更新して良いケース：
+    - 副作用が発生しない
+    - 状態の更新ロジックがシンプル
     - 複数の状態や処理が発生する場合はコールバック関数経由
-- propsでのデータ受け渡しはコンポーネント ↔︎ 関数 1往復のみ許容（NG: コンポーネント ↔︎ 関数 ↔︎ 関数）
-- 3段階以上の条件分岐ネスト禁止
+- props でのデータ受け渡しはコンポーネント ↔︎ 関数 1 往復のみ許容（NG: コンポーネント ↔︎ 関数 ↔︎ 関数）
+- 3 段階以上の条件分岐ネスト禁止
 - 冗長ロジックの回避
 
 # 非同期処理
-- Suspense必須
-- データ取得コンポーネントは必ず<Suspense>でラップ
-- フォールバックUIはロード状態を明示的に表現
-- use()またはuseActionStateで非同期処理を管理
-- 未処理のPromiseをコンポーネント内で直接待機禁止
 
-## NG例
+- Suspense 必須
+- データ取得コンポーネントは必ず<Suspense>でラップ
+- フォールバック UI はロード状態を明示的に表現
+- use()または useActionState で非同期処理を管理
+- 未処理の Promise をコンポーネント内で直接待機禁止
+
+## NG 例
+
 ```jsx
 const data = await fetchData();
 ```
 
-## OK例
+## OK 例
+
 ```jsx
 const data = use(fetchData()); // React 19のuse()でラップ
 ```
 
 # フォームアクション規約
-- useActionStateの適用
+
+- useActionState の適用
 - フォーム状態とサーバーアクションを統合管理
 - エラー処理を組み込み
 
 # 楽観的更新
+
 - 不正な楽観的更新の伝播防止
 - ネットワークエラー時の状態整合性維持
 
 # 多言語対応ガイドライン
 
 - すべての表示テキストは翻訳キーを使用
-- 画像のalt属性も翻訳キーを使用
+- 画像の alt 属性も翻訳キーを使用
 - 翻訳キーは機能単位で階層化
 - 翻訳ファイルは言語ごとに分割
-- useTranslationでnamespaceを指定（エディタ上で名前が解決されるようになります）
+- useTranslation で namespace を指定（エディタ上で名前が解決されるようになります）
 
-## OK例
+## OK 例
+
 ```tsx
 const { t } = useTranslation('header'); // namespaceを指定
 return <img alt={t('alt.home')} src={homeIcon} />;
 ```
 
-## NG例
+## NG 例
+
 ```tsx
 const { t } = useTranslation(); // namespace未指定
 return <img alt={t('alt.home')} src={homeIcon} />;
 ```
 
-## NG例
+## NG 例
+
 ```tsx
-return <img alt="ホーム" src={homeIcon} />;
+return <img alt='ホーム' src={homeIcon} />;
 ```
 
 # テーマ管理ガイドライン
 
 - カラーコードは直接指定せず、テーマから取得
-- カラーコードはpaletteで一元管理
+- カラーコードは palette で一元管理
 - ダークモード/ライトモードの切り替えはテーマで制御
-- カスタムカラーはpaletteを拡張して定義
-- fontSizeはsxではなくvariantで指定（元々の指定サイズに一致したvariantを使用）
+- カスタムカラーは palette を拡張して定義
+- fontSize は sx ではなく variant で指定（元々の指定サイズに一致した variant を使用）
 
-## fontSizeの指定
+## shadcn/ui 利用に関する指針
+
+- 公式サイトから取得したコンポーネントを`src/renderer/components/ui/`配下に配置
+- 付随ユーティリティ（`cn`）は`src/renderer/lib/utils.ts`の実装を使用
+- Radix コンポーネント利用時は`data-state`属性やフォーカスリングに配慮し、アクセシビリティを担保
+- variant/size は cva を用いてパターンを管理し、直接のクラス付与を避ける
+- 既存スタイルの上書きは`className`経由で行い、ベースの variant を尊重
+- カラートークンは Tailwind のカスタムテーマ（`tailwind.config.ts`）で一元管理し、直書きを避ける
+
+## fontSize の指定
 
 - `src/renderer/theme/theme.ts`を参照すること
-- Typographyの`variant`propで指定する
+- Typography の`variant`prop で指定する
 
-## OK例
+## OK 例
+
 ```tsx
 sx={{
   color: theme.palette.primary.main,
@@ -355,7 +378,8 @@ sx={{
 </Box>
 ```
 
-## NG例
+## NG 例
+
 ```tsx
 sx={{
   color: '#000000',
@@ -377,18 +401,18 @@ sx={{
 </Box>
 ```
 
-## コンポーネント定義OK例
+## コンポーネント定義 OK 例
+
 ```tsx
 const MyComponent = ({ propA, propB }: Props) => {
   return <div>{propA}</div>;
 };
 ```
 
-## コンポーネント定義NG例
+## コンポーネント定義 NG 例
+
 ```tsx
 const MyComponent: React.FC<Props> = ({ propA, propB }) => {
   return <div>{propA}</div>;
 };
 ```
-
-
