@@ -3,6 +3,11 @@ import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
+/**
+ * shadcn/uiのButton実装。
+ * - `cva`でvariant/sizeを管理し、`cn`でクラスを合成する。
+ * - `asChild`でRadix Slotに差し替え可能。
+ */
 const buttonVariants = cva(
   'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 disabled:pointer-events-none disabled:opacity-50',
   {

@@ -5,6 +5,11 @@ import Horses from '../pages/Horses.tsx';
 import Analysis from '../pages/Analysis.tsx';
 import History from '../pages/History.tsx';
 
+/**
+ * アプリ全体のルート定義。
+ * - Electron環境では`BrowserRouter`ではなく`createMemoryRouter`を使用する。
+ * - 各ページは`MainLayout`配下に描画され、グローバルな`Header`/`Sidebar`を共有する。
+ */
 export const router = createMemoryRouter([
   {
     path: '/',

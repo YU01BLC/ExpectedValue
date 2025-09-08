@@ -8,6 +8,10 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 
+/**
+ * 回収率推移のサンプルデータ。
+ * - グラフ描画のための暫定データ。
+ */
 const sampleData = [
   { t: '2025-08-01', rate: 95 },
   { t: '2025-08-08', rate: 102 },
@@ -16,6 +20,10 @@ const sampleData = [
   { t: '2025-08-29', rate: 98 },
 ];
 
+/**
+ * 期待値分析ページ。
+ * - 回収率推移の折れ線グラフを描画するデモ実装。
+ */
 const Analysis = () => {
   return (
     <div>

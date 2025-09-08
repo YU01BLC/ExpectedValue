@@ -1,6 +1,8 @@
 /**
  * React レンダラのエントリポイント。
- * React.StrictMode でアプリを DOM にマウントします。
+ * - Electron アプリのRendererプロセスで起動される。
+ * - ルーティングは`createMemoryRouter`を`src/routes`で構成し、本ファイルでは`RouterProvider`のみをマウントする。
+ * - `StrictMode`配下でアプリの副作用検知を有効にする。
  */
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';

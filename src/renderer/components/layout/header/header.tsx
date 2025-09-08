@@ -1,5 +1,9 @@
 import React from 'react';
 
+/**
+ * グローバルヘッダー。
+ * - アプリタイトルや将来的な操作領域（検索/ユーザー操作）を配置。
+ */
 export const Header = () => {
   return (
     <header className='h-14 bg-white border-b px-6 flex items-center justify-between'>

@@ -2,6 +2,10 @@ import type { ReactNode } from 'react';
 import { Sidebar } from './sidebar/Sidebar.tsx';
 import { Header } from './header/header';
 
+/**
+ * アプリ全体のレイアウト。
+ * - グローバル`Sidebar`と`Header`を配置し、メイン領域に子要素を描画する。
+ */
 interface MainLayoutProps {
   children: ReactNode;
 }

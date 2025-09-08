@@ -1,8 +1,16 @@
+/**
+ * 出走馬一覧（MVP用ダミーデータ）。
+ * - 将来的にはIPC/外部API経由のデータに置き換える想定。
+ */
 const mockData = [
   { num: 1, name: 'サンプルA', rank: 'A', prob: 0.32, odds: 1.8, ev: 0.95 },
   { num: 2, name: 'サンプルB', rank: 'S', prob: 0.18, odds: 7.2, ev: 1.3 },
 ];
 
+/**
+ * 馬一覧ページ。
+ * - ダミーデータのテーブル表示を行う。
+ */
 const Horses = () => {
   return (
     <div>

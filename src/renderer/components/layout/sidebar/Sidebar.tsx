@@ -1,5 +1,9 @@
 import { useNavigate } from 'react-router';
 
+/**
+ * グローバルサイドバー。
+ * - 主要ページへのナビゲーションを提供する。
+ */
 export const Sidebar = () => {
   const navigate = useNavigate();
   return (

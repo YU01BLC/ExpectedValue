@@ -1,5 +1,11 @@
 import { useNavigate } from 'react-router';
 
+/**
+ * ダッシュボード画面。
+ * - 概要テキストと機能ページへのショートカットを提供する。
+ * - Electronのメモリルーターに合わせ、`useNavigate`で遷移を行う。
+ */
+
 const Dashboard = () => {
   const navigate = useNavigate();
   return (
