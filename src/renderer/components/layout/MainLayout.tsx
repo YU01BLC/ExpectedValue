@@ -1,10 +1,8 @@
 import type { ReactNode } from 'react';
-import { Sidebar } from './sidebar/Sidebar.tsx';
-import { Header } from './header/header';
 
 /**
  * アプリ全体のレイアウト。
- * - グローバル`Sidebar`と`Header`を配置し、メイン領域に子要素を描画する。
+ * - シンプルな単一ページレイアウト（サイドバー・ヘッダーなし）
  */
 interface MainLayoutProps {
   children: ReactNode;
@@ -12,12 +10,14 @@ interface MainLayoutProps {
 
 export const MainLayout = ({ children }: MainLayoutProps) => {
   return (
-    <div className='flex h-screen'>
-      <Sidebar />
-      <div className='flex flex-1 flex-col'>
-        <Header />
-        <main className='flex-1 p-6 bg-gray-50'>{children}</main>
-      </div>
+    <div
+      className='min-h-screen text-foreground'
+      style={{
+        background: 'linear-gradient(180deg, #0f172a 0%, #1e293b 100%)',
+        padding: '32px 64px',
+      }}
+    >
+      <div className='mx-auto'>{children}</div>
     </div>
   );
 };
