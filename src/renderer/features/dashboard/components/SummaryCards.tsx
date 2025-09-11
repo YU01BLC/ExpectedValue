@@ -1,7 +1,7 @@
 import type { JSX } from 'react';
 import { ArrowUpRight, Wallet } from 'lucide-react';
-import { RichStatCard } from './RichStatCard';
-import { RecommendationsCard } from './RecommendationsCard';
+import { RichStatCard } from '@/components/ui/RichStatCard';
+import { RecommendationsCard } from '@/components/ui/RecommendationsCard';
 
 interface SummaryData {
   roi: number;

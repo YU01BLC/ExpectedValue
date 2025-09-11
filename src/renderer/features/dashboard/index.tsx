@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { JSX } from 'react';
-import { SummaryCards } from '@/features/dashboard/components/SummaryCards';
-import { ChartCard } from '@/features/dashboard/components/ChartCard';
+import { SummaryCards } from './components/SummaryCards';
+import { ChartCard } from './components/ChartCard';
 
 /**
  * ダッシュボードページ（単一ビュー）。

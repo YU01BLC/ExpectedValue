@@ -1,6 +1,6 @@
 import { createMemoryRouter } from 'react-router';
-import { MainLayout } from '@/components/layout/MainLayout.tsx';
-import Dashboard from '../renderer/features/dashboard/Dashboard.tsx';
+import { MainLayout } from '@/components/layout/MainLayout';
+import Dashboard from '@/features/dashboard/Dashboard';
 
 /**
  * アプリ全体のルート定義。
