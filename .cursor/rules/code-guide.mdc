@@ -345,59 +345,58 @@ return <img alt='ホーム' src={homeIcon} />;
 - カスタムカラーは palette を拡張して定義
 - fontSize は sx ではなく variant で指定（元々の指定サイズに一致した variant を使用）
 
-## shadcn/ui 利用に関する指針
+## MUI 利用に関する指針
 
-- 公式サイトから取得したコンポーネントを`src/renderer/components/ui/`配下に配置
-- 付随ユーティリティ（`cn`）は`src/renderer/lib/utils.ts`の実装を使用
-- Radix コンポーネント利用時は`data-state`属性やフォーカスリングに配慮し、アクセシビリティを担保
-- variant/size は cva を用いてパターンを管理し、直接のクラス付与を避ける
-- 既存スタイルの上書きは`className`経由で行い、ベースの variant を尊重
-- カラートークンは Tailwind のカスタムテーマ（`tailwind.config.ts`）で一元管理し、直書きを避ける
+- MUI コンポーネントは`@mui/material`から直接インポートして使用
+- カスタムコンポーネントは`src/renderer/components/ui/`配下に配置
+- `sx`プロパティを使用してスタイリングを行う
+- テーマカラーは`theme.palette`から取得し、直接カラーコードを指定しない
+- コンポーネントの`variant`や`size`プロパティを適切に活用する
+- アクセシビリティを考慮した実装を行う
 
-## fontSize の指定
+## MUI Typography の指定
 
-- `src/renderer/theme/theme.ts`を参照すること
-- Typography の`variant`prop で指定する
+- MUI の Typography コンポーネントを使用する
+- `variant`プロパティで適切なタイポグラフィスタイルを指定する
+- カスタムスタイルは`sx`プロパティで追加する
 
 ## OK 例
 
 ```tsx
-sx={{
-  color: theme.palette.primary.main,
-  background: theme.palette.sidebar.hover.light,
-}}
+// MUIコンポーネントの適切な使用
+<Typography variant="h6" sx={{ color: 'primary.main' }}>
+  タイトル
+</Typography>
 
-// fontSizeはvariantで指定（元々のサイズに合わせる）
-<Typography variant="bodyLg">16px相当のテキスト</Typography>
-<Typography variant="bodyMd">14px相当のテキスト</Typography>
-<Button variant="contained">ボタン</Button>
+<Button variant="contained" size="large">
+  ボタン
+</Button>
 
-// CSS最適化OK例（不要な指定を避ける）
-<Box sx={{ display: 'flex' }}>  // flexはデフォルトでrow
-  <Typography>テキスト</Typography>  // colorは親から継承
+<Box sx={{ display: 'flex', gap: 2 }}>
+  <Card sx={{ p: 2 }}>
+    <CardContent>
+      <Typography variant="body1">コンテンツ</Typography>
+    </CardContent>
+  </Card>
 </Box>
 ```
 
 ## NG 例
 
 ```tsx
-sx={{
-  color: '#000000',
-  background: '#EFEFEF',
-  fontSize: '16px', // 直接指定はNG
-}}
+// 直接カラーコード指定はNG
+<Typography sx={{ color: '#000000' }}>
+  テキスト
+</Typography>
 
-// sxでのfontSize指定もNG
-sx={{
-  fontSize: '16px',
-}}
+// 不適切なvariant使用
+<Typography variant="h1" sx={{ fontSize: '12px' }}>
+  小さなテキスト
+</Typography>
 
-// サイズが一致しないvariant指定もNG
-<Typography variant="bodyMd">16px相当のテキスト</Typography> // 14pxになってしまう
-
-// CSS最適化NG例（不要な指定）
-<Box sx={{ display: 'flex', flexDirection: 'row' }}>  // rowはデフォルト値
-  <Typography sx={{ color: theme.palette.text.primary }}>テキスト</Typography>  // 親から継承可能
+// 不要なスタイル指定
+<Box sx={{ display: 'flex', flexDirection: 'row' }}>
+  <Typography sx={{ color: 'inherit' }}>テキスト</Typography>
 </Box>
 ```
 
