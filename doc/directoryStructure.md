@@ -73,7 +73,7 @@ src/
 │ │ ├── useSidebar.ts # サイドバー状態管理フック
 │ │ ├── useAuth.ts # 認証関連フック
 │ │ └── **tests**/ # テストファイル
-│ │ └── useThemeColor.test.tsx
+│ │ │ └── useThemeColor.test.tsx
 │ │
 │ ├── utils/ # ユーティリティ関数 (Layer 型)
 │ │ ├── formatting.ts
@@ -110,7 +110,6 @@ src/
 │ │ └── theme.md # テーマ詳細ドキュメント
 │ │
 │ ├── App.tsx # レンダラーのルートコンポーネント
-│ ├── App.md # App 詳細ドキュメント
 │ ├── index.tsx # レンダラーのエントリーポイント
 │ └── **tests**/ # テストファイル
 │ └── App.test.tsx

@@ -1,0 +1,18 @@
+{
+  "summaryCards": {
+    "totalRoi": "Total ROI",
+    "profit": "Profit",
+    "recommendations": "Today's Recommendations",
+    "roiCaption": "Reference. Past period trends",
+    "profitCaption": "Check trends in the chart below"
+  },
+  "chart": {
+    "title": "ROI Trends",
+    "periods": {
+      "day": "Day",
+      "week": "Week",
+      "month": "Month",
+      "year": "Year"
+    }
+  }
+}

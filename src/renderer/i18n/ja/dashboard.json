@@ -1,0 +1,18 @@
+{
+  "summaryCards": {
+    "totalRoi": "総回収率",
+    "profit": "収支",
+    "recommendations": "本日のおすすめ",
+    "roiCaption": "参考。過去表示周期の推移",
+    "profitCaption": "推移を下のグラフで確認"
+  },
+  "chart": {
+    "title": "回収率推移",
+    "periods": {
+      "day": "日",
+      "week": "週",
+      "month": "月",
+      "year": "年"
+    }
+  }
+}
