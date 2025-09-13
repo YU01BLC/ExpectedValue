@@ -1,0 +1,38 @@
+name: PR Test
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [main]
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  test:
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    steps:
+      # リポジトリのコードをチェックアウト
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Node.jsの最新LTSバージョンをセットアップ
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: 'npm'
+
+      # プロジェクトの依存関係をインストール
+      - name: Install dependencies
+        run: npm ci
+
+      # リンターの実行
+      - name: Run linter
+        run: npm run lint
+
+      # Vitestテストの実行
+      - name: Run tests
+        run: npm run test

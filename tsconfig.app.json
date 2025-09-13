@@ -17,7 +17,8 @@
     "types": ["vite/client"],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/renderer/*"]
+      "@/*": ["src/renderer/*"],
+      "@renderer/*": ["src/renderer/*"]
     },
 
     /* Linting */

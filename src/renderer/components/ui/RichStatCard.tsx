@@ -1,6 +1,7 @@
 import { memo } from 'react';
 import type { JSX, ReactNode } from 'react';
-import { Card, CardContent } from '@mui/material';
+import { Card } from './atoms/Card';
+import { useThemeColor } from '@renderer/hooks/useThemeColor';
 
 interface RichStatCardProps {
   title: string;
@@ -11,7 +12,16 @@ interface RichStatCardProps {
 }
 
 /**
- * MUI製のリッチカード（ガラス風 / 角丸 / 強い影 / グラデ）
+ * 統計カードコンポーネント
+ *
+ * @description 共通Cardベースの統計表示カード
+ * @param props - コンポーネントのプロパティ
+ * @param props.title - カードタイトル
+ * @param props.icon - アイコン
+ * @param props.value - 表示値
+ * @param props.caption - キャプション（オプション）
+ * @param props.valueColor - 値の色（デフォルト: secondary.main）
+ * @returns JSX.Element
  */
 export const RichStatCard = memo(
   ({
@@ -19,83 +29,22 @@ export const RichStatCard = memo(
     icon,
     value,
     caption,
-    valueColor = '#22c55e',
+    valueColor = 'secondary.main',
   }: RichStatCardProps): JSX.Element => {
+    const resolvedColor = useThemeColor(valueColor, valueColor);
+
     return (
       <Card
-        elevation={0}
-        sx={{
-          position: 'relative',
-          overflow: 'hidden',
-          borderRadius: '28px',
-          p: 3.5,
-          minHeight: 168,
-          display: 'flex',
-          background:
-            'linear-gradient(180deg, rgba(30,41,59,0.72) 0%, rgba(30,41,59,0.46) 100%)',
-          backdropFilter: 'blur(10px)',
-          border: '1px solid rgba(148, 163, 184, .25)',
-          boxShadow: '0 18px 48px rgba(2,6,23,.55)',
-          color: '#e2e8f0',
+        title={title}
+        icon={icon}
+        mainValue={{
+          icon,
+          value,
+          iconColor: resolvedColor,
+          fontSize: 42,
         }}
-      >
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            pointerEvents: 'none',
-            background:
-              'linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0) 28%)',
-          }}
-        />
-        <CardContent
-          sx={{
-            p: 0,
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            gap: 1,
-          }}
-        >
-          <div style={{ marginBottom: 8 }}>
-            <div
-              style={{
-                fontSize: 24,
-                fontWeight: 600,
-                color: '#9fb0c7',
-                letterSpacing: 0.2,
-                marginBottom: 10,
-              }}
-            >
-              {title}
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <div
-                style={{
-                  width: 28,
-                  height: 28,
-                  borderRadius: 9999,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  background: `${valueColor}33`,
-                  color: valueColor,
-                }}
-              >
-                {icon}
-              </div>
-              <div style={{ fontSize: 64, fontWeight: 900, letterSpacing: -1 }}>
-                {value}
-              </div>
-            </div>
-          </div>
-          {caption ? (
-            <div style={{ fontSize: 12, color: '#aeb9c9', marginTop: 6 }}>
-              {caption}
-            </div>
-          ) : null}
-        </CardContent>
-      </Card>
+        caption={caption}
+      />
     );
   }
 );

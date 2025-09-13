@@ -24,19 +24,27 @@ src/
 │ ├── components/ # 共通コンポーネント (Layer 型)
 │ │ ├── ui/ # 純粋な UI コンポーネント
 │ │ │ ├── atoms/ # アプリ全体で共通利用する最小 UI パーツ
+│ │ │ │ ├── Card.tsx # 共通カードコンポーネント
+│ │ │ │ ├── **tests**/ # テストファイル
+│ │ │ │ │ └── Card.test.tsx
 │ │ │ │ ├── Button.tsx
 │ │ │ │ ├── Button.module.css # CSS Modules ファイル
 │ │ │ │ ├── Input.tsx
 │ │ │ │ ├── Input.module.css
 │ │ │ │ └── ... # 他の共通 atoms
-│ │ │ └── ... # 必要に応じて molecules/organisms 等
+│ │ │ ├── RichStatCard.tsx # リッチ統計カード
+│ │ │ ├── RichStatCard.md
+│ │ │ ├── RecommendationsCard.tsx # おすすめカード
+│ │ │ ├── RecommendationsCard.md
+│ │ │ ├── **tests**/ # テストファイル
+│ │ │ │ ├── RichStatCard.test.tsx
+│ │ │ │ └── RecommendationsCard.test.tsx
+│ │ │ └── index.ts # UI コンポーネントのエクスポート
 │ │ └── layout/ # 共通レイアウト
-│ │ ├── Sidebar.tsx # グローバルサイドバー
-│ │ ├── Sidebar.module.css
-│ │ ├── Header.tsx # グローバルヘッダー
-│ │ ├── Header.module.css
 │ │ ├── MainLayout.tsx # メインレイアウトラッパー
-│ │ └── MainLayout.module.css
+│ │ ├── MainLayout.md
+│ │ └── **tests**/ # テストファイル
+│ │ └── MainLayout.test.tsx
 │ │
 │ ├── features/ # 機能ごとのモジュール (Feature 型)
 │ │ ├── dashboard/ # ダッシュボード機能
@@ -44,19 +52,28 @@ src/
 │ │ │ │ ├── atoms/ # 機能固有の最小 UI パーツ
 │ │ │ │ │ ├── StatLabel.tsx
 │ │ │ │ │ └── StatLabel.module.css
-│ │ │ │ ├── Chart.tsx
-│ │ │ │ └── Chart.module.css
+│ │ │ │ ├── SummaryCards.tsx # サマリーカード群
+│ │ │ │ ├── SummaryCards.md
+│ │ │ │ ├── ChartCard.tsx # チャートカード
+│ │ │ │ ├── ChartCard.md
+│ │ │ │ └── **tests**/ # テストファイル
+│ │ │ │ ├── SummaryCards.test.tsx
+│ │ │ │ └── ChartCard.test.tsx
 │ │ │ ├── hooks/ # 機能固有フック
 │ │ │ │ └── useDashboardData.ts
-│ │ │ ├── index.tsx
+│ │ │ ├── index.tsx # ダッシュボードページ
+│ │ │ ├── index.md
 │ │ │ └── Dashboard.module.css
 │ │ │
 │ │ └── other... # 他の機能
 │ │ └── ...
 │ │
 │ ├── hooks/ # グローバルなカスタムフック (Layer 型)
+│ │ ├── useThemeColor.ts # テーマカラー解決フック
 │ │ ├── useSidebar.ts # サイドバー状態管理フック
-│ │ └── useAuth.ts # 認証関連フック
+│ │ ├── useAuth.ts # 認証関連フック
+│ │ └── **tests**/ # テストファイル
+│ │ │ └── useThemeColor.test.tsx
 │ │
 │ ├── utils/ # ユーティリティ関数 (Layer 型)
 │ │ ├── formatting.ts
@@ -67,15 +84,18 @@ src/
 │ │ └── api.ts # 外部 API 通信
 │ │
 │ ├── i18n/ # 国際化
+│ │ ├── index.ts # i18n 設定ファイル
+│ │ ├── index.md # i18n 詳細ドキュメント
 │ │ ├── en/ # 英語
 │ │ │ ├── common.json # namespace 共通
-│ │ │ └── home.json # namespace ホーム画面
-│ │ └── ja/
-│ │ ├── common.json
-│ │ └── home.json
+│ │ │ └── dashboard.json # namespace ダッシュボード
+│ │ └── ja/ # 日本語
+│ │ ├── common.json # namespace 共通
+│ │ └── dashboard.json # namespace ダッシュボード
 │ │
 │ ├── routes/ # ルーティング設定
-│ │ └── index.tsx
+│ │ ├── index.tsx # ルート定義
+│ │ └── index.md # ルート詳細ドキュメント
 │ │
 │ ├── store/ # 状態管理（Zustand）
 │ │ ├── slices/ # Slice 定義
@@ -85,8 +105,14 @@ src/
 │ │ ├── index.ts # Store 定義
 │ │ └── types.ts
 │ │
+│ ├── theme/ # テーマ管理
+│ │ ├── theme.ts # MUI テーマ設定
+│ │ └── theme.md # テーマ詳細ドキュメント
+│ │
 │ ├── App.tsx # レンダラーのルートコンポーネント
-│ └── index.tsx # レンダラーのエントリーポイント
+│ ├── index.tsx # レンダラーのエントリーポイント
+│ └── **tests**/ # テストファイル
+│ └── App.test.tsx
 │
 ├── shared/ # Main・Renderer 間で共有するコード
 │ ├── types/ # 共有型定義

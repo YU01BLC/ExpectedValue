@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { Box } from '@mui/material';
 
 /**
  * アプリ全体のレイアウト。
@@ -10,14 +11,15 @@ interface MainLayoutProps {
 
 export const MainLayout = ({ children }: MainLayoutProps) => {
   return (
-    <div
-      className='min-h-screen text-foreground'
-      style={{
+    <Box
+      sx={{
+        minHeight: '100vh',
+        color: 'text.primary',
         background: 'linear-gradient(180deg, #0f172a 0%, #1e293b 100%)',
-        padding: '32px 64px',
+        padding: { xs: 2, md: 4, lg: 8 },
       }}
     >
-      <div className='mx-auto'>{children}</div>
-    </div>
+      <Box sx={{ mx: 'auto' }}>{children}</Box>
+    </Box>
   );
 };

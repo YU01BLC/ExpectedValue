@@ -66,7 +66,9 @@ const createWindow = () => {
       if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
         shell.openExternal(url);
       }
-    } catch {}
+    } catch {
+      // URL解析に失敗した場合は無視
+    }
     return { action: 'deny' };
   });
 
