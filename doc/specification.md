@@ -191,4 +191,5 @@
 - [x] MUI コンポーネントテスト
 - [x] userEvent を使用したユーザー操作テスト
 
-![画面デザイン（参考）](../src/assets/design.png)
+![ダッシュボードデザイン](../src/assets/dashboard.png)
+![出馬リストモーダルデザイン](../src/assets//listModal.png)

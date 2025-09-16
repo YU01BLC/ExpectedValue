@@ -111,4 +111,23 @@ describe('useThemeColor', () => {
     // THEN
     expect(result.current).toBe('background');
   });
+
+  it('パレット値がnullの場合、カラーコードとして返されること', () => {
+    // GIVEN
+    const customTheme = createTheme({
+      palette: {
+        custom: null as never,
+      },
+    });
+    const wrapper = ({ children }: { children: React.ReactNode }) => (
+      <ThemeProvider theme={customTheme}>{children}</ThemeProvider>
+    );
+    const colorKey = 'custom';
+
+    // WHEN
+    const { result } = renderHook(() => useThemeColor(colorKey), { wrapper });
+
+    // THEN
+    expect(result.current).toBe('custom');
+  });
 });

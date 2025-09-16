@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import type { JSX } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Box, Typography } from '@mui/material';
 import { SummaryCards } from './components/SummaryCards';
 import { ChartCard } from './components/ChartCard';
+import { SearchArea, type SearchFilters } from '@/components/ui';
+import { RaceAnalysisModal } from '../raceAnalysis';
 
 /**
  * ダッシュボードページ（単一ビュー）
@@ -32,6 +35,12 @@ const Dashboard = (): JSX.Element => {
   const [period, setPeriod] = useState<'day' | 'week' | 'month' | 'year'>(
     DEFAULT_PERIOD
   );
+  const [searchFilters, setSearchFilters] = useState<SearchFilters>({
+    date: null,
+    venue: 'tokyo',
+    raceNumber: 1,
+  });
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const dashboardSummaryData: Record<
     'day' | 'week' | 'month' | 'year',
@@ -125,14 +134,51 @@ const Dashboard = (): JSX.Element => {
     ],
   };
 
+  const handleSearchClick = () => {
+    // TODO: 実際の検索処理を実装
+    setIsModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <div>
-      <header className='mb-8'>
-        <h1 className='text-6xl font-black tracking-tight mb-2'>
+      <Box
+        component='header'
+        sx={{
+          mb: 4,
+        }}
+      >
+        <Typography
+          variant='h2'
+          sx={{
+            fontSize: { xs: '2.5rem', md: '3.75rem' },
+            fontWeight: 900,
+            letterSpacing: '-0.025em',
+            mb: 1,
+            color: 'text.primary',
+          }}
+        >
           {t('common:app.title')}
-        </h1>
-        <p className='text-slate-300'>{t('common:app.subtitle')}</p>
-      </header>
+        </Typography>
+        <Typography
+          variant='body1'
+          sx={{
+            color: 'text.secondary',
+            fontSize: '1.125rem',
+          }}
+        >
+          {t('common:app.subtitle')}
+        </Typography>
+      </Box>
+
+      <SearchArea
+        onFiltersChange={setSearchFilters}
+        onSearchClick={handleSearchClick}
+        initialFilters={searchFilters}
+      />
 
       <SummaryCards
         summaryData={dashboardSummaryData[period]}
@@ -144,6 +190,8 @@ const Dashboard = (): JSX.Element => {
         period={period}
         onPeriodChange={setPeriod}
       />
+
+      <RaceAnalysisModal open={isModalOpen} onClose={handleModalClose} />
     </div>
   );
 };

@@ -2,5 +2,40 @@
   "app": {
     "title": "Expected Value Tracker",
     "subtitle": "Dashboard to maximize return rate"
+  },
+  "modal": {
+    "close": "Close",
+    "raceList": "Race List",
+    "raceAnalysis": "Race Analysis Modal",
+    "allHorseDiagnosis": "All Horse Diagnosis",
+    "recommendedBets": "Recommended Bets"
+  },
+  "table": {
+    "horseName": "Horse Name",
+    "evaluation": "Evaluation",
+    "winRate": "Win Rate %",
+    "odds": "Odds",
+    "evValue": "EV Value",
+    "recommendation": "Recommendation",
+    "comment": "Comment",
+    "gateNumber": "Gate Number",
+    "horseNumber": "Horse Number",
+    "expectedValue": "Expected Value"
+  },
+  "chart": {
+    "title": "Race Analysis Chart",
+    "courseTendency": "Course Tendency",
+    "legQualityDistribution": "Leg Quality Distribution",
+    "pedigreeAptitude": "Pedigree Aptitude",
+    "winRateOdds": "Win Rate × Odds",
+    "expectedValueOdds": "Expected Value × Odds",
+    "winRate": "Win Rate",
+    "odds": "Odds",
+    "expectedValue": "Expected Value"
+  },
+  "bet": {
+    "single": "Single",
+    "quinella": "Quinella",
+    "trio": "Trio"
   }
 }

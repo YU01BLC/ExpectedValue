@@ -52,6 +52,26 @@ const customColors = {
     800: '#1e293b',
     900: '#0f172a',
   },
+  // 評価カラー
+  evaluation: {
+    S: '#4CAF50', // 緑
+    A: '#2196F3', // 青
+    B: '#FF9800', // オレンジ
+    C: '#FF5722', // 赤
+    D: '#9E9E9E', // グレー
+  },
+  // 枠番カラー（netkeiba風）
+  gate: {
+    1: { bg: '#FFFFFF', text: '#000000' }, // 白
+    2: { bg: '#000000', text: '#FFFFFF' }, // 黒
+    3: { bg: '#FF0000', text: '#FFFFFF' }, // 赤
+    4: { bg: '#0000FF', text: '#FFFFFF' }, // 青
+    5: { bg: '#FFFF00', text: '#000000' }, // 黄
+    6: { bg: '#00FF00', text: '#000000' }, // 緑
+    7: { bg: '#FFA500', text: '#FFFFFF' }, // オレンジ
+    8: { bg: '#FF69B4', text: '#FFFFFF' }, // ピンク
+    default: { bg: '#E0E0E0', text: '#2D3436' }, // グレー
+  },
 } as const;
 
 /**
@@ -87,6 +107,16 @@ export const createAppTheme = () => {
       text: {
         primary: customColors.slate[200],
         secondary: customColors.slate[400],
+      },
+      // カスタムカラーをpaletteに追加
+      evaluation: customColors.evaluation,
+      gate: customColors.gate,
+      // チャート用カラー
+      chart: {
+        success: customColors.green[500],
+        warning: customColors.red[400],
+        info: customColors.blue[400],
+        purple: '#9C27B0',
       },
     },
     typography: {
