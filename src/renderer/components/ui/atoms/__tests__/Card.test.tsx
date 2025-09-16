@@ -186,4 +186,73 @@ describe('Card', () => {
     expect(screen.getByTestId('action-button')).toBeInTheDocument();
     expect(screen.getByText('コンテンツ')).toBeInTheDocument();
   });
+
+  it('カスタムiconColorが適用されること', () => {
+    // GIVEN
+    const mainValue = {
+      value: '100',
+      unit: '%',
+      icon: '📊',
+      iconColor: '#FF5722',
+    };
+
+    // WHEN
+    renderWithTheme(
+      <Card mainValue={mainValue}>
+        <div>コンテンツ</div>
+      </Card>
+    );
+
+    // THEN
+    const iconElement = screen.getByText('📊');
+    expect(iconElement).toHaveStyle({
+      color: '#FF5722',
+      background: '#FF572233',
+    });
+  });
+
+  it('classNameプロパティが適用されること', () => {
+    // GIVEN
+    const mainValue = {
+      value: '100',
+      unit: '%',
+      icon: '📊',
+    };
+
+    // WHEN
+    renderWithTheme(
+      <Card mainValue={mainValue} className='custom-card'>
+        <div>コンテンツ</div>
+      </Card>
+    );
+
+    // THEN
+    const cardElement = screen
+      .getByText('コンテンツ')
+      .closest('[class*="MuiCard-root"]');
+    expect(cardElement).toHaveClass('custom-card');
+  });
+
+  it('アイコンカラーが未定義の場合にデフォルトカラーが適用されること', () => {
+    // GIVEN
+    const mainValue = {
+      value: '100',
+      unit: '%',
+      icon: '📊',
+      // iconColorは未定義
+    };
+
+    // WHEN
+    renderWithTheme(
+      <Card mainValue={mainValue}>
+        <div>コンテンツ</div>
+      </Card>
+    );
+
+    // THEN
+    const iconElement = screen.getByText('📊');
+    expect(iconElement).toHaveStyle({
+      color: 'rgb(96, 165, 250)', // primary.mainの実際の値
+    });
+  });
 });

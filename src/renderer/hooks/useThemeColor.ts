@@ -14,7 +14,8 @@ const isValidPaletteKey = (
   if (!paletteValue || typeof paletteValue !== 'object') return false;
 
   return (
-    'main' in paletteValue && typeof (paletteValue as any).main === 'string'
+    'main' in paletteValue &&
+    typeof (paletteValue as { main: string }).main === 'string'
   );
 };
 

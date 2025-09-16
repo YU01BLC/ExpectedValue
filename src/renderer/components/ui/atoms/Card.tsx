@@ -89,6 +89,7 @@ export const Card = memo(
         elevation={elevation}
         onClick={onClick}
         role={onClick ? 'button' : undefined}
+        className={className}
         sx={{
           position: 'relative',
           overflow: 'hidden',
@@ -111,7 +112,6 @@ export const Card = memo(
               }
             : {},
           ...sx,
-          ...(className && { className }),
         }}
       >
         {/* ガラス効果のオーバーレイ */}

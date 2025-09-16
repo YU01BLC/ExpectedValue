@@ -2,5 +2,40 @@
   "app": {
     "title": "Expected Value Tracker",
     "subtitle": "回収率を最大化するためのダッシュボード"
+  },
+  "modal": {
+    "close": "閉じる",
+    "raceList": "レース一覧",
+    "raceAnalysis": "レース分析モーダル",
+    "allHorseDiagnosis": "全頭診断",
+    "recommendedBets": "推奨買い目"
+  },
+  "table": {
+    "horseName": "馬名",
+    "evaluation": "評価",
+    "winRate": "勝率%",
+    "odds": "オッズ",
+    "evValue": "EV値",
+    "recommendation": "推奨",
+    "comment": "コメント",
+    "gateNumber": "枠番",
+    "horseNumber": "馬番",
+    "expectedValue": "期待値"
+  },
+  "chart": {
+    "title": "レース分析チャート",
+    "courseTendency": "コース傾向",
+    "legQualityDistribution": "脚質分布",
+    "pedigreeAptitude": "血統適性",
+    "winRateOdds": "勝率 × オッズ",
+    "expectedValueOdds": "期待値 × オッズ",
+    "winRate": "勝率",
+    "odds": "オッズ",
+    "expectedValue": "期待値"
+  },
+  "bet": {
+    "single": "単勝",
+    "quinella": "馬連",
+    "trio": "3連複"
   }
 }
