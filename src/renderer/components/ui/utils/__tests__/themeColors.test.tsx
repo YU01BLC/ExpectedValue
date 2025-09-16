@@ -1,5 +1,3 @@
-import { render } from '@testing-library/react';
-import { ThemeProvider } from '@mui/material/styles';
 import { createTheme } from '@mui/material/styles';
 import {
   getChartColors,

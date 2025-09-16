@@ -215,7 +215,7 @@ describe('RaceTable', () => {
     // GIVEN
     const propsWithInvalidSort = {
       ...defaultProps,
-      sortField: 'invalidField' as any,
+      sortField: 'invalidField' as never,
       sortDirection: 'asc' as const,
     };
 

@@ -116,7 +116,7 @@ describe('useThemeColor', () => {
     // GIVEN
     const customTheme = createTheme({
       palette: {
-        custom: null as any,
+        custom: null as never,
       },
     });
     const wrapper = ({ children }: { children: React.ReactNode }) => (
