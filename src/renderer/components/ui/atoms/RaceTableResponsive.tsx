@@ -1,6 +1,5 @@
 import { type JSX, useMemo, useState } from 'react';
 import { Table, TableContainer, Paper, Box } from '@mui/material';
-import { useTranslation } from 'react-i18next';
 import type { RaceTableProps, HorseData } from './types/raceTable';
 import { sortHorseData } from './utils/raceTableUtils';
 import { HorseDetailModal } from './modals/HorseDetailModal';
@@ -19,7 +18,6 @@ export const RaceTableResponsive = ({
   sortDirection,
   onSort,
 }: RaceTableProps): JSX.Element => {
-  const { t } = useTranslation('common');
   const [selectedHorse, setSelectedHorse] = useState<HorseData | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
 

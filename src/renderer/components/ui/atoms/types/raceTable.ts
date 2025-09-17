@@ -1,5 +1,3 @@
-import { type Theme } from '@mui/material';
-
 // ソートの型定義
 export type SortField =
   | 'horseNumber'
