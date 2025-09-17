@@ -2,7 +2,7 @@
 
 ## 概要
 
-`App.tsx`は、Electron アプリケーションの Renderer プロセスにおける**ルートプロバイダコンポーネント**です。アプリ全体の共通プロバイダ（Suspense、将来的には ThemeProvider、i18nProvider など）を集約し、すべてのページコンポーネントに共通の機能を提供します。
+`App.tsx`は、Electron アプリケーションの Renderer プロセスにおける**ルートプロバイダコンポーネント**です。アプリ全体の共通プロバイダ（ThemeProvider、i18nProvider、Suspense など）を集約し、すべてのページコンポーネントに共通の機能を提供します。
 
 ## なぜこのコンポーネントが必要なのか？
 
@@ -75,17 +75,15 @@ const AppProviders = ({ children }: AppProvidersProps) => {
 </AppProviders>
 ```
 
-### 将来の拡張例
+### 現在の実装
 
 ```typescript
-// 将来的な拡張例
+// 現在の実装
 const AppProviders = ({ children }: AppProvidersProps) => {
   return (
-    <ThemeProvider>
+    <ThemeProvider theme={theme}>
       <I18nextProvider i18n={i18n}>
-        <ErrorBoundary>
-          <Suspense fallback={<LoadingSpinner />}>{children}</Suspense>
-        </ErrorBoundary>
+        <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
       </I18nextProvider>
     </ThemeProvider>
   );
@@ -123,8 +121,8 @@ const AppProviders = ({ children }: AppProvidersProps) => {
 
 ### 3. エラーハンドリング
 
-- 現在はエラーバウンダリが未実装
-- 将来的には`ErrorBoundary`コンポーネントでラップする予定
+- 現在は基本的なエラーハンドリングを実装
+- 必要に応じて`ErrorBoundary`コンポーネントでラップすることを検討
 
 ## 関連ファイル
 
