@@ -3,12 +3,7 @@ import { Box, Typography } from '@mui/material';
 import Grid from '@mui/material/GridLegacy';
 import { useTheme } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import {
-  PieChartCard,
-  RadarChartCard,
-  ScatterChartCard,
-  DualScatterChartCard,
-} from '../charts';
+import { PieChartCard, RadarChartCard, DualScatterChartCard } from '../charts';
 import { getChartColors, getGradientColors } from '../utils/themeColors';
 import type { HorseData } from './RaceTable';
 
@@ -284,13 +279,9 @@ export const RaceCharts = ({ horseData }: RaceChartsProps): JSX.Element => {
           <DualScatterChartCard
             title='期待値×評価分析'
             leftData={scatterData}
-            rightData={[]}
-            leftTitle='期待値×評価'
-            rightTitle=''
             xAxisName='期待値'
             yAxisName='評価'
             leftColor={colors.primary}
-            rightColor={colors.secondary}
           />
         </Grid>
       </Grid>

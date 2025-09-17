@@ -1,15 +1,13 @@
 import { type JSX } from 'react';
 import {
   ScatterChart,
-  Scatter,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  Cell,
 } from 'recharts';
-import { useTheme, Box, Typography } from '@mui/material';
+import { useTheme, Box } from '@mui/material';
 import { ChartCard } from './ChartCard';
 import { getGateColor } from '../utils/themeColors';
 
@@ -25,32 +23,27 @@ interface ScatterData {
 interface DualScatterChartCardProps {
   title: string;
   leftData: ScatterData[];
-  rightData: ScatterData[];
-  leftTitle: string;
-  rightTitle: string;
   xAxisName: string;
   yAxisName: string;
   leftColor: string;
-  rightColor: string;
-  height?: number;
 }
 
 export const DualScatterChartCard = ({
   title,
   leftData,
-  rightData,
-  leftTitle,
-  rightTitle,
   xAxisName,
   yAxisName,
   leftColor,
-  rightColor,
-  height = 600,
 }: DualScatterChartCardProps): JSX.Element => {
   const theme = useTheme();
 
   // 内訳データを空にしてチャートエリアを広げる
-  const breakdownData: any[] = [];
+  const breakdownData: {
+    name: string;
+    value: string | number;
+    color?: string;
+    horses?: { number: number; name: string }[];
+  }[] = [];
 
   // データポイントの位置に基づいて動的に高さを計算
   const calculateDynamicHeight = () => {
@@ -205,7 +198,7 @@ export const DualScatterChartCard = ({
                         tooltip.style.top = e.clientY - 10 + 'px';
                       };
 
-                      updatePosition(e as any);
+                      updatePosition(e as unknown as MouseEvent);
                       document.addEventListener('mousemove', updatePosition);
 
                       const cleanup = () => {

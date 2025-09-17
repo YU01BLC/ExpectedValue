@@ -1,6 +1,5 @@
 import { type JSX } from 'react';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
-import { useTheme } from '@mui/material';
 import { ChartCard } from './ChartCard';
 
 interface PieChartData {
@@ -23,8 +22,6 @@ export const PieChartCard = ({
   color,
   height = 600,
 }: PieChartCardProps): JSX.Element => {
-  const theme = useTheme();
-
   // 内訳データの変換
   const breakdownData = data.map((item) => ({
     name: item.name,
