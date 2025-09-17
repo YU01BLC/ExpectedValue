@@ -11,9 +11,9 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import {
-  RaceTable,
+  RaceTableResponsive,
   type HorseData,
-} from '../../../components/ui/atoms/RaceTable';
+} from '../../../components/ui/atoms/RaceTableResponsive';
 import { RaceCharts } from '../../../components/ui/atoms/RaceCharts';
 import {
   RecommendedBets,
@@ -156,17 +156,18 @@ export const RaceAnalysisModal = ({
       onClose={onClose}
       maxWidth={false}
       fullWidth
+      fullScreen={{ xs: true, sm: true, md: false }}
       slotProps={{
         paper: {
           sx: {
-            borderRadius: 2,
+            borderRadius: { xs: 0, sm: 0, md: 2 },
             background:
               'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
             backdropFilter: 'blur(10px)',
             border: '1px solid rgba(255,255,255,0.1)',
-            maxHeight: '95vh',
-            width: '95vw',
-            maxWidth: '95vw',
+            maxHeight: { xs: '100vh', sm: '100vh', md: '95vh' },
+            width: { xs: '100vw', sm: '100vw', md: '95vw' },
+            maxWidth: { xs: '100vw', sm: '100vw', md: '95vw' },
           },
         },
       }}
@@ -195,13 +196,23 @@ export const RaceAnalysisModal = ({
         </IconButton>
       </DialogTitle>
 
-      <DialogContent sx={{ p: 4, maxHeight: '85vh', overflow: 'auto' }}>
+      <DialogContent
+        sx={{
+          p: { xs: 2, sm: 3, md: 4 },
+          maxHeight: {
+            xs: 'calc(100vh - 80px)',
+            sm: 'calc(100vh - 80px)',
+            md: '85vh',
+          },
+          overflow: 'auto',
+        }}
+      >
         {/* 全頭診断テーブル */}
         <Box sx={{ mb: 4 }}>
           <Typography variant='h6' sx={{ mb: 2, color: 'text.primary' }}>
             全頭診断
           </Typography>
-          <RaceTable
+          <RaceTableResponsive
             horseData={mockHorseData}
             sortField={sortField}
             sortDirection={sortDirection}
@@ -216,7 +227,7 @@ export const RaceAnalysisModal = ({
         <RecommendedBets recommendedBets={mockRecommendedBets} />
       </DialogContent>
 
-      <DialogActions sx={{ p: 2, pt: 1 }}>
+      <DialogActions sx={{ p: { xs: 2, sm: 2, md: 2 }, pt: 1 }}>
         <Button
           onClick={onClose}
           variant='contained'

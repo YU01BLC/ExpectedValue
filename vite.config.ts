@@ -14,4 +14,10 @@ export default defineConfig({
       '@/assets': path.resolve(__dirname, 'src/assets'),
     },
   },
+  server: {
+    headers: {
+      'Content-Security-Policy':
+        "script-src 'self' 'unsafe-inline' 'unsafe-eval'; worker-src 'self' blob:;",
+    },
+  },
 });

@@ -144,11 +144,12 @@ const Dashboard = (): JSX.Element => {
   };
 
   return (
-    <div>
+    <Box>
       <Box
         component='header'
         sx={{
           mb: 4,
+          textAlign: 'left',
         }}
       >
         <Typography
@@ -159,6 +160,7 @@ const Dashboard = (): JSX.Element => {
             letterSpacing: '-0.025em',
             mb: 1,
             color: 'text.primary',
+            lineHeight: 1.1,
           }}
         >
           {t('common:app.title')}
@@ -168,6 +170,7 @@ const Dashboard = (): JSX.Element => {
           sx={{
             color: 'text.secondary',
             fontSize: '1.125rem',
+            lineHeight: 1.4,
           }}
         >
           {t('common:app.subtitle')}
@@ -192,7 +195,7 @@ const Dashboard = (): JSX.Element => {
       />
 
       <RaceAnalysisModal open={isModalOpen} onClose={handleModalClose} />
-    </div>
+    </Box>
   );
 };
 

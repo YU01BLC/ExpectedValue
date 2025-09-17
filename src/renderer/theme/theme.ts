@@ -1,7 +1,68 @@
 import { createTheme } from '@mui/material/styles';
 
+declare module '@mui/material/styles' {
+  interface Palette {
+    /** 枠番カラー定義 */
+    gate: {
+      [key: number]: { bg: string; text: string };
+      default: { bg: string; text: string };
+    };
+    /** 評価カラー定義 */
+    evaluation: {
+      [key: string]: string;
+    };
+    /** チャート用カラー定義 */
+    chart: {
+      success: string;
+      warning: string;
+      info: string;
+      purple: string;
+    };
+    /** テーブル用カラー定義 */
+    table: {
+      header: {
+        background: string;
+        text: string;
+        border: string;
+        shadow: string;
+      };
+    };
+  }
+
+  interface PaletteOptions {
+    /** 枠番カラー定義（オプション） */
+    gate?: {
+      [key: number]: { bg: string; text: string };
+      default: { bg: string; text: string };
+    };
+    /** 評価カラー定義（オプション） */
+    evaluation?: {
+      [key: string]: string;
+    };
+    /** チャート用カラー定義（オプション） */
+    chart?: {
+      success: string;
+      warning: string;
+      info: string;
+      purple: string;
+    };
+    /** テーブル用カラー定義（オプション） */
+    table?: {
+      header: {
+        background: string;
+        text: string;
+        border: string;
+        shadow: string;
+      };
+    };
+  }
+}
+
 /**
  * カスタムカラーパレット
+ *
+ * アプリケーション全体で使用するカラー定義。
+ * レース分析アプリケーションに特化したカラーパレットを提供。
  */
 const customColors = {
   blue: {
@@ -76,10 +137,23 @@ const customColors = {
 
 /**
  * MUIテーマ設定
- * - ダークモード対応
- * - カスタムカラーパレット
- * - タイポグラフィ設定
- * - レスポンシブ対応
+ *
+ * レース分析アプリケーション用のMUIテーマを作成。
+ * ダークモード対応、カスタムカラーパレット、タイポグラフィ設定、レスポンシブ対応を提供。
+ *
+ * @returns 設定されたMUIテーマオブジェクト
+ *
+ * @example
+ * ```tsx
+ * import { createAppTheme } from '@/theme/theme';
+ * import { ThemeProvider } from '@mui/material/styles';
+ *
+ * const theme = createAppTheme();
+ *
+ * <ThemeProvider theme={theme}>
+ *   <App />
+ * </ThemeProvider>
+ * ```
  */
 export const createAppTheme = () => {
   return createTheme({
@@ -117,6 +191,15 @@ export const createAppTheme = () => {
         warning: customColors.red[400],
         info: customColors.blue[400],
         purple: '#9C27B0',
+      },
+      // テーブル用カラー
+      table: {
+        header: {
+          background: 'rgba(0, 0, 0, 0.6)',
+          text: 'white',
+          border: 'rgba(255, 255, 255, 0.3)',
+          shadow: 'rgba(0, 0, 0, 0.3)',
+        },
       },
     },
     typography: {

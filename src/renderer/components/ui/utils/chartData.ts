@@ -1,4 +1,6 @@
-import { Theme } from '@mui/material/styles';
+import { createTheme } from '@mui/material/styles';
+
+type Theme = ReturnType<typeof createTheme>;
 import { getChartColors } from '../utils/themeColors';
 
 // チャートデータ生成関数（テーマベース）

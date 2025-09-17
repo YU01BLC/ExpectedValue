@@ -16,10 +16,20 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
         minHeight: '100vh',
         color: 'text.primary',
         background: 'linear-gradient(180deg, #0f172a 0%, #1e293b 100%)',
-        padding: { xs: 2, md: 4, lg: 8 },
+        padding: { xs: 2, md: 4, lg: 6 },
+        display: 'flex',
+        flexDirection: 'column',
       }}
     >
-      <Box sx={{ mx: 'auto' }}>{children}</Box>
+      <Box
+        sx={{
+          width: '100%',
+          mx: 'auto',
+          flex: 1,
+        }}
+      >
+        {children}
+      </Box>
     </Box>
   );
 };
