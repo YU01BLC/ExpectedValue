@@ -123,9 +123,9 @@ export const SearchArea = ({
           🔍 レース検索
         </Typography>
 
-        <Grid container spacing={3}>
+        <Grid container spacing={2} alignItems='end'>
           {/* 開催日 */}
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid item xs={12} sm={6} md={2.5}>
             <DatePicker
               label='開催日'
               value={filters.date}
@@ -148,7 +148,7 @@ export const SearchArea = ({
           </Grid>
 
           {/* 会場 */}
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid item xs={12} sm={6} md={2.5}>
             <FormControl fullWidth size='small'>
               <InputLabel>会場</InputLabel>
               <Select
@@ -172,7 +172,7 @@ export const SearchArea = ({
           </Grid>
 
           {/* レース番号 */}
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid item xs={12} sm={6} md={2.5}>
             <FormControl fullWidth size='small'>
               <InputLabel>レース番号</InputLabel>
               <Select
@@ -196,7 +196,7 @@ export const SearchArea = ({
           </Grid>
 
           {/* レース名表示 */}
-          <Grid xs={12} sm={6} md={2}>
+          <Grid item xs={12} sm={6} md={2.5}>
             <Box
               sx={{
                 display: 'flex',
@@ -213,6 +213,9 @@ export const SearchArea = ({
                 sx={{
                   color: 'text.secondary',
                   fontWeight: 500,
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
                 }}
               >
                 {selectedRace?.raceName || 'レース名を選択してください'}
@@ -221,7 +224,7 @@ export const SearchArea = ({
           </Grid>
 
           {/* 検索ボタン */}
-          <Grid xs={12} sm={6} md={1}>
+          <Grid item xs={12} sm={12} md={2}>
             <Button
               variant='contained'
               startIcon={<SearchIcon />}

@@ -1,12 +1,13 @@
 import { type JSX } from 'react';
-import { Card, CardContent, Typography, Box } from '@mui/material';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 import { useTheme } from '@mui/material';
+import { ChartCard } from './ChartCard';
 
 interface PieChartData {
   name: string;
   value: number;
   color: string;
+  horses?: { number: number; name: string }[];
 }
 
 interface PieChartCardProps {
@@ -20,97 +21,63 @@ export const PieChartCard = ({
   title,
   data,
   color,
-  height = 450,
+  height = 600,
 }: PieChartCardProps): JSX.Element => {
   const theme = useTheme();
 
+  // 内訳データの変換
+  const breakdownData = data.map((item) => ({
+    name: item.name,
+    value: `${item.value}%`,
+    color: item.color,
+    horses: item.horses,
+  }));
+
   return (
-    <Card
-      sx={{
-        background:
-          'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
-        backdropFilter: 'blur(10px)',
-        border: '1px solid rgba(255,255,255,0.2)',
-        borderRadius: 3,
-        height,
-        display: 'flex',
-        flexDirection: 'column',
-        boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
-        transition: 'all 0.3s ease',
-        '&:hover': {
-          transform: 'translateY(-4px)',
-          boxShadow: '0 12px 40px rgba(0,0,0,0.4)',
-        },
-      }}
+    <ChartCard
+      title={title}
+      color={color}
+      height={height}
+      breakdownData={breakdownData}
     >
-      <CardContent
-        sx={{
-          flex: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          p: 3,
-        }}
+      <ResponsiveContainer
+        width='100%'
+        height='100%'
+        minWidth={200}
+        minHeight={200}
       >
-        <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
-          <Box
-            sx={{
-              width: 8,
-              height: 8,
-              borderRadius: '50%',
-              backgroundColor: color,
-              mr: 2,
-            }}
-          />
-          <Typography
-            variant='h6'
-            sx={{
-              color: 'text.primary',
-              fontSize: '1.2rem',
+        <PieChart>
+          <Pie
+            data={data}
+            cx='50%'
+            cy='50%'
+            innerRadius={60}
+            outerRadius={120}
+            dataKey='value'
+            paddingAngle={2}
+          >
+            {data.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={entry.color} />
+            ))}
+          </Pie>
+          <Tooltip
+            formatter={(value, name) => [`${value}%`, name]}
+            labelStyle={{
+              color: '#000000',
+              fontSize: 14,
               fontWeight: 600,
             }}
-          >
-            {title}
-          </Typography>
-        </Box>
-        <Box
-          sx={{ flex: 1, height: height - 120, minWidth: 300, minHeight: 300 }}
-        >
-          <ResponsiveContainer
-            width='100%'
-            height='100%'
-            minWidth={0}
-            minHeight={0}
-            aspect={1}
-          >
-            <PieChart>
-              <Pie
-                data={data}
-                cx='50%'
-                cy='50%'
-                innerRadius={60}
-                outerRadius={140}
-                dataKey='value'
-                paddingAngle={3}
-              >
-                {data.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
-                ))}
-              </Pie>
-              <Tooltip
-                formatter={(value, name) => [`${value}%`, name]}
-                labelStyle={{ color: theme.palette.text.primary, fontSize: 14 }}
-                contentStyle={{
-                  backgroundColor: theme.palette.background.paper,
-                  border: `1px solid ${theme.palette.divider}`,
-                  borderRadius: '8px',
-                  fontSize: 14,
-                  color: theme.palette.text.primary,
-                }}
-              />
-            </PieChart>
-          </ResponsiveContainer>
-        </Box>
-      </CardContent>
-    </Card>
+            contentStyle={{
+              backgroundColor: 'rgba(255, 255, 255, 0.95)',
+              border: '1px solid rgba(0, 0, 0, 0.2)',
+              borderRadius: '8px',
+              fontSize: 14,
+              color: '#000000',
+              fontWeight: 500,
+            }}
+          />
+        </PieChart>
+      </ResponsiveContainer>
+    </ChartCard>
   );
 };

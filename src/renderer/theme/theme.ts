@@ -1,5 +1,23 @@
 import { createTheme } from '@mui/material/styles';
 
+declare module '@mui/material/styles' {
+  interface Palette {
+    gate: {
+      [key: number]: { bg: string; text: string };
+      default: { bg: string; text: string };
+    };
+    evaluation: {
+      [key: string]: string;
+    };
+    chart: {
+      success: string;
+      warning: string;
+      info: string;
+      purple: string;
+    };
+  }
+}
+
 /**
  * カスタムカラーパレット
  */

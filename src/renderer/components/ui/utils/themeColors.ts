@@ -1,4 +1,6 @@
-import { Theme } from '@mui/material/styles';
+import { createTheme } from '@mui/material/styles';
+
+type Theme = ReturnType<typeof createTheme>;
 
 // 評価の色を取得する関数（テーマカラー使用）
 export const getEvaluationColor = (

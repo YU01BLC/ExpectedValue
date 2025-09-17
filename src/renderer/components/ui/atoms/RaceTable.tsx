@@ -1,4 +1,4 @@
-import { type JSX, useMemo } from 'react';
+import { type JSX, useMemo, useState } from 'react';
 import {
   Table,
   TableBody,
@@ -12,8 +12,21 @@ import {
   Box,
   useTheme,
   type Theme,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Typography,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  IconButton,
+  Grid,
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import CloseIcon from '@mui/icons-material/Close';
 
 // ソートの型定義
 type SortField =
@@ -43,6 +56,13 @@ interface RaceTableProps {
   onSort: (field: SortField) => void;
 }
 
+// 詳細モーダルの型定義
+interface HorseDetailModalProps {
+  horse: HorseData | null;
+  open: boolean;
+  onClose: () => void;
+}
+
 // 評価の色を取得する関数（テーマカラー使用）
 const getEvaluationColor = (evaluation: string, theme: Theme) => {
   return (
@@ -60,6 +80,91 @@ const getGateColor = (gateNumber: number, theme: Theme) => {
   );
 };
 
+// 詳細モーダルコンポーネント
+const HorseDetailModal = ({
+  horse,
+  open,
+  onClose,
+}: HorseDetailModalProps): JSX.Element => {
+  const theme = useTheme();
+
+  if (!horse) return <></>;
+
+  return (
+    <Dialog open={open} onClose={onClose} maxWidth='sm' fullWidth>
+      <DialogTitle>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
+        >
+          <Typography variant='h6'>
+            {horse.name} (馬番{horse.horseNumber})
+          </Typography>
+          <IconButton onClick={onClose} size='small'>
+            <CloseIcon />
+          </IconButton>
+        </Box>
+      </DialogTitle>
+      <DialogContent>
+        <Grid container spacing={2}>
+          <Grid item xs={6}>
+            <Typography variant='body2' color='text.secondary'>
+              枠番
+            </Typography>
+            <Chip label={horse.gateNumber} size='small' />
+          </Grid>
+          <Grid item xs={6}>
+            <Typography variant='body2' color='text.secondary'>
+              馬番
+            </Typography>
+            <Chip label={horse.horseNumber} size='small' />
+          </Grid>
+          <Grid item xs={6}>
+            <Typography variant='body2' color='text.secondary'>
+              評価
+            </Typography>
+            <Chip
+              label={horse.evaluation}
+              color={getEvaluationColor(horse.evaluation, theme)}
+              size='small'
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <Typography variant='body2' color='text.secondary'>
+              オッズ
+            </Typography>
+            <Typography variant='body1' fontWeight='bold'>
+              {horse.odds}倍
+            </Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant='body2' color='text.secondary'>
+              期待値
+            </Typography>
+            <Typography variant='h6' color='primary.main'>
+              {horse.expectedValue}
+            </Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant='body2' color='text.secondary'>
+              コメント
+            </Typography>
+            <Typography variant='body1'>{horse.comment}</Typography>
+          </Grid>
+        </Grid>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose} variant='contained'>
+          閉じる
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
+
 export const RaceTable = ({
   horseData,
   sortField,
@@ -68,6 +173,8 @@ export const RaceTable = ({
 }: RaceTableProps): JSX.Element => {
   const { t } = useTranslation('common');
   const theme = useTheme();
+  const [selectedHorse, setSelectedHorse] = useState<HorseData | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
 
   // ソートされたデータの計算
   const sortedHorseData = useMemo(() => {
