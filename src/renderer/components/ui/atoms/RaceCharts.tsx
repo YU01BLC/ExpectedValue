@@ -5,7 +5,7 @@ import { useTheme } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { PieChartCard, RadarChartCard, DualScatterChartCard } from '../charts';
 import { getChartColors, getGradientColors } from '../utils/themeColors';
-import type { HorseData } from './RaceTable';
+import type { HorseData } from './types/raceTable';
 
 interface RaceChartsProps {
   horseData: HorseData[];
