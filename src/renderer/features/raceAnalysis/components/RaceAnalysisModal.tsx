@@ -19,6 +19,7 @@ import {
   RecommendedBets,
   type RecommendedBet,
 } from '../../../components/ui/atoms/RecommendedBets';
+import { PurchaseForm } from '../../../components/ui/atoms/PurchaseForm';
 
 interface RaceAnalysisModalProps {
   open: boolean;
@@ -116,6 +117,106 @@ const mockHorseData: HorseData[] = [
     odds: 5.2,
     comment: '血統良し、調教要観察',
   },
+  {
+    id: '9',
+    name: 'ジェンティルドンナ',
+    horseNumber: 9,
+    gateNumber: 5,
+    evaluation: 'A',
+    expectedValue: 1.12,
+    odds: 3.1,
+    comment: '牝馬の強さ、距離適性◎',
+  },
+  {
+    id: '10',
+    name: 'オルフェーヴル',
+    horseNumber: 10,
+    gateNumber: 5,
+    evaluation: 'B',
+    expectedValue: 0.98,
+    odds: 4.2,
+    comment: '中距離得意、脚質良し',
+  },
+  {
+    id: '11',
+    name: 'キタサンブラック',
+    horseNumber: 11,
+    gateNumber: 6,
+    evaluation: 'C',
+    expectedValue: 0.78,
+    odds: 6.5,
+    comment: '重賞経験あり、調子要確認',
+  },
+  {
+    id: '12',
+    name: 'サトノダイヤモンド',
+    horseNumber: 12,
+    gateNumber: 6,
+    evaluation: 'B',
+    expectedValue: 1.08,
+    odds: 3.6,
+    comment: '血統良し、騎手相性◎',
+  },
+  {
+    id: '13',
+    name: 'レイデオロ',
+    horseNumber: 13,
+    gateNumber: 7,
+    evaluation: 'D',
+    expectedValue: 0.52,
+    odds: 9.8,
+    comment: '初戦、距離不安',
+  },
+  {
+    id: '14',
+    name: 'サートゥルナーリア',
+    horseNumber: 14,
+    gateNumber: 7,
+    evaluation: 'C',
+    expectedValue: 0.85,
+    odds: 5.8,
+    comment: '牝馬、血統良し',
+  },
+  {
+    id: '15',
+    name: 'ロードカナロア',
+    horseNumber: 15,
+    gateNumber: 8,
+    evaluation: 'B',
+    expectedValue: 1.02,
+    odds: 4.0,
+    comment: 'スピード型、直線勝負',
+  },
+  {
+    id: '16',
+    name: 'アーモンドアイ',
+    horseNumber: 16,
+    gateNumber: 8,
+    evaluation: 'A',
+    expectedValue: 1.2,
+    odds: 2.7,
+    comment: '牝馬の強さ、コース適性◎',
+  },
+  {
+    id: '17',
+    name: 'コントレイル',
+    horseNumber: 17,
+    gateNumber: 9,
+    evaluation: 'B',
+    expectedValue: 0.95,
+    odds: 4.3,
+    comment: '血統良し、調教順調',
+  },
+  {
+    id: '18',
+    name: 'エフフォーリア',
+    horseNumber: 18,
+    gateNumber: 9,
+    evaluation: 'C',
+    expectedValue: 0.88,
+    odds: 5.5,
+    comment: '中距離得意、騎手相性良',
+  },
 ];
 
 const mockRecommendedBets: RecommendedBet[] = [
@@ -139,6 +240,7 @@ export const RaceAnalysisModal = ({
   // ソート状態の管理
   const [sortField, setSortField] = useState<SortField | null>(null);
   const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
+  const [showPurchaseForm, setShowPurchaseForm] = useState(false);
 
   // ソート処理
   const handleSort = (field: SortField) => {
@@ -148,6 +250,18 @@ export const RaceAnalysisModal = ({
       setSortField(field);
       setSortDirection('asc');
     }
+  };
+
+  // 購入フォームの表示切り替え
+  const handleTogglePurchaseForm = () => {
+    setShowPurchaseForm(!showPurchaseForm);
+  };
+
+  // 購入実行
+  const handlePurchase = (tickets: any[]) => {
+    console.log('購入実行:', tickets);
+    alert('購入が完了しました！');
+    setShowPurchaseForm(false);
   };
 
   return (
@@ -223,8 +337,50 @@ export const RaceAnalysisModal = ({
         {/* チャートセクション */}
         <RaceCharts horseData={mockHorseData} />
 
-        {/* 推奨買い目 */}
-        <RecommendedBets recommendedBets={mockRecommendedBets} />
+        {/* 購入フォームまたは推奨買い目 */}
+        {showPurchaseForm ? (
+          <PurchaseForm
+            horses={mockHorseData.map((horse) => ({
+              number: horse.horseNumber,
+              name: horse.name,
+              odds: horse.odds,
+              expectedValue: horse.expectedValue,
+              evaluation: horse.evaluation,
+            }))}
+            onPurchase={handlePurchase}
+            onCancel={() => setShowPurchaseForm(false)}
+          />
+        ) : (
+          <Box sx={{ mb: 4 }}>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                mb: 2,
+              }}
+            >
+              <Typography variant='h6' sx={{ color: 'text.primary' }}>
+                推奨買い目
+              </Typography>
+              <Button
+                variant='contained'
+                onClick={handleTogglePurchaseForm}
+                sx={{
+                  background:
+                    'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  '&:hover': {
+                    background:
+                      'linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%)',
+                  },
+                }}
+              >
+                購入フォームを開く
+              </Button>
+            </Box>
+            <RecommendedBets recommendedBets={mockRecommendedBets} />
+          </Box>
+        )}
       </DialogContent>
 
       <DialogActions sx={{ p: { xs: 2, sm: 2, md: 2 }, pt: 1 }}>

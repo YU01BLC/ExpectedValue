@@ -4,8 +4,10 @@ import { initReactI18next } from 'react-i18next';
 // 翻訳リソース
 import jaCommon from './ja/common.json';
 import jaDashboard from './ja/dashboard.json';
+import jaPurchaseForm from './ja/purchaseForm.json';
 import enCommon from './en/common.json';
 import enDashboard from './en/dashboard.json';
+import enPurchaseForm from './en/purchaseForm.json';
 
 /**
  * i18n設定
@@ -19,10 +21,12 @@ i18n.use(initReactI18next).init({
     ja: {
       common: jaCommon,
       dashboard: jaDashboard,
+      purchaseForm: jaPurchaseForm,
     },
     en: {
       common: enCommon,
       dashboard: enDashboard,
+      purchaseForm: enPurchaseForm,
     },
   },
   lng: 'ja',

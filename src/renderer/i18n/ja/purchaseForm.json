@@ -1,0 +1,76 @@
+{
+  "title": "購入フォーム",
+  "betSelection": {
+    "title": "馬券選択",
+    "betType": "馬券種別",
+    "method": "買い方"
+  },
+  "nagashi": {
+    "title": "流し馬券のタイプを選択してください",
+    "multi1": "軸1頭流しマルチ",
+    "multi2": "軸2頭流しマルチ",
+    "first": "1着固定流し",
+    "second": "2着固定流し",
+    "third": "3着固定流し",
+    "firstSecond": "1着・2着固定流し"
+  },
+  "horseSelection": {
+    "axis": {
+      "first": "1着固定馬を選択してください",
+      "second": "2着固定馬を選択してください",
+      "third": "3着固定馬を選択してください",
+      "firstSecond": "1着固定馬を選択してください",
+      "multi1": "軸1頭流しマルチの軸馬を選択してください",
+      "multi2": "軸2頭流しマルチの軸馬を選択してください"
+    },
+    "secondFixed": "2着固定馬を選択してください",
+    "opponent": {
+      "first": "2着・3着流し馬を選択してください",
+      "second": "1着・3着流し馬を選択してください",
+      "third": "1着・2着流し馬を選択してください",
+      "firstSecond": "3着流し馬を選択してください",
+      "multi1": "軸1頭流しマルチの相手馬を選択してください",
+      "multi2": "軸2頭流しマルチの相手馬を選択してください"
+    },
+    "multiple": "(複数頭選択可)",
+    "single": "(1頭まで)",
+    "column": "列目を選択してください",
+    "select": "馬を選択してください"
+  },
+  "amount": {
+    "label": "購入金額",
+    "placeholder": "100",
+    "helperText": "100円単位で入力してください",
+    "errorText": "100円以上で100円単位で入力してください"
+  },
+  "points": {
+    "label": "購入点数",
+    "unit": "点"
+  },
+  "buttons": {
+    "addTicket": "馬券を追加",
+    "cancel": "キャンセル",
+    "purchase": "購入する"
+  },
+  "purchaseContent": {
+    "title": "購入内容",
+    "empty": "購入する馬券を選択してください",
+    "selectedHorses": "選択馬",
+    "combinations": "組み合わせ数",
+    "total": "合計"
+  },
+  "errors": {
+    "betTypeRequired": "馬券種別を選択してください",
+    "methodRequired": "買い方を選択してください",
+    "horsesRequired": "馬を選択してください",
+    "amountRequired": "金額は100円以上で入力してください",
+    "noValidCombinations": "有効な組み合わせがありません",
+    "ticketsRequired": "購入する馬券を選択してください",
+    "firstFixedHorsesRequired": "1着固定馬と2着・3着流し馬を選択してください",
+    "secondFixedHorsesRequired": "2着固定馬と1着・3着流し馬を選択してください",
+    "thirdFixedHorsesRequired": "3着固定馬と1着・2着流し馬を選択してください",
+    "firstSecondFixedHorsesRequired": "1着固定馬、2着固定馬、3着流し馬を選択してください",
+    "multi1AxisHorsesRequired": "軸1頭流しマルチの軸馬と相手馬を選択してください",
+    "multi2AxisHorsesRequired": "軸2頭流しマルチの軸馬2頭と相手馬を選択してください"
+  }
+}
