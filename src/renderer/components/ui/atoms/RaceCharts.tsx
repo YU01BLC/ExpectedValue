@@ -1,7 +1,5 @@
-import { type JSX } from 'react';
-import { Box, Typography } from '@mui/material';
-import Grid from '@mui/material/GridLegacy';
-import { useTheme } from '@mui/material';
+import { type JSX, useMemo, useCallback } from 'react';
+import { Box, Typography, useTheme, Grid } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { PieChartCard, RadarChartCard, DualScatterChartCard } from '../charts';
 import { getChartColors, getGradientColors } from '../utils/themeColors';
@@ -17,58 +15,83 @@ export const RaceCharts = ({ horseData }: RaceChartsProps): JSX.Element => {
   const colors = getChartColors(theme);
   const gradients = getGradientColors(theme);
 
-  // 実際の馬データに基づくチャートデータ生成
-  const generateChartData = () => {
+  // 共通のフィルタリング処理を関数として抽出（メモ化）
+  // 評価による馬のフィルタリング（S, A, B, C, Dの組み合わせに対応）
+  const filterHorsesByEvaluation = useCallback(
+    (evaluations: string[]) => {
+      return horseData.filter((h) => evaluations.includes(h.evaluation));
+    },
+    [horseData]
+  );
+
+  // 期待値による馬のフィルタリング（範囲指定可能）
+  const filterHorsesByExpectedValue = useCallback(
+    (minValue: number, maxValue?: number) => {
+      return horseData.filter((h) => {
+        if (maxValue !== undefined) {
+          return h.expectedValue >= minValue && h.expectedValue < maxValue;
+        }
+        return h.expectedValue >= minValue;
+      });
+    },
+    [horseData]
+  );
+
+  // オッズによる馬のフィルタリング（最小値以上）
+  const filterHorsesByOdds = useCallback(
+    (minOdds: number) => {
+      return horseData.filter((h) => h.odds >= minOdds);
+    },
+    [horseData]
+  );
+
+  // 実際の馬データに基づくチャートデータ生成（メモ化）
+  const chartData = useMemo(() => {
     // コース傾向データ（馬の評価に基づく）
     const courseTendency = [
       {
         name: '先行有利',
         value: Math.round(
-          (horseData.filter((h) => h.evaluation === 'S' || h.evaluation === 'A')
-            .length /
-            horseData.length) *
-            100
+          (filterHorsesByEvaluation(['S', 'A']).length / horseData.length) * 100
         ),
         color: colors.success,
-        horses: horseData
-          .filter((h) => h.evaluation === 'S' || h.evaluation === 'A')
-          .map((h) => ({ number: h.horseNumber, name: h.name })),
+        horses: filterHorsesByEvaluation(['S', 'A']).map((h) => ({
+          number: h.horseNumber,
+          name: h.name,
+        })),
       },
       {
         name: '差し有利',
         value: Math.round(
-          (horseData.filter((h) => h.evaluation === 'B').length /
-            horseData.length) *
-            100
+          (filterHorsesByEvaluation(['B']).length / horseData.length) * 100
         ),
         color: colors.info,
-        horses: horseData
-          .filter((h) => h.evaluation === 'B')
-          .map((h) => ({ number: h.horseNumber, name: h.name })),
+        horses: filterHorsesByEvaluation(['B']).map((h) => ({
+          number: h.horseNumber,
+          name: h.name,
+        })),
       },
       {
         name: '逃げ有利',
         value: Math.round(
-          (horseData.filter((h) => h.evaluation === 'C').length /
-            horseData.length) *
-            100
+          (filterHorsesByEvaluation(['C']).length / horseData.length) * 100
         ),
         color: colors.warning,
-        horses: horseData
-          .filter((h) => h.evaluation === 'C')
-          .map((h) => ({ number: h.horseNumber, name: h.name })),
+        horses: filterHorsesByEvaluation(['C']).map((h) => ({
+          number: h.horseNumber,
+          name: h.name,
+        })),
       },
       {
         name: 'その他',
         value: Math.round(
-          (horseData.filter((h) => h.evaluation === 'D').length /
-            horseData.length) *
-            100
+          (filterHorsesByEvaluation(['D']).length / horseData.length) * 100
         ),
         color: colors.grey,
-        horses: horseData
-          .filter((h) => h.evaluation === 'D')
-          .map((h) => ({ number: h.horseNumber, name: h.name })),
+        horses: filterHorsesByEvaluation(['D']).map((h) => ({
+          number: h.horseNumber,
+          name: h.name,
+        })),
       },
     ];
 
@@ -77,54 +100,48 @@ export const RaceCharts = ({ horseData }: RaceChartsProps): JSX.Element => {
       {
         name: '逃げ',
         value: Math.round(
-          (horseData.filter((h) => h.expectedValue >= 1.5).length /
-            horseData.length) *
-            100
+          (filterHorsesByExpectedValue(1.5).length / horseData.length) * 100
         ),
         color: colors.error,
-        horses: horseData
-          .filter((h) => h.expectedValue >= 1.5)
-          .map((h) => ({ number: h.horseNumber, name: h.name })),
+        horses: filterHorsesByExpectedValue(1.5).map((h) => ({
+          number: h.horseNumber,
+          name: h.name,
+        })),
       },
       {
         name: '先行',
         value: Math.round(
-          (horseData.filter(
-            (h) => h.expectedValue >= 1.2 && h.expectedValue < 1.5
-          ).length /
-            horseData.length) *
+          (filterHorsesByExpectedValue(1.2, 1.5).length / horseData.length) *
             100
         ),
         color: colors.warning,
-        horses: horseData
-          .filter((h) => h.expectedValue >= 1.2 && h.expectedValue < 1.5)
-          .map((h) => ({ number: h.horseNumber, name: h.name })),
+        horses: filterHorsesByExpectedValue(1.2, 1.5).map((h) => ({
+          number: h.horseNumber,
+          name: h.name,
+        })),
       },
       {
         name: '差し',
         value: Math.round(
-          (horseData.filter(
-            (h) => h.expectedValue >= 1.0 && h.expectedValue < 1.2
-          ).length /
-            horseData.length) *
+          (filterHorsesByExpectedValue(1.0, 1.2).length / horseData.length) *
             100
         ),
         color: colors.info,
-        horses: horseData
-          .filter((h) => h.expectedValue >= 1.0 && h.expectedValue < 1.2)
-          .map((h) => ({ number: h.horseNumber, name: h.name })),
+        horses: filterHorsesByExpectedValue(1.0, 1.2).map((h) => ({
+          number: h.horseNumber,
+          name: h.name,
+        })),
       },
       {
         name: '追込',
         value: Math.round(
-          (horseData.filter((h) => h.expectedValue < 1.0).length /
-            horseData.length) *
-            100
+          (filterHorsesByExpectedValue(0, 1.0).length / horseData.length) * 100
         ),
         color: colors.purple,
-        horses: horseData
-          .filter((h) => h.expectedValue < 1.0)
-          .map((h) => ({ number: h.horseNumber, name: h.name })),
+        horses: filterHorsesByExpectedValue(0, 1.0).map((h) => ({
+          number: h.horseNumber,
+          name: h.name,
+        })),
       },
     ];
 
@@ -143,86 +160,86 @@ export const RaceCharts = ({ horseData }: RaceChartsProps): JSX.Element => {
       },
       {
         subject: 'スタミナ',
-        A: Math.round(
-          (horseData.filter((h) => h.odds >= 3).length / horseData.length) * 100
-        ),
+        A: Math.round((filterHorsesByOdds(3).length / horseData.length) * 100),
         B: Math.round(
-          (horseData.filter((h) => h.expectedValue >= 1.2).length /
-            horseData.length) *
-            100
+          (filterHorsesByExpectedValue(1.2).length / horseData.length) * 100
         ),
         fullMark: 100,
       },
       {
         subject: '瞬発力',
-        A: Math.round(
-          (horseData.filter((h) => h.odds >= 5).length / horseData.length) * 100
-        ),
+        A: Math.round((filterHorsesByOdds(5).length / horseData.length) * 100),
         B: Math.round(
-          (horseData.filter((h) => h.expectedValue >= 1.5).length /
-            horseData.length) *
-            100
+          (filterHorsesByExpectedValue(1.5).length / horseData.length) * 100
         ),
         fullMark: 100,
       },
       {
         subject: '持久力',
-        A: Math.round(
-          (horseData.filter((h) => h.odds >= 2).length / horseData.length) * 100
-        ),
+        A: Math.round((filterHorsesByOdds(2).length / horseData.length) * 100),
         B: Math.round(
-          (horseData.filter((h) => h.expectedValue >= 1.0).length /
-            horseData.length) *
-            100
+          (filterHorsesByExpectedValue(1.0).length / horseData.length) * 100
         ),
         fullMark: 100,
       },
       {
         subject: '柔軟性',
-        A: Math.round(
-          (horseData.filter((h) => h.odds >= 4).length / horseData.length) * 100
-        ),
+        A: Math.round((filterHorsesByOdds(4).length / horseData.length) * 100),
         B: Math.round(
-          (horseData.filter((h) => h.expectedValue >= 1.3).length /
-            horseData.length) *
-            100
+          (filterHorsesByExpectedValue(1.3).length / horseData.length) * 100
         ),
         fullMark: 100,
       },
       {
         subject: 'バランス',
         A: Math.round(
-          (horseData.filter((h) => h.odds >= 2.5).length / horseData.length) *
-            100
+          (filterHorsesByOdds(2.5).length / horseData.length) * 100
         ),
         B: Math.round(
-          (horseData.filter((h) => h.expectedValue >= 1.1).length /
-            horseData.length) *
-            100
+          (filterHorsesByExpectedValue(1.1).length / horseData.length) * 100
         ),
         fullMark: 100,
       },
     ];
 
     return { courseTendency, legQuality, pedigreeAptitude };
-  };
+  }, [
+    horseData,
+    colors,
+    filterHorsesByEvaluation,
+    filterHorsesByExpectedValue,
+    filterHorsesByOdds,
+  ]);
 
-  const chartData = generateChartData();
+  // 期待値×評価データの変換（メモ化）
+  // 散布図用のデータを生成し、評価を数値に変換
+  const scatterData = useMemo(() => {
+    // 評価文字列を数値に変換する関数（S=5, A=4, B=3, C=2, D=1）
+    const evaluationToNumber = (evaluation: string) => {
+      const map: Record<string, number> = { S: 5, A: 4, B: 3, C: 2, D: 1 };
+      return map[evaluation] || 1;
+    };
 
-  // 期待値×評価データの変換
-  const evaluationToNumber = (evaluation: string) => {
-    const map: Record<string, number> = { S: 5, A: 4, B: 3, C: 2, D: 1 };
-    return map[evaluation] || 1;
-  };
+    return horseData.map((horse) => ({
+      x: horse.expectedValue,
+      y: evaluationToNumber(horse.evaluation),
+      name: horse.name,
+      horseNumber: horse.horseNumber,
+      gateNumber: horse.gateNumber,
+      evaluation: horse.evaluation,
+    }));
+  }, [horseData]);
 
-  const scatterData = horseData.map((horse) => ({
-    x: horse.expectedValue,
-    y: evaluationToNumber(horse.evaluation),
-    name: horse.name,
-    horseNumber: horse.horseNumber,
-    gateNumber: horse.gateNumber,
-    evaluation: horse.evaluation,
-  }));
+  // エラーハンドリング: データが空の場合は早期リターン
+  if (!horseData || horseData.length === 0) {
+    return (
+      <Box sx={{ mb: 4, textAlign: 'center', py: 4 }}>
+        <Typography variant='h6' color='text.secondary'>
+          馬データがありません
+        </Typography>
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ mb: 4 }}>
@@ -231,8 +248,6 @@ export const RaceCharts = ({ horseData }: RaceChartsProps): JSX.Element => {
         sx={{
           mb: 3,
           color: 'text.primary',
-          fontSize: '1.5rem',
-          fontWeight: 700,
           textAlign: 'center',
           background: gradients.primary,
           backgroundClip: 'text',
@@ -245,7 +260,7 @@ export const RaceCharts = ({ horseData }: RaceChartsProps): JSX.Element => {
 
       <Grid container spacing={3} sx={{ mb: 4 }}>
         {/* コース傾向 */}
-        <Grid item xs={12} sm={6} lg={4}>
+        <Grid size={{ xs: 12, sm: 6, lg: 4 }}>
           <PieChartCard
             title={t('chart.courseTendency')}
             data={chartData.courseTendency}
@@ -255,7 +270,7 @@ export const RaceCharts = ({ horseData }: RaceChartsProps): JSX.Element => {
         </Grid>
 
         {/* 脚質分布 */}
-        <Grid item xs={12} sm={6} lg={4}>
+        <Grid size={{ xs: 12, sm: 6, lg: 4 }}>
           <PieChartCard
             title={t('chart.legQualityDistribution')}
             data={chartData.legQuality}
@@ -265,7 +280,7 @@ export const RaceCharts = ({ horseData }: RaceChartsProps): JSX.Element => {
         </Grid>
 
         {/* 血統適性 */}
-        <Grid item xs={12} sm={12} lg={4}>
+        <Grid size={{ xs: 12, sm: 12, lg: 4 }}>
           <RadarChartCard
             title={t('chart.pedigreeAptitude')}
             data={chartData.pedigreeAptitude}
@@ -275,7 +290,7 @@ export const RaceCharts = ({ horseData }: RaceChartsProps): JSX.Element => {
         </Grid>
 
         {/* 期待値 × 評価分析 */}
-        <Grid item xs={12}>
+        <Grid size={12}>
           <DualScatterChartCard
             title='期待値×評価分析'
             leftData={scatterData}

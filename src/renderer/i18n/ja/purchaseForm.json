@@ -50,7 +50,8 @@
   "buttons": {
     "addTicket": "馬券を追加",
     "cancel": "キャンセル",
-    "purchase": "購入する"
+    "purchase": "購入する",
+    "removeTicket": "馬券を削除"
   },
   "purchaseContent": {
     "title": "購入内容",

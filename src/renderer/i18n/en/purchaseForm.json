@@ -50,7 +50,8 @@
   "buttons": {
     "addTicket": "Add Ticket",
     "cancel": "Cancel",
-    "purchase": "Purchase"
+    "purchase": "Purchase",
+    "removeTicket": "Remove Ticket"
   },
   "purchaseContent": {
     "title": "Purchase Content",

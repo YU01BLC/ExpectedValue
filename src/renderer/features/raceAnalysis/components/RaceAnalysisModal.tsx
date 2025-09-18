@@ -20,6 +20,7 @@ import {
   type RecommendedBet,
 } from '../../../components/ui/atoms/RecommendedBets';
 import { PurchaseForm } from '../../../components/ui/atoms/PurchaseForm';
+import { type BetTicket } from '../../../components/ui/atoms/types/purchaseForm';
 
 interface RaceAnalysisModalProps {
   open: boolean;
@@ -258,7 +259,7 @@ export const RaceAnalysisModal = ({
   };
 
   // 購入実行
-  const handlePurchase = (tickets: any[]) => {
+  const handlePurchase = (tickets: BetTicket[]) => {
     console.log('購入実行:', tickets);
     alert('購入が完了しました！');
     setShowPurchaseForm(false);

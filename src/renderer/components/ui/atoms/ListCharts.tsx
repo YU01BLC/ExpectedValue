@@ -1,7 +1,5 @@
-import React, { type JSX } from 'react';
-import { Box, Typography } from '@mui/material';
-import Grid from '@mui/material/GridLegacy';
-import { useTheme } from '@mui/material';
+import { type JSX, useMemo } from 'react';
+import { Box, Typography, useTheme, Grid } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { PieChartCard, RadarChartCard, ScatterChartCard } from '../charts';
 import { getChartColors, getGradientColors } from '../utils/themeColors';
@@ -22,14 +20,29 @@ export const ListCharts = ({
   const { t } = useTranslation('common');
   const colors = getChartColors(theme);
   const gradients = getGradientColors(theme);
-  const chartData = createChartData(theme);
 
-  // 勝率×オッズデータの変換
-  const scatterData = winRateOddsData.map((horse) => ({
-    x: horse.winRate,
-    y: horse.odds,
-    name: horse.name,
-  }));
+  // チャートデータの生成（メモ化）
+  const chartData = useMemo(() => createChartData(theme), [theme]);
+
+  // 勝率×オッズデータの変換（メモ化）
+  const scatterData = useMemo(() => {
+    return winRateOddsData.map((horse) => ({
+      x: horse.winRate,
+      y: horse.odds,
+      name: horse.name,
+    }));
+  }, [winRateOddsData]);
+
+  // エラーハンドリング: データが空の場合は早期リターン
+  if (!winRateOddsData || winRateOddsData.length === 0) {
+    return (
+      <Box sx={{ mb: 4, textAlign: 'center', py: 4 }}>
+        <Typography variant='h6' color='text.secondary'>
+          勝率・オッズデータがありません
+        </Typography>
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ mb: 4 }}>
@@ -38,8 +51,6 @@ export const ListCharts = ({
         sx={{
           mb: 3,
           color: 'text.primary',
-          fontSize: '1.5rem',
-          fontWeight: 700,
           textAlign: 'center',
           background: gradients.primary,
           backgroundClip: 'text',
@@ -52,7 +63,7 @@ export const ListCharts = ({
 
       <Grid container spacing={3}>
         {/* コース傾向 */}
-        <Grid item xs={12} md={4}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <PieChartCard
             title={t('chart.courseTendency')}
             data={chartData.courseTendency}
@@ -61,7 +72,7 @@ export const ListCharts = ({
         </Grid>
 
         {/* 脚質分布 */}
-        <Grid item xs={12} md={4}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <PieChartCard
             title={t('chart.legQualityDistribution')}
             data={chartData.legQuality}
@@ -70,7 +81,7 @@ export const ListCharts = ({
         </Grid>
 
         {/* 血統適性 */}
-        <Grid item xs={12} md={4}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <RadarChartCard
             title={t('chart.pedigreeAptitude')}
             data={chartData.pedigreeAptitude}
@@ -79,7 +90,7 @@ export const ListCharts = ({
         </Grid>
 
         {/* 勝率 × オッズ */}
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <ScatterChartCard
             title={t('chart.winRateOdds')}
             data={scatterData}
@@ -92,7 +103,7 @@ export const ListCharts = ({
         </Grid>
 
         {/* 期待値 × オッズ */}
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <ScatterChartCard
             title={t('chart.expectedValueOdds')}
             data={scatterData}
