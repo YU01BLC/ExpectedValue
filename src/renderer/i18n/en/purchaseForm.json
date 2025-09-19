@@ -35,6 +35,8 @@
     "multiple": "(Multiple selection allowed)",
     "single": "(1 horse only)",
     "column": "Select column",
+    "columnSelection": "Column Selection",
+    "boxSelection": "Box Selection",
     "select": "Please select horses"
   },
   "amount": {
@@ -59,6 +61,19 @@
     "selectedHorses": "Selected Horses",
     "combinations": "Number of Combinations",
     "total": "Total"
+  },
+  "betTypes": {
+    "exacta": "Exacta",
+    "quinella": "Quinella",
+    "wide": "Wide",
+    "trio": "Trio",
+    "trifecta": "Trifecta"
+  },
+  "betMethods": {
+    "single": "Single",
+    "formation": "Formation",
+    "box": "Box",
+    "nagashi": "Nagashi"
   },
   "errors": {
     "betTypeRequired": "Please select a bet type",

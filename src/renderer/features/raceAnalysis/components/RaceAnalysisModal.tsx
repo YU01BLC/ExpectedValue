@@ -162,7 +162,7 @@ const mockHorseData: HorseData[] = [
     id: '13',
     name: 'レイデオロ',
     horseNumber: 13,
-    gateNumber: 7,
+    gateNumber: 13,
     evaluation: 'D',
     expectedValue: 0.52,
     odds: 9.8,
@@ -172,7 +172,7 @@ const mockHorseData: HorseData[] = [
     id: '14',
     name: 'サートゥルナーリア',
     horseNumber: 14,
-    gateNumber: 7,
+    gateNumber: 14,
     evaluation: 'C',
     expectedValue: 0.85,
     odds: 5.8,
@@ -182,7 +182,7 @@ const mockHorseData: HorseData[] = [
     id: '15',
     name: 'ロードカナロア',
     horseNumber: 15,
-    gateNumber: 8,
+    gateNumber: 15,
     evaluation: 'B',
     expectedValue: 1.02,
     odds: 4.0,
@@ -192,7 +192,7 @@ const mockHorseData: HorseData[] = [
     id: '16',
     name: 'アーモンドアイ',
     horseNumber: 16,
-    gateNumber: 8,
+    gateNumber: 16,
     evaluation: 'A',
     expectedValue: 1.2,
     odds: 2.7,
@@ -202,7 +202,7 @@ const mockHorseData: HorseData[] = [
     id: '17',
     name: 'コントレイル',
     horseNumber: 17,
-    gateNumber: 9,
+    gateNumber: 17,
     evaluation: 'B',
     expectedValue: 0.95,
     odds: 4.3,
@@ -212,7 +212,7 @@ const mockHorseData: HorseData[] = [
     id: '18',
     name: 'エフフォーリア',
     horseNumber: 18,
-    gateNumber: 9,
+    gateNumber: 18,
     evaluation: 'C',
     expectedValue: 0.88,
     odds: 5.5,
@@ -260,7 +260,6 @@ export const RaceAnalysisModal = ({
 
   // 購入実行
   const handlePurchase = (tickets: BetTicket[]) => {
-    console.log('購入実行:', tickets);
     alert('購入が完了しました！');
     setShowPurchaseForm(false);
   };
@@ -347,6 +346,7 @@ export const RaceAnalysisModal = ({
               odds: horse.odds,
               expectedValue: horse.expectedValue,
               evaluation: horse.evaluation,
+              gateNumber: horse.gateNumber,
             }))}
             onPurchase={handlePurchase}
             onCancel={() => setShowPurchaseForm(false)}

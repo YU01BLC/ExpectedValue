@@ -25,6 +25,47 @@ export const PurchaseSummary = ({
 }: PurchaseSummaryProps): JSX.Element => {
   const { t } = useTranslation('purchaseForm');
 
+  // 馬券の種類を翻訳する関数
+  const translateBetType = (type: string): string => {
+    // "trifecta nagashi" -> "三連単流し" のような形式に翻訳
+    const parts = type.split(' ');
+    if (parts.length === 1) {
+      // 通常の馬券種別
+      return t(`betTypes.${parts[0]}`);
+    } else if (parts.length === 2) {
+      // 流し馬券
+      const betType = t(`betTypes.${parts[0]}`);
+      const method = t(`betMethods.${parts[1]}`);
+      return `${betType}${method}`;
+    }
+    return type;
+  };
+
+  // 選択馬の表示を改善する関数
+  const formatSelectedHorses = (ticket: BetTicket): string => {
+    if (ticket.axisHorse && ticket.opponentHorses) {
+      // 流し馬券の場合
+      const axisText = `軸馬: ${ticket.axisHorse}`;
+      const opponentText =
+        ticket.opponentHorses.length > 0
+          ? `相手馬: ${ticket.opponentHorses.join(', ')}`
+          : '相手馬: 選択なし';
+      return `${axisText}, ${opponentText}`;
+    } else if (ticket.columnHorses && ticket.columnHorses.length > 0) {
+      // フォーメーション買いの場合
+      const columnTexts = ticket.columnHorses.map((column, index) => {
+        const columnLabel = `${index + 1}列目`;
+        const horsesText = column.length > 0 ? column.join(', ') : '選択なし';
+        return `${columnLabel}: ${horsesText}`;
+      });
+      return columnTexts.join(' | ');
+    } else {
+      // 通常の馬券の場合
+      if (ticket.horses.length === 0) return '選択なし';
+      return ticket.horses.join(', ');
+    }
+  };
+
   // 合計金額を計算
   const totalAmount = tickets.reduce(
     (sum, ticket) => sum + ticket.totalAmount,
@@ -32,8 +73,21 @@ export const PurchaseSummary = ({
   );
 
   return (
-    <Paper sx={{ p: 3, flex: 1 }}>
-      <Typography variant='h6' sx={{ mb: 2 }}>
+    <Paper
+      sx={{
+        p: { xs: 1.5, sm: 2 },
+        height: 'fit-content',
+        maxHeight: { xs: '50vh', md: 'none' },
+        overflow: { xs: 'auto', md: 'visible' },
+      }}
+    >
+      <Typography
+        variant='h6'
+        sx={{
+          mb: 2,
+          fontSize: { xs: '1.1rem', sm: '1.25rem' },
+        }}
+      >
         {t('purchaseContent.title')}
       </Typography>
 
@@ -53,34 +107,60 @@ export const PurchaseSummary = ({
                         variant='subtitle1'
                         sx={{ fontWeight: 'bold' }}
                       >
-                        {ticket.type}
+                        {translateBetType(ticket.type)}
                       </Typography>
                       <Typography
-                        variant='body2'
+                        variant='caption'
                         color='text.secondary'
-                        sx={{ mb: 1 }}
+                        sx={{ mb: 0.5, display: 'block' }}
                       >
                         {t('purchaseContent.selectedHorses')}:{' '}
-                        {ticket.horses.join(', ')}
+                        {formatSelectedHorses(ticket)}
                       </Typography>
                       <Typography
-                        variant='body2'
+                        variant='caption'
                         color='text.secondary'
-                        sx={{ mb: 1 }}
+                        sx={{ mb: 0.5, display: 'block' }}
                       >
                         {t('purchaseContent.combinations')}:{' '}
                         {ticket.combinations.length}
                         {t('points.unit')}
                       </Typography>
-                      <Box sx={{ maxHeight: 100, overflowY: 'auto' }}>
-                        {ticket.combinations.map((combo, comboIndex) => (
+                      <Box
+                        sx={{
+                          maxHeight: { xs: 60, sm: 80 },
+                          overflowY: 'auto',
+                          display: 'flex',
+                          flexWrap: 'wrap',
+                          gap: 0.25,
+                        }}
+                      >
+                        {ticket.combinations
+                          .slice(0, 10)
+                          .map((combo, comboIndex) => (
+                            <Chip
+                              key={comboIndex}
+                              label={combo.join('-')}
+                              size='small'
+                              sx={{
+                                fontSize: { xs: '0.6rem', sm: '0.7rem' },
+                                height: { xs: 18, sm: 20 },
+                                minWidth: 'auto',
+                              }}
+                            />
+                          ))}
+                        {ticket.combinations.length > 10 && (
                           <Chip
-                            key={comboIndex}
-                            label={combo.join(' - ')}
+                            label={`+${ticket.combinations.length - 10}`}
                             size='small'
-                            sx={{ mr: 0.5, mb: 0.5 }}
+                            variant='outlined'
+                            sx={{
+                              fontSize: { xs: '0.6rem', sm: '0.7rem' },
+                              height: { xs: 18, sm: 20 },
+                              minWidth: 'auto',
+                            }}
                           />
-                        ))}
+                        )}
                       </Box>
                     </Box>
                   }

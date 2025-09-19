@@ -16,13 +16,23 @@ export const ActionButtons = ({
   const { t } = useTranslation('purchaseForm');
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        mt: 3,
+        flexDirection: { xs: 'column', sm: 'row' },
+        gap: { xs: 2, sm: 3 },
+      }}
+    >
       <Button
         variant='outlined'
         onClick={onCancel}
+        fullWidth={{ xs: true, sm: false }}
         sx={{
           borderColor: 'error.main',
           color: 'error.main',
+          minWidth: { xs: 'auto', sm: 120 },
           '&:hover': {
             borderColor: 'error.dark',
             backgroundColor: 'error.light',
@@ -36,9 +46,11 @@ export const ActionButtons = ({
         variant='contained'
         onClick={onPurchase}
         disabled={isPurchaseDisabled}
+        fullWidth={{ xs: true, sm: false }}
         sx={{
           backgroundColor: 'success.main',
           color: 'white',
+          minWidth: { xs: 'auto', sm: 120 },
           '&:hover': {
             backgroundColor: 'success.dark',
           },

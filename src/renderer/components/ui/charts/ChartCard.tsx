@@ -11,7 +11,7 @@ interface ChartCardProps {
     name: string;
     value: string | number;
     color?: string;
-    horses?: { number: number; name: string }[];
+    horses?: { number: number; name: string; gateNumber: number }[];
   }>;
   showBreakdown?: boolean;
 }
@@ -224,8 +224,13 @@ export const ChartCard = ({
                                 width: 16,
                                 height: 16,
                                 borderRadius: '50%',
-                                backgroundColor: getGateColor(horse.number).bg,
-                                color: getGateColor(horse.number).text,
+                                backgroundColor: getGateColor(
+                                  horse.gateNumber,
+                                  theme,
+                                  18
+                                ).bg, // デフォルト18頭
+                                color: getGateColor(horse.gateNumber, theme, 18)
+                                  .text, // デフォルト18頭
                                 fontSize: '0.6rem',
                                 fontWeight: 700,
                                 mr: 0.5,

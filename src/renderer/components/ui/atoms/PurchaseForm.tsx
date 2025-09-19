@@ -1,6 +1,6 @@
 import { type JSX, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, Grid } from '@mui/material';
 
 import { type BetTicket, type PurchaseFormProps } from './types/purchaseForm';
 import { BET_TYPES, BET_METHODS } from './constants/betConfig';
@@ -77,13 +77,44 @@ export const PurchaseForm = ({
       nagashiType
     );
 
+    // 選択された馬のリストを生成（undefinedを除外）
+    const selectedHorses = columnHorses
+      .flat()
+      .filter((h) => h !== undefined && h !== null)
+      .map((h) => `${h}番`);
+
+    // 流し馬券の詳細情報を設定
+    const isNagashi = selectedMethod === 'nagashi';
+    const isFormation = selectedMethod === 'formation';
+
+    const nagashiDetails = isNagashi
+      ? {
+          axisHorse: axisHorse ? `${axisHorse}番` : undefined,
+          opponentHorses: selectedHorses.filter((h) => h !== `${axisHorse}番`),
+          nagashiType: nagashiType,
+        }
+      : {};
+
+    // フォーメーション買いの詳細情報を設定
+    const formationDetails = isFormation
+      ? {
+          columnHorses: columnHorses.map((column) =>
+            column
+              .filter((h) => h !== undefined && h !== null)
+              .map((h) => `${h}番`)
+          ),
+        }
+      : {};
+
     const newTicket: BetTicket = {
       id: `ticket-${Date.now()}`,
       type: `${selectedBetType} ${selectedMethod}`,
-      horses: columnHorses.flat().map((h) => `${h}番`),
+      horses: selectedHorses,
       combinations: generatedCombinations,
       amount: amount,
       totalAmount: amount * combinations,
+      ...nagashiDetails,
+      ...formationDetails,
     };
 
     setTickets([...tickets, newTicket]);
@@ -106,40 +137,56 @@ export const PurchaseForm = ({
   };
 
   return (
-    <Box sx={{ width: '100%', p: 2 }}>
-      <Typography variant='h6' sx={{ mb: 3, color: 'text.primary' }}>
+    <Box sx={{ width: '100%', p: { xs: 1, sm: 2 } }}>
+      <Typography
+        variant='h6'
+        sx={{
+          mb: 3,
+          color: 'text.primary',
+          fontSize: { xs: '1.1rem', sm: '1.25rem' },
+        }}
+      >
         {t('title')}
       </Typography>
 
-      <Box sx={{ display: 'flex', gap: 3 }}>
-        <BetSelectionForm
-          horses={horses}
-          selectedBetType={selectedBetType}
-          selectedMethod={selectedMethod}
-          columnHorses={columnHorses}
-          axisHorse={axisHorse}
-          nagashiType={nagashiType}
-          onBetTypeChange={handleBetTypeChange}
-          onMethodChange={handleMethodChange}
-          onHorseToggle={handleHorseToggle}
-          onAxisHorseToggle={handleAxisHorseToggle}
-          onNagashiTypeChange={handleNagashiTypeChange}
-          onAddTicket={handleAddTicket}
-          combinations={combinations}
-          error={error}
-        />
+      <Grid container spacing={{ xs: 1, sm: 2 }}>
+        {/* 馬券選択フォーム */}
+        <Grid size={{ xs: 12, lg: 8 }}>
+          <BetSelectionForm
+            horses={horses}
+            selectedBetType={selectedBetType}
+            selectedMethod={selectedMethod}
+            columnHorses={columnHorses}
+            axisHorse={axisHorse}
+            nagashiType={nagashiType}
+            onBetTypeChange={handleBetTypeChange}
+            onMethodChange={handleMethodChange}
+            onHorseToggle={handleHorseToggle}
+            onAxisHorseToggle={handleAxisHorseToggle}
+            onNagashiTypeChange={handleNagashiTypeChange}
+            onAddTicket={handleAddTicket}
+            combinations={combinations}
+            error={error}
+          />
+        </Grid>
 
-        <PurchaseSummary
-          tickets={tickets}
-          onRemoveTicket={handleRemoveTicket}
+        {/* 購入サマリー */}
+        <Grid size={{ xs: 12, lg: 4 }}>
+          <PurchaseSummary
+            tickets={tickets}
+            onRemoveTicket={handleRemoveTicket}
+          />
+        </Grid>
+      </Grid>
+
+      {/* アクションボタン */}
+      <Box sx={{ mt: 3, display: 'flex', justifyContent: 'center' }}>
+        <ActionButtons
+          onCancel={onCancel}
+          onPurchase={handlePurchase}
+          isPurchaseDisabled={tickets.length === 0}
         />
       </Box>
-
-      <ActionButtons
-        onCancel={onCancel}
-        onPurchase={handlePurchase}
-        isPurchaseDisabled={tickets.length === 0}
-      />
     </Box>
   );
 };

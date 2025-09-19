@@ -58,6 +58,7 @@ export const RaceCharts = ({ horseData }: RaceChartsProps): JSX.Element => {
         horses: filterHorsesByEvaluation(['S', 'A']).map((h) => ({
           number: h.horseNumber,
           name: h.name,
+          gateNumber: h.gateNumber,
         })),
       },
       {
@@ -69,6 +70,7 @@ export const RaceCharts = ({ horseData }: RaceChartsProps): JSX.Element => {
         horses: filterHorsesByEvaluation(['B']).map((h) => ({
           number: h.horseNumber,
           name: h.name,
+          gateNumber: h.gateNumber,
         })),
       },
       {
@@ -80,6 +82,7 @@ export const RaceCharts = ({ horseData }: RaceChartsProps): JSX.Element => {
         horses: filterHorsesByEvaluation(['C']).map((h) => ({
           number: h.horseNumber,
           name: h.name,
+          gateNumber: h.gateNumber,
         })),
       },
       {
@@ -91,6 +94,7 @@ export const RaceCharts = ({ horseData }: RaceChartsProps): JSX.Element => {
         horses: filterHorsesByEvaluation(['D']).map((h) => ({
           number: h.horseNumber,
           name: h.name,
+          gateNumber: h.gateNumber,
         })),
       },
     ];
@@ -106,6 +110,7 @@ export const RaceCharts = ({ horseData }: RaceChartsProps): JSX.Element => {
         horses: filterHorsesByExpectedValue(1.5).map((h) => ({
           number: h.horseNumber,
           name: h.name,
+          gateNumber: h.gateNumber,
         })),
       },
       {
@@ -118,6 +123,7 @@ export const RaceCharts = ({ horseData }: RaceChartsProps): JSX.Element => {
         horses: filterHorsesByExpectedValue(1.2, 1.5).map((h) => ({
           number: h.horseNumber,
           name: h.name,
+          gateNumber: h.gateNumber,
         })),
       },
       {
@@ -130,6 +136,7 @@ export const RaceCharts = ({ horseData }: RaceChartsProps): JSX.Element => {
         horses: filterHorsesByExpectedValue(1.0, 1.2).map((h) => ({
           number: h.horseNumber,
           name: h.name,
+          gateNumber: h.gateNumber,
         })),
       },
       {
@@ -141,6 +148,7 @@ export const RaceCharts = ({ horseData }: RaceChartsProps): JSX.Element => {
         horses: filterHorsesByExpectedValue(0, 1.0).map((h) => ({
           number: h.horseNumber,
           name: h.name,
+          gateNumber: h.gateNumber,
         })),
       },
     ];
@@ -258,7 +266,7 @@ export const RaceCharts = ({ horseData }: RaceChartsProps): JSX.Element => {
         {t('chart.title')}
       </Typography>
 
-      <Grid container spacing={3} sx={{ mb: 4 }}>
+      <Grid container spacing={{ xs: 2, sm: 3 }} sx={{ mb: 4 }}>
         {/* コース傾向 */}
         <Grid size={{ xs: 12, sm: 6, lg: 4 }}>
           <PieChartCard

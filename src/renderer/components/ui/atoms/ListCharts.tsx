@@ -61,31 +61,34 @@ export const ListCharts = ({
         {t('chart.title')}
       </Typography>
 
-      <Grid container spacing={3}>
+      <Grid container spacing={{ xs: 2, sm: 3 }}>
         {/* コース傾向 */}
-        <Grid size={{ xs: 12, md: 4 }}>
+        <Grid size={{ xs: 12, sm: 6, md: 4 }}>
           <PieChartCard
             title={t('chart.courseTendency')}
             data={chartData.courseTendency}
             color={colors.success}
+            height={500}
           />
         </Grid>
 
         {/* 脚質分布 */}
-        <Grid size={{ xs: 12, md: 4 }}>
+        <Grid size={{ xs: 12, sm: 6, md: 4 }}>
           <PieChartCard
             title={t('chart.legQualityDistribution')}
             data={chartData.legQuality}
             color={colors.warning}
+            height={500}
           />
         </Grid>
 
         {/* 血統適性 */}
-        <Grid size={{ xs: 12, md: 4 }}>
+        <Grid size={{ xs: 12, sm: 12, md: 4 }}>
           <RadarChartCard
             title={t('chart.pedigreeAptitude')}
             data={chartData.pedigreeAptitude}
             color={colors.info}
+            height={500}
           />
         </Grid>
 
@@ -99,6 +102,7 @@ export const ListCharts = ({
             xAxisName={t('chart.winRate')}
             yAxisName={t('chart.odds')}
             color={colors.primary}
+            height={350}
           />
         </Grid>
 
@@ -112,6 +116,7 @@ export const ListCharts = ({
             xAxisName={t('chart.expectedValue')}
             yAxisName={t('chart.odds')}
             color={colors.secondary}
+            height={350}
           />
         </Grid>
       </Grid>

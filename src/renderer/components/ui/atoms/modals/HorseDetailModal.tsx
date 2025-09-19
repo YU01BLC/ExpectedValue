@@ -33,7 +33,7 @@ export const HorseDetailModal = ({
 
   // 馬の詳細情報の計算（メモ化）
   const horseDetails = useMemo(() => {
-    const gateColor = getGateColor(horse.gateNumber, theme);
+    const gateColor = getGateColor(horse.gateNumber, theme, 18); // デフォルト18頭
     const evaluationColor = getEvaluationColor(horse.evaluation, theme);
 
     return {
@@ -48,12 +48,15 @@ export const HorseDetailModal = ({
       onClose={onClose}
       maxWidth='sm'
       fullWidth
+      fullScreen={{ xs: true, sm: false }}
       aria-labelledby='horse-detail-title'
       aria-describedby='horse-detail-content'
       PaperProps={{
         sx: {
           backgroundColor: 'rgba(0, 0, 0, 0.95)',
           backdropFilter: 'blur(10px)',
+          m: { xs: 0, sm: 2 },
+          maxHeight: { xs: '100vh', sm: '90vh' },
         },
       }}
       BackdropProps={{
@@ -83,8 +86,8 @@ export const HorseDetailModal = ({
         </Box>
       </DialogTitle>
       <DialogContent id='horse-detail-content'>
-        <Grid container spacing={2} sx={{ mt: 1 }}>
-          <Grid size={6}>
+        <Grid container spacing={{ xs: 1, sm: 2 }} sx={{ mt: 1 }}>
+          <Grid size={{ xs: 12, sm: 6 }}>
             <Typography variant='body2' color='text.secondary' sx={{ mb: 1 }}>
               枠番
             </Typography>
@@ -106,7 +109,7 @@ export const HorseDetailModal = ({
               {horse.gateNumber}
             </Box>
           </Grid>
-          <Grid size={6}>
+          <Grid size={{ xs: 12, sm: 6 }}>
             <Typography variant='body2' color='text.secondary' sx={{ mb: 1 }}>
               馬番
             </Typography>
@@ -116,7 +119,7 @@ export const HorseDetailModal = ({
               </Typography>
             </Box>
           </Grid>
-          <Grid size={6}>
+          <Grid size={{ xs: 12, sm: 6 }}>
             <Typography variant='body2' color='text.secondary' sx={{ mb: 1 }}>
               評価
             </Typography>
@@ -138,7 +141,7 @@ export const HorseDetailModal = ({
               {horse.evaluation}
             </Box>
           </Grid>
-          <Grid size={6}>
+          <Grid size={{ xs: 12, sm: 6 }}>
             <Typography variant='body2' color='text.secondary' sx={{ mb: 1 }}>
               オッズ
             </Typography>

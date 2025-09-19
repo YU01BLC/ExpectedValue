@@ -67,8 +67,21 @@ export const BetSelectionForm = ({
   };
 
   return (
-    <Paper sx={{ p: 3, flex: 1 }}>
-      <Typography variant='h6' sx={{ mb: 2 }}>
+    <Paper
+      sx={{
+        p: { xs: 1.5, sm: 2 },
+        height: 'fit-content',
+        maxHeight: { xs: '70vh', md: 'none' },
+        overflow: { xs: 'auto', md: 'visible' },
+      }}
+    >
+      <Typography
+        variant='h6'
+        sx={{
+          mb: 2,
+          fontSize: { xs: '1.1rem', sm: '1.25rem' },
+        }}
+      >
         {t('betSelection.title')}
       </Typography>
 
@@ -80,12 +93,22 @@ export const BetSelectionForm = ({
       )}
 
       {/* 馬券種別選択 */}
-      <FormControl fullWidth sx={{ mb: 2 }}>
-        <InputLabel>{t('betSelection.betType')}</InputLabel>
+      <FormControl fullWidth sx={{ mb: 1.5 }}>
+        <InputLabel size='small'>{t('betSelection.betType')}</InputLabel>
         <Select
           value={selectedBetType}
           label={t('betSelection.betType')}
           onChange={(e) => onBetTypeChange(e.target.value)}
+          size='small'
+          MenuProps={{
+            PaperProps: {
+              sx: {
+                backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                backdropFilter: 'blur(10px)',
+              },
+            },
+          }}
         >
           {BET_TYPES.map((type) => (
             <MenuItem key={type.value} value={type.value}>
@@ -97,12 +120,22 @@ export const BetSelectionForm = ({
 
       {/* 買い方選択 */}
       {selectedBetType && (
-        <FormControl fullWidth sx={{ mb: 2 }}>
-          <InputLabel>{t('betSelection.method')}</InputLabel>
+        <FormControl fullWidth sx={{ mb: 1.5 }}>
+          <InputLabel size='small'>{t('betSelection.method')}</InputLabel>
           <Select
             value={selectedMethod}
             label={t('betSelection.method')}
             onChange={(e) => onMethodChange(e.target.value)}
+            size='small'
+            MenuProps={{
+              PaperProps: {
+                sx: {
+                  backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  backdropFilter: 'blur(10px)',
+                },
+              },
+            }}
           >
             {(selectedBetType === 'win' || selectedBetType === 'place'
               ? BET_METHODS.filter((method) => method.value === 'single')
@@ -110,7 +143,7 @@ export const BetSelectionForm = ({
             ).map((method) => (
               <MenuItem key={method.value} value={method.value}>
                 <Box>
-                  <Typography variant='body1'>{method.label}</Typography>
+                  <Typography variant='body2'>{method.label}</Typography>
                   <Typography variant='caption' color='text.secondary'>
                     {method.description}
                   </Typography>
@@ -143,7 +176,8 @@ export const BetSelectionForm = ({
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
         placeholder={t('amount.placeholder')}
-        sx={{ mb: 2 }}
+        size='small'
+        sx={{ mb: 1.5 }}
         helperText={
           amount && !isAmountValid(amount)
             ? t('amount.errorText')
@@ -151,16 +185,24 @@ export const BetSelectionForm = ({
         }
         error={amount !== '' && !isAmountValid(amount)}
         InputProps={{
-          startAdornment: <Typography sx={{ mr: 1 }}>¥</Typography>,
+          startAdornment: (
+            <Typography sx={{ mr: 1, fontSize: '0.875rem' }}>¥</Typography>
+          ),
         }}
       />
 
       {/* 点数表示 */}
       {selectedBetType && selectedMethod && (
-        <Box sx={{ mb: 2, p: 2, bgcolor: 'primary.light', borderRadius: 1 }}>
+        <Box
+          sx={{ mb: 1.5, p: 1.5, bgcolor: 'primary.light', borderRadius: 1 }}
+        >
           <Typography
             variant='body2'
-            sx={{ color: 'primary.contrastText', fontWeight: 'bold' }}
+            sx={{
+              color: 'primary.contrastText',
+              fontWeight: 'bold',
+              fontSize: '0.875rem',
+            }}
           >
             {t('points.label')}: {combinations}
             {t('points.unit')}
@@ -181,9 +223,12 @@ export const BetSelectionForm = ({
         }
         startIcon={<AddIcon />}
         fullWidth
+        size='small'
         sx={{
           backgroundColor: 'primary.main',
           color: 'white',
+          fontSize: { xs: '0.875rem', sm: '0.9rem' },
+          py: 1,
           '&:hover': {
             backgroundColor: 'primary.dark',
           },

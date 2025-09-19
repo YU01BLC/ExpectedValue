@@ -29,20 +29,23 @@ export const calculateCombinations = (
   } else if (methodConfig.value === 'box') {
     // ボックス: 全馬の組み合わせ
     const allHorses = columnHorses.flat();
-    if (
+    if (betTypeConfig.value === 'exacta') {
+      // 馬単: 順列 P(n,2) = n × (n-1)
+      return allHorses.length * (allHorses.length - 1);
+    } else if (
       betTypeConfig.value.includes('quinella') ||
       betTypeConfig.value.includes('wide')
     ) {
-      // 2頭の組み合わせ
+      // 馬連・ワイド: 組み合わせ C(n,2) = n × (n-1) / 2
       return (allHorses.length * (allHorses.length - 1)) / 2;
-    } else if (
-      betTypeConfig.value.includes('trio') ||
-      betTypeConfig.value.includes('trifecta')
-    ) {
-      // 3頭の組み合わせ
+    } else if (betTypeConfig.value === 'trio') {
+      // 三連複: 組み合わせ C(n,3) = n × (n-1) × (n-2) / 6
       return (
         (allHorses.length * (allHorses.length - 1) * (allHorses.length - 2)) / 6
       );
+    } else if (betTypeConfig.value === 'trifecta') {
+      // 三連単: 順列 P(n,3) = n × (n-1) × (n-2)
+      return allHorses.length * (allHorses.length - 1) * (allHorses.length - 2);
     }
   } else if (methodConfig.value === 'nagashi') {
     // 流し馬券

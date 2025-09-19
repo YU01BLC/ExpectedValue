@@ -35,6 +35,8 @@
     "multiple": "(複数頭選択可)",
     "single": "(1頭まで)",
     "column": "列目を選択してください",
+    "columnSelection": "列選択",
+    "boxSelection": "ボックス選択",
     "select": "馬を選択してください"
   },
   "amount": {
@@ -59,6 +61,19 @@
     "selectedHorses": "選択馬",
     "combinations": "組み合わせ数",
     "total": "合計"
+  },
+  "betTypes": {
+    "exacta": "馬単",
+    "quinella": "馬連",
+    "wide": "ワイド",
+    "trio": "三連複",
+    "trifecta": "三連単"
+  },
+  "betMethods": {
+    "single": "単式",
+    "formation": "フォーメーション",
+    "box": "ボックス",
+    "nagashi": "流し"
   },
   "errors": {
     "betTypeRequired": "馬券種別を選択してください",
