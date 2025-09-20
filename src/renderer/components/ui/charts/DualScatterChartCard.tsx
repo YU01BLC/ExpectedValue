@@ -241,7 +241,11 @@ export const DualScatterChartCard = ({
                 <Scatter
                   data={leftData}
                   fill={theme.palette.primary.main}
-                  shape={(props: any) => {
+                  shape={(props: {
+                    cx: number;
+                    cy: number;
+                    payload: ScatterData;
+                  }) => {
                     const { cx, cy, payload } = props;
                     const gateColor = getGateColor(
                       payload?.gateNumber || 1,

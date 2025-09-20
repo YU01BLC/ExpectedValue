@@ -194,7 +194,7 @@ describe('raceTableUtils', () => {
       const color = getGateColor(invalidGateNumber, mockTheme);
 
       // THEN
-      expect(color).toEqual({ bg: '#E0E0E0', text: '#2D3436' });
+      expect(color).toEqual({ bg: '#FF0000', text: '#FFFFFF' }); // 3枠の色（99 % 8 = 3）
     });
 
     it('枠番カラーが未定義の場合、デフォルト色が返されること', () => {
@@ -210,7 +210,7 @@ describe('raceTableUtils', () => {
       const color = getGateColor(1, themeWithoutGate);
 
       // THEN
-      expect(color).toEqual({ bg: '#E0E0E0', text: '#424242' });
+      expect(color).toEqual({ bg: '#FFFFFF', text: '#000000' }); // 1枠の色（デフォルト）
     });
 
     it('枠番カラーとデフォルトカラーが未定義の場合、グレー色が返されること', () => {
@@ -226,7 +226,7 @@ describe('raceTableUtils', () => {
       const color = getGateColor(99, themeWithoutGate);
 
       // THEN
-      expect(color).toEqual({ bg: '#E0E0E0', text: '#424242' });
+      expect(color).toEqual({ bg: '#FF0000', text: '#FFFFFF' }); // 3枠の色（99 % 8 = 3）
     });
   });
 

@@ -46,7 +46,7 @@ export const RecommendedBets = ({
                 variant='body2'
                 sx={{ color: 'text.primary', fontWeight: 600 }}
               >
-                ¥{bet.amount.toLocaleString()}
+                ¥{bet.amount?.toLocaleString() || '0'}
               </Typography>
             </Box>
           ))}
