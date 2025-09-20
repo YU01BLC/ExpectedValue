@@ -4,6 +4,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { createAppTheme } from '@/theme/theme';
 import '@/i18n';
+import './pwa';
 
 /**
  * アプリ全体のプロバイダを集約するルートコンポーネント

@@ -1,14 +1,82 @@
 {
   "name": "expected-value",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.1.0",
+  "description": "競馬期待値分析アプリケーション - レース分析と馬券購入機能を提供",
+  "author": "Expected Value Analysis Team",
   "type": "module",
+  "main": "dist-electron/main.js",
+  "build": {
+    "appId": "com.expectedvalue.raceanalysis",
+    "productName": "競馬期待値分析",
+    "copyright": "Copyright © 2024 Expected Value Analysis",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "dist-electron/**/*",
+      "!**/*.map",
+      "!**/node_modules/**/*"
+    ],
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ],
+      "icon": "build/icons/icons/mac/icon.icns",
+      "category": "public.app-category.finance"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ],
+      "icon": "build/icons/icons/win/icon.ico"
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ],
+      "icon": "build/icons/icons/png/512x512.png",
+      "category": "Office"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
+  },
   "scripts": {
     "dev": "concurrently -k \"vite\" \"npm:dev:electron\"",
     "dev:web": "vite --open",
     "dev:electron": "wait-on http://localhost:5173 && tsup --watch --silent --onSuccess=\"cross-env NODE_ENV=development electron ./dist-electron/main.js\"",
     "start:prod": "cross-env NODE_ENV=production electron ./dist-electron/main.js",
     "build": "vite build && tsup",
+    "build:pwa": "vite build",
+    "dist": "npm run build && electron-builder",
+    "dist:mac": "npm run build && electron-builder --mac",
+    "dist:win": "npm run build && electron-builder --win",
+    "dist:linux": "npm run build && electron-builder --linux",
+    "dist:pwa": "npm run build:pwa && npm run package:pwa",
+    "package:pwa": "cd dist && zip -r ../release/競馬期待値分析-PWA-1.1.0.zip .",
     "preview": "vite preview --open",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint . --ext ts,tsx --fix",
@@ -51,6 +119,8 @@
     "concurrently": "^9.1.2",
     "cross-env": "^10.0.0",
     "electron": "^38.0.0",
+    "electron-builder": "^26.0.12",
+    "electron-icon-builder": "^2.0.1",
     "eslint": "^9.33.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
