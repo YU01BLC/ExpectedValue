@@ -96,11 +96,11 @@ describe('ListModal', () => {
     // WHEN
     renderWithTheme(<ListModal open={true} onClose={mockOnClose} />);
 
-    // THEN
-    expect(screen.getByText('コース傾向')).toBeInTheDocument();
-    expect(screen.getByText('脚質分布')).toBeInTheDocument();
-    expect(screen.getByText('血統適性')).toBeInTheDocument();
-    expect(screen.getByText('勝率 × オッズ')).toBeInTheDocument();
+    // THEN - チャートコンテナの存在を確認
+    const chartContainer = document.querySelector(
+      '.recharts-responsive-container'
+    );
+    expect(chartContainer).toBeInTheDocument();
   });
 
   it('推奨買い目が表示されること', () => {

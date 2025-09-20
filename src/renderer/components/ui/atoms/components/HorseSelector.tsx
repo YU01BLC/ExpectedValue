@@ -118,15 +118,19 @@ export const HorseSelector = ({
             <TableHead>
               <TableRow>
                 <TableCell sx={{ fontWeight: 'bold', minWidth: 60 }}>
-                  馬番
+                  {t('table.horseNumber')}
                 </TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>馬名</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>
+                  {t('table.horseName')}
+                </TableCell>
                 <TableCell sx={{ fontWeight: 'bold', textAlign: 'center' }}>
-                  {nagashiType === 'firstSecond' ? '1着' : '軸馬'}
+                  {nagashiType === 'firstSecond'
+                    ? t('table.firstPlace')
+                    : t('table.axisHorse')}
                 </TableCell>
                 {nagashiType === 'firstSecond' && (
                   <TableCell sx={{ fontWeight: 'bold', textAlign: 'center' }}>
-                    2着
+                    {t('table.secondPlace')}
                   </TableCell>
                 )}
               </TableRow>
@@ -243,11 +247,15 @@ export const HorseSelector = ({
             <TableHead>
               <TableRow>
                 <TableCell sx={{ fontWeight: 'bold', minWidth: 60 }}>
-                  馬番
+                  {t('table.horseNumber')}
                 </TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>馬名</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>
+                  {t('table.horseName')}
+                </TableCell>
                 <TableCell sx={{ fontWeight: 'bold', textAlign: 'center' }}>
-                  {nagashiType === 'firstSecond' ? '3着' : '相手馬'}
+                  {nagashiType === 'firstSecond'
+                    ? t('table.thirdPlace')
+                    : t('table.opponentHorse')}
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -353,19 +361,27 @@ export const HorseSelector = ({
       return t('horseSelection.boxSelection');
     }
     if (selectedBetType === 'trifecta') {
-      const labels = ['1着', '2着', '3着'];
+      const labels = [
+        t('table.firstPlace'),
+        t('table.secondPlace'),
+        t('table.thirdPlace'),
+      ];
       return labels[index] || `${index + 1}${t('horseSelection.column')}`;
     }
     if (selectedBetType === 'trio') {
-      const labels = ['1着', '2着', '3着'];
+      const labels = [
+        t('table.firstPlace'),
+        t('table.secondPlace'),
+        t('table.thirdPlace'),
+      ];
       return labels[index] || `${index + 1}${t('horseSelection.column')}`;
     }
     if (selectedBetType === 'exacta') {
-      const labels = ['1着', '2着'];
+      const labels = [t('table.firstPlace'), t('table.secondPlace')];
       return labels[index] || `${index + 1}${t('horseSelection.column')}`;
     }
     if (selectedBetType === 'quinella' || selectedBetType === 'wide') {
-      const labels = ['1着', '2着'];
+      const labels = [t('table.firstPlace'), t('table.secondPlace')];
       return labels[index] || `${index + 1}${t('horseSelection.column')}`;
     }
     return `${index + 1}${t('horseSelection.column')}`;

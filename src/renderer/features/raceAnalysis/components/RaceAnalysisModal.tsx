@@ -10,6 +10,7 @@ import {
   Typography,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import { useTranslation } from 'react-i18next';
 import {
   RaceTableResponsive,
   type HorseData,
@@ -37,6 +38,8 @@ export const RaceAnalysisModal = ({
   open,
   onClose,
 }: RaceAnalysisModalProps): JSX.Element => {
+  const { t } = useTranslation('common');
+
   // ソート状態の管理
   const [sortField, setSortField] = useState<SortField | null>(null);
   const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
@@ -66,7 +69,7 @@ export const RaceAnalysisModal = ({
 
   // 購入実行
   const handlePurchase = (tickets: BetTicket[]) => {
-    alert('購入が完了しました！');
+    alert(t('purchase.completed'));
     setShowPurchaseForm(false);
   };
 
@@ -105,7 +108,7 @@ export const RaceAnalysisModal = ({
           component='span'
           sx={{ color: 'text.primary' }}
         >
-          レース分析モーダル
+          {t('modal.raceAnalysis')}
         </Typography>
         <IconButton
           onClick={onClose}
@@ -130,7 +133,7 @@ export const RaceAnalysisModal = ({
         {/* 全頭診断テーブル */}
         <Box sx={{ mb: 4 }}>
           <Typography variant='h6' sx={{ mb: 2, color: 'text.primary' }}>
-            全頭診断
+            {t('modal.allHorseDiagnosis')}
           </Typography>
           <RaceTableResponsive
             horseData={mockHorseData}
@@ -168,7 +171,7 @@ export const RaceAnalysisModal = ({
               }}
             >
               <Typography variant='h6' sx={{ color: 'text.primary' }}>
-                推奨買い目
+                {t('modal.recommendedBets')}
               </Typography>
               <Button
                 variant='contained'
@@ -182,7 +185,7 @@ export const RaceAnalysisModal = ({
                   },
                 }}
               >
-                購入フォームを開く
+                {t('purchase.openForm')}
               </Button>
             </Box>
             <RecommendedBets recommendedBets={mockRecommendedBets} />

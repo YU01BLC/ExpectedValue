@@ -37,7 +37,8 @@
     "column": "Select column",
     "columnSelection": "Column Selection",
     "boxSelection": "Box Selection",
-    "select": "Please select horses"
+    "select": "Please select horses",
+    "horseNumber": ""
   },
   "amount": {
     "label": "Purchase Amount",

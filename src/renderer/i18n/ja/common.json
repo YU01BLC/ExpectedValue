@@ -20,7 +20,12 @@
     "comment": "コメント",
     "gateNumber": "枠番",
     "horseNumber": "馬番",
-    "expectedValue": "期待値"
+    "expectedValue": "期待値",
+    "firstPlace": "1着",
+    "secondPlace": "2着",
+    "thirdPlace": "3着",
+    "axisHorse": "軸馬",
+    "opponentHorse": "相手馬"
   },
   "chart": {
     "title": "レース分析チャート",
@@ -29,13 +34,39 @@
     "pedigreeAptitude": "血統適性",
     "winRateOdds": "勝率 × オッズ",
     "expectedValueOdds": "期待値 × オッズ",
+    "expectedValueEvaluation": "期待値×評価分析",
     "winRate": "勝率",
     "odds": "オッズ",
-    "expectedValue": "期待値"
+    "expectedValue": "期待値",
+    "noData": "馬データがありません",
+    "courseTendencyLabels": {
+      "leadAdvantage": "先行有利",
+      "chaseAdvantage": "差し有利",
+      "escapeAdvantage": "逃げ有利",
+      "others": "その他"
+    },
+    "legQualityLabels": {
+      "escape": "逃げ",
+      "lead": "先行",
+      "chase": "差し",
+      "closer": "追込"
+    },
+    "pedigreeAptitudeLabels": {
+      "speed": "スピード",
+      "stamina": "スタミナ",
+      "sprint": "瞬発力",
+      "endurance": "持久力",
+      "flexibility": "柔軟性",
+      "balance": "バランス"
+    }
   },
   "bet": {
     "single": "単勝",
     "quinella": "馬連",
     "trio": "3連複"
+  },
+  "purchase": {
+    "completed": "購入が完了しました！",
+    "openForm": "購入フォームを開く"
   }
 }

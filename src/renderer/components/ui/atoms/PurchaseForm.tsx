@@ -81,7 +81,7 @@ export const PurchaseForm = ({
     const selectedHorses = columnHorses
       .flat()
       .filter((h) => h !== undefined && h !== null)
-      .map((h) => `${h}番`);
+      .map((h) => `${h}${t('horseSelection.horseNumber')}`);
 
     // 流し馬券の詳細情報を設定
     const isNagashi = selectedMethod === 'nagashi';
@@ -89,8 +89,12 @@ export const PurchaseForm = ({
 
     const nagashiDetails = isNagashi
       ? {
-          axisHorse: axisHorse ? `${axisHorse}番` : undefined,
-          opponentHorses: selectedHorses.filter((h) => h !== `${axisHorse}番`),
+          axisHorse: axisHorse
+            ? `${axisHorse}${t('horseSelection.horseNumber')}`
+            : undefined,
+          opponentHorses: selectedHorses.filter(
+            (h) => h !== `${axisHorse}${t('horseSelection.horseNumber')}`
+          ),
           nagashiType: nagashiType,
         }
       : {};
@@ -101,7 +105,7 @@ export const PurchaseForm = ({
           columnHorses: columnHorses.map((column) =>
             column
               .filter((h) => h !== undefined && h !== null)
-              .map((h) => `${h}番`)
+              .map((h) => `${h}${t('horseSelection.horseNumber')}`)
           ),
         }
       : {};

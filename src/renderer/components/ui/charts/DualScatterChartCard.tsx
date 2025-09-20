@@ -9,6 +9,7 @@ import {
   Scatter,
 } from 'recharts';
 import { useTheme, Box, Typography } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import { ChartCard } from './ChartCard';
 import { getGateColor } from '../atoms/utils/raceTableUtils';
 
@@ -37,6 +38,7 @@ export const DualScatterChartCard = ({
   leftColor,
 }: DualScatterChartCardProps): JSX.Element => {
   const theme = useTheme();
+  const { t } = useTranslation('common');
 
   // 内訳データを空にしてチャートエリアを広げる
   const breakdownData: {
@@ -91,16 +93,18 @@ export const DualScatterChartCard = ({
           }}
         >
           <Typography variant='subtitle2' sx={{ mb: 1, fontWeight: 'bold' }}>
-            {data.horseNumber}番
+            {data.horseNumber}
+            {t('table.horseNumber')}
           </Typography>
           <Typography variant='body2' sx={{ mb: 0.5 }}>
-            期待値: {data.x.toFixed(2)}%
+            {t('table.expectedValue')}: {data.x.toFixed(2)}%
           </Typography>
           <Typography variant='body2' sx={{ mb: 0.5 }}>
-            評価: {getEvaluationGrade(data.y)}
+            {t('table.evaluation')}: {getEvaluationGrade(data.y)}
           </Typography>
           <Typography variant='body2'>
-            馬名: {data.horseName || `馬${data.horseNumber}`}
+            {t('table.horseName')}:{' '}
+            {data.horseName || `${t('table.horseName')}${data.horseNumber}`}
           </Typography>
           <Box
             sx={{
@@ -210,7 +214,7 @@ export const DualScatterChartCard = ({
                 <Tooltip content={<CustomTooltip />} />
                 <XAxis
                   dataKey='x'
-                  name={xAxisName}
+                  name={t('table.expectedValue')}
                   tick={{
                     fill: theme.palette.text.primary,
                     fontSize: 12,
@@ -225,7 +229,7 @@ export const DualScatterChartCard = ({
                 />
                 <YAxis
                   dataKey='y'
-                  name={yAxisName}
+                  name={t('table.evaluation')}
                   tick={{
                     fill: theme.palette.text.primary,
                     fontSize: 12,

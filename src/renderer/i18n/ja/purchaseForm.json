@@ -37,7 +37,8 @@
     "column": "列目を選択してください",
     "columnSelection": "列選択",
     "boxSelection": "ボックス選択",
-    "select": "馬を選択してください"
+    "select": "馬を選択してください",
+    "horseNumber": "番"
   },
   "amount": {
     "label": "購入金額",

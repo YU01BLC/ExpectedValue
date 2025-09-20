@@ -50,7 +50,7 @@ export const RaceCharts = ({ horseData }: RaceChartsProps): JSX.Element => {
     // コース傾向データ（馬の評価に基づく）
     const courseTendency = [
       {
-        name: '先行有利',
+        name: t('chart.courseTendencyLabels.leadAdvantage'),
         value: Math.round(
           (filterHorsesByEvaluation(['S', 'A']).length / horseData.length) * 100
         ),
@@ -62,7 +62,7 @@ export const RaceCharts = ({ horseData }: RaceChartsProps): JSX.Element => {
         })),
       },
       {
-        name: '差し有利',
+        name: t('chart.courseTendencyLabels.chaseAdvantage'),
         value: Math.round(
           (filterHorsesByEvaluation(['B']).length / horseData.length) * 100
         ),
@@ -74,7 +74,7 @@ export const RaceCharts = ({ horseData }: RaceChartsProps): JSX.Element => {
         })),
       },
       {
-        name: '逃げ有利',
+        name: t('chart.courseTendencyLabels.escapeAdvantage'),
         value: Math.round(
           (filterHorsesByEvaluation(['C']).length / horseData.length) * 100
         ),
@@ -86,7 +86,7 @@ export const RaceCharts = ({ horseData }: RaceChartsProps): JSX.Element => {
         })),
       },
       {
-        name: 'その他',
+        name: t('chart.courseTendencyLabels.others'),
         value: Math.round(
           (filterHorsesByEvaluation(['D']).length / horseData.length) * 100
         ),
@@ -102,7 +102,7 @@ export const RaceCharts = ({ horseData }: RaceChartsProps): JSX.Element => {
     // 脚質分布データ（期待値に基づく）
     const legQuality = [
       {
-        name: '逃げ',
+        name: t('chart.legQualityLabels.escape'),
         value: Math.round(
           (filterHorsesByExpectedValue(1.5).length / horseData.length) * 100
         ),
@@ -114,7 +114,7 @@ export const RaceCharts = ({ horseData }: RaceChartsProps): JSX.Element => {
         })),
       },
       {
-        name: '先行',
+        name: t('chart.legQualityLabels.lead'),
         value: Math.round(
           (filterHorsesByExpectedValue(1.2, 1.5).length / horseData.length) *
             100
@@ -127,7 +127,7 @@ export const RaceCharts = ({ horseData }: RaceChartsProps): JSX.Element => {
         })),
       },
       {
-        name: '差し',
+        name: t('chart.legQualityLabels.chase'),
         value: Math.round(
           (filterHorsesByExpectedValue(1.0, 1.2).length / horseData.length) *
             100
@@ -140,7 +140,7 @@ export const RaceCharts = ({ horseData }: RaceChartsProps): JSX.Element => {
         })),
       },
       {
-        name: '追込',
+        name: t('chart.legQualityLabels.closer'),
         value: Math.round(
           (filterHorsesByExpectedValue(0, 1.0).length / horseData.length) * 100
         ),
@@ -156,7 +156,7 @@ export const RaceCharts = ({ horseData }: RaceChartsProps): JSX.Element => {
     // 血統適性データ（オッズに基づく）
     const pedigreeAptitude = [
       {
-        subject: 'スピード',
+        subject: t('chart.pedigreeAptitudeLabels.speed'),
         A: Math.round(
           horseData.reduce((sum, h) => sum + h.odds, 0) / horseData.length
         ),
@@ -167,7 +167,7 @@ export const RaceCharts = ({ horseData }: RaceChartsProps): JSX.Element => {
         fullMark: 100,
       },
       {
-        subject: 'スタミナ',
+        subject: t('chart.pedigreeAptitudeLabels.stamina'),
         A: Math.round((filterHorsesByOdds(3).length / horseData.length) * 100),
         B: Math.round(
           (filterHorsesByExpectedValue(1.2).length / horseData.length) * 100
@@ -175,7 +175,7 @@ export const RaceCharts = ({ horseData }: RaceChartsProps): JSX.Element => {
         fullMark: 100,
       },
       {
-        subject: '瞬発力',
+        subject: t('chart.pedigreeAptitudeLabels.sprint'),
         A: Math.round((filterHorsesByOdds(5).length / horseData.length) * 100),
         B: Math.round(
           (filterHorsesByExpectedValue(1.5).length / horseData.length) * 100
@@ -183,7 +183,7 @@ export const RaceCharts = ({ horseData }: RaceChartsProps): JSX.Element => {
         fullMark: 100,
       },
       {
-        subject: '持久力',
+        subject: t('chart.pedigreeAptitudeLabels.endurance'),
         A: Math.round((filterHorsesByOdds(2).length / horseData.length) * 100),
         B: Math.round(
           (filterHorsesByExpectedValue(1.0).length / horseData.length) * 100
@@ -191,7 +191,7 @@ export const RaceCharts = ({ horseData }: RaceChartsProps): JSX.Element => {
         fullMark: 100,
       },
       {
-        subject: '柔軟性',
+        subject: t('chart.pedigreeAptitudeLabels.flexibility'),
         A: Math.round((filterHorsesByOdds(4).length / horseData.length) * 100),
         B: Math.round(
           (filterHorsesByExpectedValue(1.3).length / horseData.length) * 100
@@ -199,7 +199,7 @@ export const RaceCharts = ({ horseData }: RaceChartsProps): JSX.Element => {
         fullMark: 100,
       },
       {
-        subject: 'バランス',
+        subject: t('chart.pedigreeAptitudeLabels.balance'),
         A: Math.round(
           (filterHorsesByOdds(2.5).length / horseData.length) * 100
         ),
@@ -243,7 +243,7 @@ export const RaceCharts = ({ horseData }: RaceChartsProps): JSX.Element => {
     return (
       <Box sx={{ mb: 4, textAlign: 'center', py: 4 }}>
         <Typography variant='h6' color='text.secondary'>
-          馬データがありません
+          {t('chart.noData')}
         </Typography>
       </Box>
     );
@@ -300,10 +300,10 @@ export const RaceCharts = ({ horseData }: RaceChartsProps): JSX.Element => {
         {/* 期待値 × 評価分析 */}
         <Grid size={12}>
           <DualScatterChartCard
-            title='期待値×評価分析'
+            title={t('chart.expectedValueEvaluation')}
             leftData={scatterData}
-            xAxisName='期待値'
-            yAxisName='評価'
+            xAxisName={t('table.expectedValue')}
+            yAxisName={t('table.evaluation')}
             leftColor={colors.primary}
           />
         </Grid>
