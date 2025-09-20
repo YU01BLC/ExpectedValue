@@ -28,3 +28,10 @@ dist-electron
 # Coverage reports
 coverage/
 *.lcov
+
+# Build outputs and distribution files
+release/
+build/
+dist/
+dist-electron/
+dist-ssr/
