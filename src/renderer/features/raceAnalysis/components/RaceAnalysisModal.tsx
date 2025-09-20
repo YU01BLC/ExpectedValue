@@ -10,144 +10,56 @@ import {
   Typography,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import {
-  RaceTableResponsive,
-  type HorseData,
-} from '../../../components/ui/atoms/RaceTableResponsive';
+import { useTranslation } from 'react-i18next';
+import { RaceTableResponsive } from '../../../components/ui/atoms/RaceTableResponsive';
 import { RaceCharts } from '../../../components/ui/atoms/RaceCharts';
-import {
-  RecommendedBets,
-  type RecommendedBet,
-} from '../../../components/ui/atoms/RecommendedBets';
+import { RecommendedBets } from '../../../components/ui/atoms/RecommendedBets';
+import { PurchaseForm } from '../../../components/ui/atoms/PurchaseForm';
+// import { type BetTicket } from '../../../components/ui/atoms/types/purchaseForm';
+import { mockHorseData, mockRecommendedBets } from '../data/mockData';
 
 interface RaceAnalysisModalProps {
   open: boolean;
   onClose: () => void;
 }
 
-// ソートの型定義
-type SortField =
-  | 'horseNumber'
-  | 'gateNumber'
-  | 'evaluation'
-  | 'expectedValue'
-  | 'odds';
-type SortDirection = 'asc' | 'desc';
-
-// モックデータ
-const mockHorseData: HorseData[] = [
-  {
-    id: '1',
-    name: 'サンデーレーサー',
-    horseNumber: 1,
-    gateNumber: 1,
-    evaluation: 'S',
-    expectedValue: 1.25,
-    odds: 2.8,
-    comment: '近走好調、血統適性◎',
-  },
-  {
-    id: '2',
-    name: 'トウカイテイオー',
-    horseNumber: 2,
-    gateNumber: 1,
-    evaluation: 'A',
-    expectedValue: 1.15,
-    odds: 3.2,
-    comment: '脚質先行、コース適性良',
-  },
-  {
-    id: '3',
-    name: 'ダイナミックガイ',
-    horseNumber: 3,
-    gateNumber: 2,
-    evaluation: 'B',
-    expectedValue: 0.95,
-    odds: 4.5,
-    comment: '中距離得意、騎手相性良',
-  },
-  {
-    id: '4',
-    name: 'メジロマックイーン',
-    horseNumber: 4,
-    gateNumber: 2,
-    evaluation: 'C',
-    expectedValue: 0.75,
-    odds: 6.8,
-    comment: '距離短め、調教順調',
-  },
-  {
-    id: '5',
-    name: 'オグリキャップ',
-    horseNumber: 5,
-    gateNumber: 3,
-    evaluation: 'B',
-    expectedValue: 1.05,
-    odds: 3.8,
-    comment: '差し切り型、直線勝負',
-  },
-  {
-    id: '6',
-    name: 'シンボリルドルフ',
-    horseNumber: 6,
-    gateNumber: 3,
-    evaluation: 'A',
-    expectedValue: 1.18,
-    odds: 2.9,
-    comment: '重賞経験豊富、安定感◎',
-  },
-  {
-    id: '7',
-    name: 'ナリタブライアン',
-    horseNumber: 7,
-    gateNumber: 4,
-    evaluation: 'D',
-    expectedValue: 0.45,
-    odds: 12.5,
-    comment: '距離不安、初戦',
-  },
-  {
-    id: '8',
-    name: 'ディープインパクト',
-    horseNumber: 8,
-    gateNumber: 4,
-    evaluation: 'C',
-    expectedValue: 0.82,
-    odds: 5.2,
-    comment: '血統良し、調教要観察',
-  },
-];
-
-const mockRecommendedBets: RecommendedBet[] = [
-  { type: '単勝', horses: ['サンデーレーサー'], amount: 10000 },
-  {
-    type: '馬連',
-    horses: ['サンデーレーサー', 'トウカイテイオー'],
-    amount: 5000,
-  },
-  {
-    type: '3連複',
-    horses: ['サンデーレーサー', 'トウカイテイオー', 'シンボリルドルフ'],
-    amount: 3000,
-  },
-];
-
 export const RaceAnalysisModal = ({
   open,
   onClose,
 }: RaceAnalysisModalProps): JSX.Element => {
+  const { t } = useTranslation('common');
+
   // ソート状態の管理
-  const [sortField, setSortField] = useState<SortField | null>(null);
-  const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
+  const [sortField, setSortField] = useState<string | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+  const [showPurchaseForm, setShowPurchaseForm] = useState(false);
 
   // ソート処理
-  const handleSort = (field: SortField) => {
+  const handleSort = (field: string) => {
     if (sortField === field) {
       setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
     } else {
       setSortField(field);
       setSortDirection('asc');
     }
+  };
+
+  // ソートされたデータを取得（現在は使用していないが、将来的に使用予定）
+  // const sortedHorseData = sortHorseData(
+  //   mockHorseData,
+  //   sortField || 'horseNumber',
+  //   sortDirection
+  // );
+
+  // 購入フォームの表示切り替え
+  const handleTogglePurchaseForm = () => {
+    setShowPurchaseForm(!showPurchaseForm);
+  };
+
+  // 購入実行
+  const handlePurchase = () => {
+    alert(t('purchase.completed'));
+    setShowPurchaseForm(false);
   };
 
   return (
@@ -185,7 +97,7 @@ export const RaceAnalysisModal = ({
           component='span'
           sx={{ color: 'text.primary' }}
         >
-          レース分析モーダル
+          {t('modal.raceAnalysis')}
         </Typography>
         <IconButton
           onClick={onClose}
@@ -210,7 +122,7 @@ export const RaceAnalysisModal = ({
         {/* 全頭診断テーブル */}
         <Box sx={{ mb: 4 }}>
           <Typography variant='h6' sx={{ mb: 2, color: 'text.primary' }}>
-            全頭診断
+            {t('modal.allHorseDiagnosis')}
           </Typography>
           <RaceTableResponsive
             horseData={mockHorseData}
@@ -223,8 +135,51 @@ export const RaceAnalysisModal = ({
         {/* チャートセクション */}
         <RaceCharts horseData={mockHorseData} />
 
-        {/* 推奨買い目 */}
-        <RecommendedBets recommendedBets={mockRecommendedBets} />
+        {/* 購入フォームまたは推奨買い目 */}
+        {showPurchaseForm ? (
+          <PurchaseForm
+            horses={mockHorseData.map((horse) => ({
+              number: horse.horseNumber,
+              name: horse.name,
+              odds: horse.odds,
+              expectedValue: horse.expectedValue,
+              evaluation: horse.evaluation,
+              gateNumber: horse.gateNumber,
+            }))}
+            onPurchase={handlePurchase}
+            onCancel={() => setShowPurchaseForm(false)}
+          />
+        ) : (
+          <Box sx={{ mb: 4 }}>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                mb: 2,
+              }}
+            >
+              <Typography variant='h6' sx={{ color: 'text.primary' }}>
+                {t('modal.recommendedBets')}
+              </Typography>
+              <Button
+                variant='contained'
+                onClick={handleTogglePurchaseForm}
+                sx={{
+                  background:
+                    'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  '&:hover': {
+                    background:
+                      'linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%)',
+                  },
+                }}
+              >
+                {t('purchase.openForm')}
+              </Button>
+            </Box>
+            <RecommendedBets recommendedBets={mockRecommendedBets} />
+          </Box>
+        )}
       </DialogContent>
 
       <DialogActions sx={{ p: { xs: 2, sm: 2, md: 2 }, pt: 1 }}>

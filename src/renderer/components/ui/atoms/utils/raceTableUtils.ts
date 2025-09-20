@@ -23,16 +23,45 @@ export const getEvaluationColor = (
 };
 
 /**
- * 枠番の色を取得する関数（テーマカラー使用）
+ * 枠番の色を取得する関数（netkeibaの色分けルールに準拠）
  */
-export const getGateColor = (gateNumber: number, theme: Theme): ColorInfo => {
-  return (
-    theme.palette.gate?.[gateNumber as keyof typeof theme.palette.gate] ||
-    theme.palette.gate?.default || {
-      bg: theme.palette.grey[300],
-      text: theme.palette.grey[800],
+export const getGateColor = (
+  gateNumber: number,
+  theme: Theme,
+  totalHorses?: number
+): ColorInfo => {
+  // 基本の8色
+  const baseColors = [
+    { bg: '#FFFFFF', text: '#000000' }, // 1枠 - 白背景、黒文字
+    { bg: '#000000', text: '#FFFFFF' }, // 2枠 - 黒背景、白文字
+    { bg: '#FF0000', text: '#FFFFFF' }, // 3枠 - 赤背景、白文字
+    { bg: '#0000FF', text: '#FFFFFF' }, // 4枠 - 青背景、白文字
+    { bg: '#FFFF00', text: '#000000' }, // 5枠 - 黄背景、黒文字
+    { bg: '#00FF00', text: '#000000' }, // 6枠 - 緑背景、黒文字
+    { bg: '#FFA500', text: '#FFFFFF' }, // 7枠 - オレンジ背景、白文字
+    { bg: '#FF69B4', text: '#FFFFFF' }, // 8枠 - ピンク背景、白文字
+  ];
+
+  // 17頭以上の場合：netkeibaの色分けルール
+  if (totalHorses >= 17) {
+    if (gateNumber >= 13 && gateNumber <= 15) {
+      return baseColors[6]; // オレンジ色（7枠と同じ）
     }
-  );
+    if (gateNumber >= 16 && gateNumber <= 18) {
+      return baseColors[7]; // ピンク色（8枠と同じ）
+    }
+    // 1-12枠は通常の8色循環
+    return baseColors[(gateNumber - 1) % 8];
+  }
+
+  // 16頭の場合：2枠ずつ色分け
+  if (totalHorses === 16) {
+    const colorIndex = Math.floor((gateNumber - 1) / 2);
+    return baseColors[colorIndex % 8];
+  }
+
+  // その他の場合：通常の8色循環
+  return baseColors[(gateNumber - 1) % 8];
 };
 
 /**

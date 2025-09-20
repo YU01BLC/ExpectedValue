@@ -88,8 +88,13 @@ export const RaceTableMobileView = ({
                   width: 32,
                   height: 32,
                   borderRadius: '50%',
-                  backgroundColor: getGateColor(horse.gateNumber, theme).bg,
-                  color: getGateColor(horse.gateNumber, theme).text,
+                  backgroundColor: getGateColor(
+                    horse.gateNumber,
+                    theme,
+                    horseData.length
+                  ).bg,
+                  color: getGateColor(horse.gateNumber, theme, horseData.length)
+                    .text,
                   fontWeight: 700,
                   fontSize: '0.875rem',
                   mr: 2,

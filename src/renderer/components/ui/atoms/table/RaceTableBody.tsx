@@ -23,7 +23,11 @@ export const RaceTableBody = ({
   return (
     <TableBody>
       {horseData.map((horse) => {
-        const gateColor = getGateColor(horse.gateNumber, theme);
+        const gateColor = getGateColor(
+          horse.gateNumber,
+          theme,
+          horseData.length
+        );
         return (
           <TableRow
             key={horse.id}

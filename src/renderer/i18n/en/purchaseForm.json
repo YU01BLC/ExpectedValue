@@ -1,0 +1,93 @@
+{
+  "title": "Purchase Form",
+  "betSelection": {
+    "title": "Bet Selection",
+    "betType": "Bet Type",
+    "method": "Method"
+  },
+  "nagashi": {
+    "title": "Please select the type of betting ticket",
+    "multi1": "1-axis multi flow",
+    "multi2": "2-axis multi flow",
+    "first": "1st place fixed flow",
+    "second": "2nd place fixed flow",
+    "third": "3rd place fixed flow",
+    "firstSecond": "1st and 2nd place fixed flow"
+  },
+  "horseSelection": {
+    "axis": {
+      "first": "Please select the 1st place fixed horse",
+      "second": "Please select the 2nd place fixed horse",
+      "third": "Please select the 3rd place fixed horse",
+      "firstSecond": "Please select the 1st place fixed horse",
+      "multi1": "Please select the axis horse for 1-axis multi flow",
+      "multi2": "Please select the axis horses for 2-axis multi flow"
+    },
+    "secondFixed": "Please select the 2nd place fixed horse",
+    "opponent": {
+      "first": "Please select the 2nd and 3rd place flow horses",
+      "second": "Please select the 1st and 3rd place flow horses",
+      "third": "Please select the 1st and 2nd place flow horses",
+      "firstSecond": "Please select the 3rd place flow horses",
+      "multi1": "Please select the opponent horses for 1-axis multi flow",
+      "multi2": "Please select the opponent horses for 2-axis multi flow"
+    },
+    "multiple": "(Multiple selection allowed)",
+    "single": "(1 horse only)",
+    "column": "Select column",
+    "columnSelection": "Column Selection",
+    "boxSelection": "Box Selection",
+    "select": "Please select horses",
+    "horseNumber": ""
+  },
+  "amount": {
+    "label": "Purchase Amount",
+    "placeholder": "100",
+    "helperText": "Please enter in 100 yen units",
+    "errorText": "Please enter 100 yen or more in 100 yen units"
+  },
+  "points": {
+    "label": "Purchase Points",
+    "unit": "points"
+  },
+  "buttons": {
+    "addTicket": "Add Ticket",
+    "cancel": "Cancel",
+    "purchase": "Purchase",
+    "removeTicket": "Remove Ticket"
+  },
+  "purchaseContent": {
+    "title": "Purchase Content",
+    "empty": "Please select tickets to purchase",
+    "selectedHorses": "Selected Horses",
+    "combinations": "Number of Combinations",
+    "total": "Total"
+  },
+  "betTypes": {
+    "exacta": "Exacta",
+    "quinella": "Quinella",
+    "wide": "Wide",
+    "trio": "Trio",
+    "trifecta": "Trifecta"
+  },
+  "betMethods": {
+    "single": "Single",
+    "formation": "Formation",
+    "box": "Box",
+    "nagashi": "Nagashi"
+  },
+  "errors": {
+    "betTypeRequired": "Please select a bet type",
+    "methodRequired": "Please select a method",
+    "horsesRequired": "Please select horses",
+    "amountRequired": "Please enter 100 yen or more",
+    "noValidCombinations": "No valid combinations available",
+    "ticketsRequired": "Please select tickets to purchase",
+    "firstFixedHorsesRequired": "Please select the 1st place fixed horse and 2nd/3rd place flow horses",
+    "secondFixedHorsesRequired": "Please select the 2nd place fixed horse and 1st/3rd place flow horses",
+    "thirdFixedHorsesRequired": "Please select the 3rd place fixed horse and 1st/2nd place flow horses",
+    "firstSecondFixedHorsesRequired": "Please select the 1st place fixed horse, 2nd place fixed horse, and 3rd place flow horses",
+    "multi1AxisHorsesRequired": "Please select the axis horse and opponent horses for 1-axis multi flow",
+    "multi2AxisHorsesRequired": "Please select 2 axis horses and opponent horses for 2-axis multi flow"
+  }
+}

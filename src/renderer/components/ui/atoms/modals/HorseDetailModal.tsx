@@ -1,4 +1,4 @@
-import { type JSX } from 'react';
+import { type JSX, useMemo } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -8,8 +8,8 @@ import {
   IconButton,
   Box,
   Typography,
-  Grid,
   useTheme,
+  Grid,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import type { HorseDetailModalProps } from '../types/raceTable';
@@ -26,7 +26,24 @@ export const HorseDetailModal = ({
 }: HorseDetailModalProps): JSX.Element => {
   const theme = useTheme();
 
-  if (!horse) return <></>;
+  // エラーハンドリング: 馬データが存在しない場合は早期リターン
+  // 馬の詳細情報の計算（メモ化）
+  const horseDetails = useMemo(() => {
+    if (!horse) {
+      return null;
+    }
+    const gateColor = getGateColor(horse.gateNumber, theme, 18); // デフォルト18頭
+    const evaluationColor = getEvaluationColor(horse.evaluation, theme);
+
+    return {
+      gateColor,
+      evaluationColor,
+    };
+  }, [horse, theme]);
+
+  if (!horse || !horseDetails) {
+    return <></>;
+  }
 
   return (
     <Dialog
@@ -34,12 +51,15 @@ export const HorseDetailModal = ({
       onClose={onClose}
       maxWidth='sm'
       fullWidth
+      fullScreen={{ xs: true, sm: false }}
       aria-labelledby='horse-detail-title'
       aria-describedby='horse-detail-content'
       PaperProps={{
         sx: {
           backgroundColor: 'rgba(0, 0, 0, 0.95)',
           backdropFilter: 'blur(10px)',
+          m: { xs: 0, sm: 2 },
+          maxHeight: { xs: '100vh', sm: '90vh' },
         },
       }}
       BackdropProps={{
@@ -69,8 +89,8 @@ export const HorseDetailModal = ({
         </Box>
       </DialogTitle>
       <DialogContent id='horse-detail-content'>
-        <Grid container spacing={2} sx={{ mt: 1 }}>
-          <Grid item xs={6}>
+        <Grid container spacing={{ xs: 1, sm: 2 }} sx={{ mt: 1 }}>
+          <Grid size={{ xs: 12, sm: 6 }}>
             <Typography variant='body2' color='text.secondary' sx={{ mb: 1 }}>
               枠番
             </Typography>
@@ -82,8 +102,8 @@ export const HorseDetailModal = ({
                 width: 32,
                 height: 32,
                 borderRadius: '50%',
-                backgroundColor: getGateColor(horse.gateNumber, theme).bg,
-                color: getGateColor(horse.gateNumber, theme).text,
+                backgroundColor: horseDetails.gateColor.bg,
+                color: horseDetails.gateColor.text,
                 fontWeight: 700,
                 fontSize: '0.875rem',
                 boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
@@ -92,7 +112,7 @@ export const HorseDetailModal = ({
               {horse.gateNumber}
             </Box>
           </Grid>
-          <Grid item xs={6}>
+          <Grid size={{ xs: 12, sm: 6 }}>
             <Typography variant='body2' color='text.secondary' sx={{ mb: 1 }}>
               馬番
             </Typography>
@@ -102,7 +122,7 @@ export const HorseDetailModal = ({
               </Typography>
             </Box>
           </Grid>
-          <Grid item xs={6}>
+          <Grid size={{ xs: 12, sm: 6 }}>
             <Typography variant='body2' color='text.secondary' sx={{ mb: 1 }}>
               評価
             </Typography>
@@ -114,7 +134,7 @@ export const HorseDetailModal = ({
                 width: 32,
                 height: 32,
                 borderRadius: '50%',
-                backgroundColor: getEvaluationColor(horse.evaluation, theme),
+                backgroundColor: horseDetails.evaluationColor,
                 color: 'white',
                 fontWeight: 700,
                 fontSize: '0.875rem',
@@ -124,7 +144,7 @@ export const HorseDetailModal = ({
               {horse.evaluation}
             </Box>
           </Grid>
-          <Grid item xs={6}>
+          <Grid size={{ xs: 12, sm: 6 }}>
             <Typography variant='body2' color='text.secondary' sx={{ mb: 1 }}>
               オッズ
             </Typography>
@@ -134,7 +154,7 @@ export const HorseDetailModal = ({
               </Typography>
             </Box>
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Typography variant='body2' color='text.secondary' sx={{ mb: 1 }}>
               期待値
             </Typography>
@@ -144,7 +164,7 @@ export const HorseDetailModal = ({
               </Typography>
             </Box>
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Typography variant='body2' color='text.secondary' sx={{ mb: 1 }}>
               コメント
             </Typography>

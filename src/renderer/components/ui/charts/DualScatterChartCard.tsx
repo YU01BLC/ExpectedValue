@@ -6,10 +6,12 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
+  Scatter,
 } from 'recharts';
-import { useTheme, Box } from '@mui/material';
+import { useTheme, Box, Typography } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import { ChartCard } from './ChartCard';
-import { getGateColor } from '../utils/themeColors';
+import { getGateColor } from '../atoms/utils/raceTableUtils';
 
 interface ScatterData {
   x: number;
@@ -23,19 +25,16 @@ interface ScatterData {
 interface DualScatterChartCardProps {
   title: string;
   leftData: ScatterData[];
-  xAxisName: string;
-  yAxisName: string;
   leftColor: string;
 }
 
 export const DualScatterChartCard = ({
   title,
   leftData,
-  xAxisName,
-  yAxisName,
   leftColor,
 }: DualScatterChartCardProps): JSX.Element => {
   const theme = useTheme();
+  const { t } = useTranslation('common');
 
   // 内訳データを空にしてチャートエリアを広げる
   const breakdownData: {
@@ -44,6 +43,87 @@ export const DualScatterChartCard = ({
     color?: string;
     horses?: { number: number; name: string }[];
   }[] = [];
+
+  // シンプルなX軸範囲設定
+  const getXAxisRange = () => {
+    if (leftData.length === 0) return { minX: 0.8, maxX: 1.4 };
+
+    const xValues = leftData.map((entry) => entry.x);
+    const minX = Math.min(...xValues);
+    const maxX = Math.max(...xValues);
+
+    // データの範囲に十分な余裕を持たせる（見切れ防止）
+    const padding = (maxX - minX) * 0.2; // 20%のパディングに増加
+    return {
+      minX: Math.max(0.7, minX - padding), // 最小値は0.7%に拡張
+      maxX: Math.min(1.5, maxX + padding), // 最大値は1.5%に拡張
+    };
+  };
+
+  const xAxisRange = getXAxisRange();
+
+  // 評価を数値からグレードに変換する関数
+  const getEvaluationGrade = (value: number): string => {
+    if (value >= 4.5) return 'S';
+    if (value >= 4.0) return 'A';
+    if (value >= 3.5) return 'B';
+    if (value >= 3.0) return 'C';
+    if (value >= 2.5) return 'D';
+    return 'E';
+  };
+
+  // カスタムTooltipコンポーネント
+  const CustomTooltip = ({
+    active,
+    payload,
+  }: {
+    active?: boolean;
+    payload?: Array<{ payload: ScatterData }>;
+  }) => {
+    if (active && payload && payload.length > 0) {
+      const data = payload[0].payload;
+      const gateColor = getGateColor(data.gateNumber || 1, theme, 18);
+
+      return (
+        <Box
+          sx={{
+            backgroundColor: theme.palette.background.paper,
+            border: `1px solid ${theme.palette.divider}`,
+            borderRadius: 1,
+            p: 1.5,
+            boxShadow: theme.shadows[3],
+          }}
+        >
+          <Typography variant='subtitle2' sx={{ mb: 1, fontWeight: 'bold' }}>
+            {data.horseNumber}
+            {t('table.horseNumber')}
+          </Typography>
+          <Typography variant='body2' sx={{ mb: 0.5 }}>
+            {t('table.expectedValue')}: {data.x.toFixed(2)}%
+          </Typography>
+          <Typography variant='body2' sx={{ mb: 0.5 }}>
+            {t('table.evaluation')}: {getEvaluationGrade(data.y)}
+          </Typography>
+          <Typography variant='body2'>
+            {t('table.horseName')}:{' '}
+            {data.horseName || `${t('table.horseName')}${data.horseNumber}`}
+          </Typography>
+          <Box
+            sx={{
+              display: 'inline-block',
+              width: 12,
+              height: 12,
+              backgroundColor: gateColor.bg,
+              borderRadius: '50%',
+              border: `2px solid ${gateColor.text}`,
+              mt: 0.5,
+            }}
+          />
+        </Box>
+      );
+    }
+    return null;
+  };
 
   // データポイントの位置に基づいて動的に高さを計算
   const calculateDynamicHeight = () => {
@@ -88,152 +168,128 @@ export const DualScatterChartCard = ({
       breakdownData={breakdownData}
       showBreakdown={false}
     >
-      <Box sx={{ width: '100%', height: '100%' }}>
-        <ResponsiveContainer width='100%' height={dynamicHeight - 100}>
-          <ScatterChart
-            data={leftData}
-            margin={{ top: 40, right: 40, bottom: 40, left: 40 }}
+      <Box
+        sx={{
+          width: '100%',
+          height: '100%',
+          overflow: 'hidden', // 親コンテナのオーバーフローを制御
+        }}
+      >
+        <Box
+          sx={{
+            width: '100%',
+            height: dynamicHeight - 100,
+            overflowX: 'auto', // 横スクロールを有効化
+            overflowY: 'hidden',
+            '&::-webkit-scrollbar': {
+              height: 6,
+            },
+            '&::-webkit-scrollbar-track': {
+              backgroundColor: theme.palette.grey[800],
+              borderRadius: 3,
+            },
+            '&::-webkit-scrollbar-thumb': {
+              backgroundColor: theme.palette.grey[600],
+              borderRadius: 3,
+              '&:hover': {
+                backgroundColor: theme.palette.grey[500],
+              },
+            },
+          }}
+        >
+          <Box
+            sx={{
+              width: { xs: 1000, sm: '100%' }, // SP表示のみ固定幅
+              height: '100%',
+              flexShrink: 0, // 縮小を防ぐ
+            }}
           >
-            <CartesianGrid
-              stroke={theme.palette.divider}
-              strokeDasharray='3 3'
-            />
-            <XAxis
-              dataKey='x'
-              name={xAxisName}
-              tick={{
-                fill: theme.palette.text.primary,
-                fontSize: 12,
-              }}
-              axisLine={{ stroke: theme.palette.divider }}
-              tickLine={{ stroke: theme.palette.divider }}
-              type='number'
-              scale='linear'
-              domain={[0, 2]}
-            />
-            <YAxis
-              dataKey='y'
-              name={yAxisName}
-              tick={{
-                fill: theme.palette.text.primary,
-                fontSize: 12,
-              }}
-              axisLine={{ stroke: theme.palette.divider }}
-              tickLine={{ stroke: theme.palette.divider }}
-              type='number'
-              scale='linear'
-              domain={yDomain}
-            />
-            <Tooltip
-              cursor={{
-                strokeDasharray: '3 3',
-                stroke: theme.palette.divider,
-              }}
-              contentStyle={{
-                backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                border: '1px solid rgba(0, 0, 0, 0.2)',
-                borderRadius: '8px',
-                color: '#000000',
-                fontSize: 12,
-                fontWeight: 500,
-              }}
-              formatter={(value, name, props) => {
-                const data = props.payload;
-                const evaluationText = data?.evaluation || '';
-                const horseNumber = data?.horseNumber || '';
-                if (name === 'y') {
-                  return [
-                    `評価: ${evaluationText}`,
-                    `馬番${horseNumber}: ${data?.name || ''}`,
-                  ];
-                } else {
-                  return [
-                    `期待値: ${value}`,
-                    `馬番${horseNumber}: ${data?.name || ''}`,
-                  ];
-                }
-              }}
-            />
-            {/* 馬番を直接表示 */}
-            {leftData.map((entry, index) => {
-              const gateColor = getGateColor(entry.gateNumber || 1, theme);
-              const x = 40 + (entry.x / 2) * 60; // X軸の位置を計算（マージン考慮）
-              const yRange = yDomain[1] - yDomain[0];
-              const y = 40 + ((yDomain[1] - entry.y) / yRange) * 60; // Y軸の位置を計算（動的ドメイン考慮）
-              return (
-                <g key={`horse-${index}`}>
-                  {/* 背景円 */}
-                  <circle
-                    cx={`${x}%`}
-                    cy={`${y}%`}
-                    r='16'
-                    fill={gateColor.bg}
-                    stroke={gateColor.text}
-                    strokeWidth='2'
-                    style={{ cursor: 'pointer' }}
-                    onMouseEnter={(e) => {
-                      // ホバー時の処理
-                      const tooltip = document.createElement('div');
-                      tooltip.style.position = 'fixed';
-                      tooltip.style.backgroundColor =
-                        'rgba(255, 255, 255, 0.95)';
-                      tooltip.style.border = '1px solid rgba(0, 0, 0, 0.2)';
-                      tooltip.style.borderRadius = '8px';
-                      tooltip.style.padding = '8px';
-                      tooltip.style.fontSize = '12px';
-                      tooltip.style.color = '#000000';
-                      tooltip.style.fontWeight = '500';
-                      tooltip.style.zIndex = '9999';
-                      tooltip.style.pointerEvents = 'none';
-                      tooltip.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.3)';
-                      tooltip.innerHTML = `
-                        <div>期待値: ${entry.x}</div>
-                        <div>評価: ${entry.evaluation}</div>
-                        <div>馬番${entry.horseNumber}: ${entry.name}</div>
-                      `;
-                      document.body.appendChild(tooltip);
+            <ResponsiveContainer width='100%' height='100%'>
+              <ScatterChart
+                data={leftData}
+                margin={{ top: 40, right: 40, bottom: 40, left: 40 }}
+              >
+                <CartesianGrid
+                  stroke={theme.palette.divider}
+                  strokeDasharray='3 3'
+                />
+                <Tooltip content={<CustomTooltip />} />
+                <XAxis
+                  dataKey='x'
+                  name={t('table.expectedValue')}
+                  tick={{
+                    fill: theme.palette.text.primary,
+                    fontSize: 12,
+                  }}
+                  axisLine={{ stroke: theme.palette.divider }}
+                  tickLine={{ stroke: theme.palette.divider }}
+                  type='number'
+                  scale='linear'
+                  domain={[xAxisRange.minX, xAxisRange.maxX]}
+                  ticks={[0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4]}
+                  tickFormatter={(value) => `${value.toFixed(2)}%`}
+                />
+                <YAxis
+                  dataKey='y'
+                  name={t('table.evaluation')}
+                  tick={{
+                    fill: theme.palette.text.primary,
+                    fontSize: 12,
+                  }}
+                  axisLine={{ stroke: theme.palette.divider }}
+                  tickLine={{ stroke: theme.palette.divider }}
+                  type='number'
+                  scale='linear'
+                  domain={yDomain}
+                  tickFormatter={(value) => getEvaluationGrade(value)}
+                />
+                {/* RechartsのScatterコンポーネントを使用してホバー機能を有効化 */}
+                <Scatter
+                  data={leftData}
+                  fill={theme.palette.primary.main}
+                  shape={(props: {
+                    cx: number;
+                    cy: number;
+                    payload: ScatterData;
+                  }) => {
+                    const { cx, cy, payload } = props;
+                    const gateColor = getGateColor(
+                      payload?.gateNumber || 1,
+                      theme,
+                      18
+                    );
 
-                      const updatePosition = (e: MouseEvent) => {
-                        tooltip.style.left = e.clientX + 10 + 'px';
-                        tooltip.style.top = e.clientY - 10 + 'px';
-                      };
-
-                      updatePosition(e as unknown as MouseEvent);
-                      document.addEventListener('mousemove', updatePosition);
-
-                      const cleanup = () => {
-                        if (document.body.contains(tooltip)) {
-                          document.body.removeChild(tooltip);
-                        }
-                        document.removeEventListener(
-                          'mousemove',
-                          updatePosition
-                        );
-                        document.removeEventListener('mouseleave', cleanup);
-                      };
-
-                      e.currentTarget.addEventListener('mouseleave', cleanup);
-                    }}
-                  />
-                  {/* 馬番テキスト */}
-                  <text
-                    x={`${x}%`}
-                    y={`${y}%`}
-                    textAnchor='middle'
-                    dominantBaseline='middle'
-                    fontSize='14'
-                    fontWeight='bold'
-                    fill='white'
-                    stroke='black'
-                    strokeWidth='0.5'
-                  >
-                    {entry.horseNumber}
-                  </text>
-                </g>
-              );
-            })}
-          </ScatterChart>
-        </ResponsiveContainer>
+                    return (
+                      <g>
+                        <circle
+                          cx={cx}
+                          cy={cy}
+                          r={12}
+                          fill={gateColor.bg}
+                          stroke={gateColor.text}
+                          strokeWidth={2}
+                        />
+                        <text
+                          x={cx}
+                          y={cy}
+                          textAnchor='middle'
+                          dominantBaseline='middle'
+                          fontSize={10}
+                          fontWeight='bold'
+                          fill={gateColor.text}
+                          stroke='white'
+                          strokeWidth={0.5}
+                        >
+                          {payload?.horseNumber}
+                        </text>
+                      </g>
+                    );
+                  }}
+                />
+              </ScatterChart>
+            </ResponsiveContainer>
+          </Box>
+        </Box>
       </Box>
     </ChartCard>
   );

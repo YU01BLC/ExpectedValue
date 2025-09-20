@@ -129,3 +129,25 @@ const AppProviders = ({ children }: AppProvidersProps) => {
 - `src/main.tsx`: このコンポーネントを使用
 - `src/routes/index.tsx`: 子コンポーネントとして`RouterProvider`を渡す
 - 将来的な Provider ファイル: `src/renderer/providers/`配下に配置予定
+
+## 購入フォーム機能
+
+### 概要
+
+レース分析結果に基づいて馬券を購入する機能を提供。netkeiba スタイルの UI で直感的な馬券購入が可能。
+
+### 主要コンポーネント
+
+- **PurchaseForm**: メイン購入フォーム
+- **BetSelectionForm**: 馬券種別・買い方選択
+- **HorseSelector**: 馬選択テーブル
+- **PurchaseSummary**: 購入内容サマリー
+- **ActionButtons**: 購入・キャンセルボタン
+
+### 機能
+
+- 馬券種別（単勝、馬連、3 連複など）の選択
+- 買い方（単複、流し、フォーメーション、ボックス）の選択
+- netkeiba スタイルの馬選択テーブル
+- 組み合わせ数計算とバリデーション
+- レスポンシブ対応
