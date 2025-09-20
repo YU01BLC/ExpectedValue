@@ -25,16 +25,12 @@ interface ScatterData {
 interface DualScatterChartCardProps {
   title: string;
   leftData: ScatterData[];
-  xAxisName: string;
-  yAxisName: string;
   leftColor: string;
 }
 
 export const DualScatterChartCard = ({
   title,
   leftData,
-  xAxisName,
-  yAxisName,
   leftColor,
 }: DualScatterChartCardProps): JSX.Element => {
   const theme = useTheme();
@@ -77,7 +73,13 @@ export const DualScatterChartCard = ({
   };
 
   // カスタムTooltipコンポーネント
-  const CustomTooltip = ({ active, payload }: any) => {
+  const CustomTooltip = ({
+    active,
+    payload,
+  }: {
+    active?: boolean;
+    payload?: Array<{ payload: ScatterData }>;
+  }) => {
     if (active && payload && payload.length > 0) {
       const data = payload[0].payload;
       const gateColor = getGateColor(data.gateNumber || 1, theme, 18);

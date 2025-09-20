@@ -27,12 +27,11 @@ export const HorseDetailModal = ({
   const theme = useTheme();
 
   // エラーハンドリング: 馬データが存在しない場合は早期リターン
-  if (!horse) {
-    return <></>;
-  }
-
   // 馬の詳細情報の計算（メモ化）
   const horseDetails = useMemo(() => {
+    if (!horse) {
+      return null;
+    }
     const gateColor = getGateColor(horse.gateNumber, theme, 18); // デフォルト18頭
     const evaluationColor = getEvaluationColor(horse.evaluation, theme);
 
@@ -40,7 +39,11 @@ export const HorseDetailModal = ({
       gateColor,
       evaluationColor,
     };
-  }, [horse.gateNumber, horse.evaluation, theme]);
+  }, [horse, theme]);
+
+  if (!horse || !horseDetails) {
+    return <></>;
+  }
 
   return (
     <Dialog

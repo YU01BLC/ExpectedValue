@@ -28,7 +28,7 @@ export const sortHorseData = (
         aValue = a.gateNumber;
         bValue = b.gateNumber;
         break;
-      case 'evaluation':
+      case 'evaluation': {
         // 評価を数値に変換（S=5, A=4, B=3, C=2, D=1）
         const evaluationOrder = { S: 5, A: 4, B: 3, C: 2, D: 1 };
         aValue =
@@ -36,6 +36,7 @@ export const sortHorseData = (
         bValue =
           evaluationOrder[b.evaluation as keyof typeof evaluationOrder] || 0;
         break;
+      }
       case 'expectedValue':
         aValue = a.expectedValue;
         bValue = b.expectedValue;

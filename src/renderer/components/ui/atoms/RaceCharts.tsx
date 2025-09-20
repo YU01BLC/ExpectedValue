@@ -217,6 +217,7 @@ export const RaceCharts = ({ horseData }: RaceChartsProps): JSX.Element => {
     filterHorsesByEvaluation,
     filterHorsesByExpectedValue,
     filterHorsesByOdds,
+    t,
   ]);
 
   // 期待値×評価データの変換（メモ化）
@@ -302,8 +303,6 @@ export const RaceCharts = ({ horseData }: RaceChartsProps): JSX.Element => {
           <DualScatterChartCard
             title={t('chart.expectedValueEvaluation')}
             leftData={scatterData}
-            xAxisName={t('table.expectedValue')}
-            yAxisName={t('table.evaluation')}
             leftColor={colors.primary}
           />
         </Grid>

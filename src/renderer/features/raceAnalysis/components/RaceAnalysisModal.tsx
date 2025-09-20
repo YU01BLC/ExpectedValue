@@ -11,23 +11,12 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useTranslation } from 'react-i18next';
-import {
-  RaceTableResponsive,
-  type HorseData,
-} from '../../../components/ui/atoms/RaceTableResponsive';
+import { RaceTableResponsive } from '../../../components/ui/atoms/RaceTableResponsive';
 import { RaceCharts } from '../../../components/ui/atoms/RaceCharts';
-import {
-  RecommendedBets,
-  type RecommendedBet,
-} from '../../../components/ui/atoms/RecommendedBets';
+import { RecommendedBets } from '../../../components/ui/atoms/RecommendedBets';
 import { PurchaseForm } from '../../../components/ui/atoms/PurchaseForm';
-import { type BetTicket } from '../../../components/ui/atoms/types/purchaseForm';
+// import { type BetTicket } from '../../../components/ui/atoms/types/purchaseForm';
 import { mockHorseData, mockRecommendedBets } from '../data/mockData';
-import {
-  sortHorseData,
-  type SortField,
-  type SortDirection,
-} from '../utils/sortUtils';
 
 interface RaceAnalysisModalProps {
   open: boolean;
@@ -41,12 +30,12 @@ export const RaceAnalysisModal = ({
   const { t } = useTranslation('common');
 
   // ソート状態の管理
-  const [sortField, setSortField] = useState<SortField | null>(null);
-  const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
+  const [sortField, setSortField] = useState<string | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [showPurchaseForm, setShowPurchaseForm] = useState(false);
 
   // ソート処理
-  const handleSort = (field: SortField) => {
+  const handleSort = (field: string) => {
     if (sortField === field) {
       setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
     } else {
@@ -55,12 +44,12 @@ export const RaceAnalysisModal = ({
     }
   };
 
-  // ソートされたデータを取得
-  const sortedHorseData = sortHorseData(
-    mockHorseData,
-    sortField || 'horseNumber',
-    sortDirection
-  );
+  // ソートされたデータを取得（現在は使用していないが、将来的に使用予定）
+  // const sortedHorseData = sortHorseData(
+  //   mockHorseData,
+  //   sortField || 'horseNumber',
+  //   sortDirection
+  // );
 
   // 購入フォームの表示切り替え
   const handleTogglePurchaseForm = () => {
@@ -68,7 +57,7 @@ export const RaceAnalysisModal = ({
   };
 
   // 購入実行
-  const handlePurchase = (tickets: BetTicket[]) => {
+  const handlePurchase = () => {
     alert(t('purchase.completed'));
     setShowPurchaseForm(false);
   };
