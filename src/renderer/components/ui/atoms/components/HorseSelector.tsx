@@ -43,7 +43,8 @@ export const HorseSelector = ({
   onAxisHorseToggle,
   onNagashiTypeChange,
 }: HorseSelectorProps): JSX.Element => {
-  const { t } = useTranslation('purchaseForm');
+  const { t } = useTranslation('common');
+  const { t: tPurchase } = useTranslation('purchaseForm');
   const theme = useTheme();
 
   if (selectedMethod === 'nagashi') {
@@ -52,7 +53,7 @@ export const HorseSelector = ({
         {/* 流し馬券の場合：タイプ選択 */}
         <Box sx={{ mb: 2 }}>
           <Typography variant='subtitle2' sx={{ mb: 1 }}>
-            {t('nagashi.title')}
+            {tPurchase('nagashi.title')}
           </Typography>
           <FormControl component='fieldset'>
             <RadioGroup
@@ -72,37 +73,37 @@ export const HorseSelector = ({
               <FormControlLabel
                 value='multi1'
                 control={<Radio size='small' />}
-                label={t('nagashi.multi1')}
+                label={tPurchase('nagashi.multi1')}
                 sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}
               />
               <FormControlLabel
                 value='multi2'
                 control={<Radio size='small' />}
-                label={t('nagashi.multi2')}
+                label={tPurchase('nagashi.multi2')}
                 sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}
               />
               <FormControlLabel
                 value='first'
                 control={<Radio size='small' />}
-                label={t('nagashi.first')}
+                label={tPurchase('nagashi.first')}
                 sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}
               />
               <FormControlLabel
                 value='second'
                 control={<Radio size='small' />}
-                label={t('nagashi.second')}
+                label={tPurchase('nagashi.second')}
                 sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}
               />
               <FormControlLabel
                 value='third'
                 control={<Radio size='small' />}
-                label={t('nagashi.third')}
+                label={tPurchase('nagashi.third')}
                 sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}
               />
               <FormControlLabel
                 value='firstSecond'
                 control={<Radio size='small' />}
-                label={t('nagashi.firstSecond')}
+                label={tPurchase('nagashi.firstSecond')}
                 sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}
               />
             </RadioGroup>
@@ -111,7 +112,7 @@ export const HorseSelector = ({
 
         {/* 軸馬選択テーブル */}
         <Typography variant='subtitle2' sx={{ mb: 1 }}>
-          {t(`horseSelection.axis.${nagashiType}`)}
+          {tPurchase(`horseSelection.axis.${nagashiType}`)}
         </Typography>
         <TableContainer component={Paper} sx={{ mb: 2, maxHeight: 300 }}>
           <Table size='small'>
@@ -237,9 +238,9 @@ export const HorseSelector = ({
 
         {/* 相手馬選択テーブル */}
         <Typography variant='subtitle2' sx={{ mb: 1 }}>
-          {t(`horseSelection.opponent.${nagashiType}`)}
+          {tPurchase(`horseSelection.opponent.${nagashiType}`)}
           <Typography component='span' variant='caption' sx={{ ml: 1 }}>
-            {t('horseSelection.multiple')}
+            {tPurchase('horseSelection.multiple')}
           </Typography>
         </Typography>
         <TableContainer component={Paper} sx={{ mb: 2, maxHeight: 300 }}>
@@ -355,10 +356,10 @@ export const HorseSelector = ({
 
   const getColumnLabel = (index: number) => {
     if (selectedBetType === 'win' || selectedBetType === 'place') {
-      return t('horseSelection.select');
+      return tPurchase('horseSelection.select');
     }
     if (selectedMethod === 'box') {
-      return t('horseSelection.boxSelection');
+      return tPurchase('horseSelection.boxSelection');
     }
     if (selectedBetType === 'trifecta') {
       const labels = [
@@ -366,7 +367,9 @@ export const HorseSelector = ({
         t('table.secondPlace'),
         t('table.thirdPlace'),
       ];
-      return labels[index] || `${index + 1}${t('horseSelection.column')}`;
+      return (
+        labels[index] || `${index + 1}${tPurchase('horseSelection.column')}`
+      );
     }
     if (selectedBetType === 'trio') {
       const labels = [
@@ -374,32 +377,38 @@ export const HorseSelector = ({
         t('table.secondPlace'),
         t('table.thirdPlace'),
       ];
-      return labels[index] || `${index + 1}${t('horseSelection.column')}`;
+      return (
+        labels[index] || `${index + 1}${tPurchase('horseSelection.column')}`
+      );
     }
     if (selectedBetType === 'exacta') {
       const labels = [t('table.firstPlace'), t('table.secondPlace')];
-      return labels[index] || `${index + 1}${t('horseSelection.column')}`;
+      return (
+        labels[index] || `${index + 1}${tPurchase('horseSelection.column')}`
+      );
     }
     if (selectedBetType === 'quinella' || selectedBetType === 'wide') {
       const labels = [t('table.firstPlace'), t('table.secondPlace')];
-      return labels[index] || `${index + 1}${t('horseSelection.column')}`;
+      return (
+        labels[index] || `${index + 1}${tPurchase('horseSelection.column')}`
+      );
     }
-    return `${index + 1}${t('horseSelection.column')}`;
+    return `${index + 1}${tPurchase('horseSelection.column')}`;
   };
 
   return (
     <Box sx={{ mb: 2 }}>
       <Typography variant='subtitle2' sx={{ mb: 1 }}>
         {selectedBetType === 'win' || selectedBetType === 'place'
-          ? t('horseSelection.select')
-          : t('horseSelection.columnSelection')}
+          ? tPurchase('horseSelection.select')
+          : tPurchase('horseSelection.columnSelection')}
         <Typography component='span' variant='caption' sx={{ ml: 1 }}>
           (
           {selectedBetType === 'win' || selectedBetType === 'place'
-            ? t('horseSelection.multiple')
+            ? tPurchase('horseSelection.multiple')
             : selectedMethod === 'single'
-            ? t('horseSelection.single')
-            : t('horseSelection.multiple')}
+            ? tPurchase('horseSelection.single')
+            : tPurchase('horseSelection.multiple')}
           )
         </Typography>
       </Typography>
