@@ -1,0 +1,9 @@
+{
+  "name": "expected-value-distribution",
+  "version": "1.1.0",
+  "description": "競馬期待値分析 配布ファイル",
+  "scripts": {
+    "build": "echo 'Static files - no build required'",
+    "start": "echo 'Static files - no start required'"
+  }
+}
