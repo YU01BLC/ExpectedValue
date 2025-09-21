@@ -27,7 +27,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
   deferredPrompt = e as BeforeInstallPromptEvent;
 
   // インストールボタンを表示（オプション）
-  console.log('PWAインストール可能');
+  console.log('PWA installable');
 });
 
 // インストールボタンのクリック処理

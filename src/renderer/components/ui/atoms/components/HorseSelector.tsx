@@ -409,9 +409,11 @@ export const HorseSelector = ({
           <TableHead>
             <TableRow>
               <TableCell sx={{ fontWeight: 'bold', minWidth: 60 }}>
-                馬番
+                {t('table.horseNumber')}
               </TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>馬名</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>
+                {t('table.horseName')}
+              </TableCell>
               {Array.from({ length: getColumnCount() }, (_, index) => (
                 <TableCell
                   key={index}
