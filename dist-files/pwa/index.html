@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="./vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    
+    <!-- PWA設定 -->
+    <link rel="manifest" href="./manifest.json" />
+    <meta name="theme-color" content="#4CAF50" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="競馬期待値分析" />
+    <link rel="apple-touch-icon" href="./icons/icon-192x192.png" />
+    
+    <!-- CSP: 開発はViteのHMRでunsafe-inlineが必要になる場合あり。本番ビルドでは'unsafe-inline'を外す運用を推奨 -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' http://localhost:5173 ws://localhost:5173;"
+    />
+    <title>競馬期待値分析</title>
+    <script type="module" crossorigin src="./assets/index-XSph9AI6.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-BRyUwIHl.css">
+  </head>
+  <body class="dark antialiased">
+    <div id="root"></div>
+  </body>
+</html>
