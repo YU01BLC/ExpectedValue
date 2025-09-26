@@ -1,9 +1,10 @@
 import type { JSX } from 'react';
-import { ArrowUpRight, Wallet } from 'lucide-react';
+import { ArrowUpRight, Wallet, History } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import { RichStatCard } from '@/components/ui/RichStatCard';
 import { RecommendationsCard } from '@/components/ui/RecommendationsCard';
+import { PurchaseHistoryCard } from '@/components/ui/atoms/PurchaseHistoryCard';
 
 interface SummaryData {
   roi: number;
@@ -21,6 +22,8 @@ interface RecommendationItem {
 interface SummaryCardsProps {
   summaryData: SummaryData;
   recommendations: RecommendationItem[];
+  onHistoryClick?: (date: string, venue: string) => void;
+  refreshTrigger?: number;
 }
 
 /**
@@ -35,6 +38,8 @@ interface SummaryCardsProps {
 export const SummaryCards = ({
   summaryData,
   recommendations,
+  onHistoryClick,
+  refreshTrigger,
 }: SummaryCardsProps): JSX.Element => {
   const { t } = useTranslation('dashboard');
   const topRecommendations = [...recommendations].sort((a, b) => b.ev - a.ev);
@@ -48,6 +53,21 @@ export const SummaryCards = ({
         alignItems: 'stretch',
         overflowX: 'auto',
         pb: 1,
+        scrollbarWidth: 'thin',
+        scrollbarColor: 'rgba(148, 163, 184, 0.3) transparent',
+        '&::-webkit-scrollbar': {
+          height: '6px',
+        },
+        '&::-webkit-scrollbar-track': {
+          background: 'transparent',
+        },
+        '&::-webkit-scrollbar-thumb': {
+          background: 'rgba(148, 163, 184, 0.3)',
+          borderRadius: '3px',
+          '&:hover': {
+            background: 'rgba(148, 163, 184, 0.5)',
+          },
+        },
       }}
     >
       <Box sx={{ flexShrink: 0, width: 500 }}>
@@ -76,6 +96,12 @@ export const SummaryCards = ({
           icon={<ArrowUpRight size={16} />}
           items={topRecommendations.map((r) => ({ label: r.horse, ev: r.ev }))}
           color='primary.main'
+        />
+      </Box>
+      <Box sx={{ flexShrink: 0, width: 500 }}>
+        <PurchaseHistoryCard
+          onHistoryClick={onHistoryClick}
+          refreshTrigger={refreshTrigger}
         />
       </Box>
     </Box>

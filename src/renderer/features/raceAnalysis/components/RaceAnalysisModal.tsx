@@ -21,11 +21,13 @@ import { mockHorseData, mockRecommendedBets } from '../data/mockData';
 interface RaceAnalysisModalProps {
   open: boolean;
   onClose: () => void;
+  onPurchaseComplete?: () => void;
 }
 
 export const RaceAnalysisModal = ({
   open,
   onClose,
+  onPurchaseComplete,
 }: RaceAnalysisModalProps): JSX.Element => {
   const { t } = useTranslation('common');
 
@@ -147,7 +149,16 @@ export const RaceAnalysisModal = ({
               gateNumber: horse.gateNumber,
             }))}
             onPurchase={handlePurchase}
-            onCancel={() => setShowPurchaseForm(false)}
+            onCancel={() => {
+              setShowPurchaseForm(false);
+              onClose(); // レース分析モーダルも閉じる
+            }}
+            raceInfo={{
+              date: new Date().toISOString().split('T')[0], // 現在の日付
+              venue: '東京競馬場',
+              raceNumber: 1,
+              raceName: 'サンプルレース',
+            }}
           />
         ) : (
           <Box sx={{ mb: 4 }}>

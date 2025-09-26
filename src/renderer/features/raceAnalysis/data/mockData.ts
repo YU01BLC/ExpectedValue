@@ -189,43 +189,28 @@ export const mockHorseData: HorseData[] = [
 
 export const mockRecommendedBets: RecommendedBet[] = [
   {
-    id: '1',
     type: '馬単',
     horses: ['1', '16'],
-    odds: 6.7,
-    confidence: 85,
-    reason: '血統優秀な2頭の組み合わせ',
+    amount: 1000,
   },
   {
-    id: '2',
     type: '馬連',
     horses: ['1', '15'],
-    odds: 3.2,
-    confidence: 78,
-    reason: '安定感抜群の組み合わせ',
+    amount: 2000,
   },
   {
-    id: '3',
     type: '三連複',
     horses: ['1', '15', '16'],
-    odds: 12.5,
-    confidence: 72,
-    reason: '上位3頭の確実な組み合わせ',
+    amount: 500,
   },
   {
-    id: '4',
     type: 'ワイド',
     horses: ['2', '6'],
-    odds: 1.8,
-    confidence: 68,
-    reason: '脚質先行の安定組み合わせ',
+    amount: 1500,
   },
   {
-    id: '5',
     type: '三連単',
     horses: ['16', '1', '15'],
-    odds: 18.2,
-    confidence: 65,
-    reason: '高配当狙いの組み合わせ',
+    amount: 300,
   },
 ];

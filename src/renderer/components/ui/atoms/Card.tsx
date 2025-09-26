@@ -177,6 +177,8 @@ export const Card = memo(
             flexDirection: 'column',
             flex: 1,
             justifyContent: 'flex-start',
+            minHeight: 0,
+            overflow: 'hidden',
           }}
         >
           {/* メイン値表示 */}

@@ -9,6 +9,11 @@ export const useBetSelection = (horses: Horse[]) => {
   const [nagashiType, setNagashiType] = useState<NagashiType>('multi1');
 
   // 馬を選択/選択解除（列ごと）
+  // 枠番を計算する関数
+  const getWakuNumber = (horseNumber: number): number => {
+    return Math.ceil(horseNumber / 2);
+  };
+
   const handleHorseToggle = useCallback(
     (horseNumber: number, columnIndex: number) => {
       setColumnHorses((prevColumns) => {
@@ -27,6 +32,36 @@ export const useBetSelection = (horses: Horse[]) => {
               ? 1
               : horses.length; // その他は単式なら1頭まで、それ以外は出馬頭数まで
 
+          // 枠連の単式では、同じ枠の馬を複数列で選択できない
+          if (selectedMethod === 'single' && selectedBetType === 'wakuren') {
+            const currentWaku = getWakuNumber(horseNumber);
+            // 他の列で同じ枠の馬が選択されているかチェック
+            const isSameWakuSelectedInOtherColumn = newColumns.some(
+              (col, idx) =>
+                idx !== columnIndex &&
+                col.some((h) => getWakuNumber(h) === currentWaku)
+            );
+            if (isSameWakuSelectedInOtherColumn) {
+              return prevColumns; // 選択を拒否
+            }
+          }
+          // その他の馬券種別では、同じ馬を複数列で選択できない（順序が重要な馬券種別）
+          else if (
+            selectedMethod === 'single' &&
+            (selectedBetType === 'exacta' ||
+              selectedBetType === 'trifecta' ||
+              selectedBetType === 'quinella' ||
+              selectedBetType === 'wide')
+          ) {
+            // 他の列で同じ馬が選択されているかチェック
+            const isAlreadySelectedInOtherColumn = newColumns.some(
+              (col, idx) => idx !== columnIndex && col.includes(horseNumber)
+            );
+            if (isAlreadySelectedInOtherColumn) {
+              return prevColumns; // 選択を拒否
+            }
+          }
+
           if (column.length < maxHorses) {
             newColumns[columnIndex] = [...column, horseNumber];
           }
@@ -43,17 +78,64 @@ export const useBetSelection = (horses: Horse[]) => {
   }, []);
 
   // 馬券種別変更時のリセット
-  const handleBetTypeChange = useCallback((betType: string) => {
-    setSelectedBetType(betType);
-    // 単勝・複勝の場合は自動的に単式を選択
-    if (betType === 'win' || betType === 'place') {
-      setSelectedMethod('single');
-    } else {
-      setSelectedMethod('');
-    }
-    setColumnHorses([]);
-    setAxisHorse(null);
-  }, []);
+  const handleBetTypeChange = useCallback(
+    (betType: string) => {
+      setSelectedBetType(betType);
+      // 単勝・複勝の場合は自動的に単式を選択
+      if (betType === 'win' || betType === 'place') {
+        setSelectedMethod('single');
+      } else {
+        setSelectedMethod('');
+      }
+      setColumnHorses([]);
+      setAxisHorse(null);
+
+      // 各馬券種別で無効な流しタイプをリセット
+      if (betType === 'exacta') {
+        // 馬単: 3着固定、1着・2着固定、軸2頭流しは無効
+        if (
+          nagashiType === 'third' ||
+          nagashiType === 'firstSecond' ||
+          nagashiType === 'multi2'
+        ) {
+          setNagashiType('multi1');
+        }
+      } else if (betType === 'wide' || betType === 'quinella') {
+        // ワイド・馬連: 固定流しと軸2頭流しは無効
+        if (
+          nagashiType === 'first' ||
+          nagashiType === 'second' ||
+          nagashiType === 'third' ||
+          nagashiType === 'firstSecond' ||
+          nagashiType === 'multi2'
+        ) {
+          setNagashiType('multi1');
+        }
+      } else if (betType === 'wakuren') {
+        // 枠連: 固定流しと軸2頭流しは無効（軸1頭流しマルチのみ）
+        if (
+          nagashiType === 'first' ||
+          nagashiType === 'second' ||
+          nagashiType === 'third' ||
+          nagashiType === 'firstSecond' ||
+          nagashiType === 'multi2'
+        ) {
+          setNagashiType('multi1');
+        }
+      } else if (betType === 'trio') {
+        // 三連複: 固定流しは無効（軸2頭流しは有効）
+        if (
+          nagashiType === 'first' ||
+          nagashiType === 'second' ||
+          nagashiType === 'third' ||
+          nagashiType === 'firstSecond'
+        ) {
+          setNagashiType('multi1');
+        }
+      }
+    },
+    [nagashiType]
+  );
 
   // 買い方変更時のリセット
   const handleMethodChange = useCallback((method: string) => {

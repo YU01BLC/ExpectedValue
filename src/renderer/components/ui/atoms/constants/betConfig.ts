@@ -8,7 +8,7 @@ export const BET_TYPES: BetTypeConfig[] = [
   { value: 'win', label: '単勝', columns: 1, description: '1着のみ' },
   { value: 'place', label: '複勝', columns: 1, description: '1-3着のいずれか' },
   {
-    value: 'bracket',
+    value: 'wakuren',
     label: '枠連',
     columns: 2,
     description: '1着・2着の枠組み合わせ',

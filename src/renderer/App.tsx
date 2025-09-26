@@ -1,10 +1,11 @@
 import type { ReactNode } from 'react';
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { createAppTheme } from '@/theme/theme';
 import '@/i18n';
 import './pwa';
+import { initializeMockData } from './utils/initializeMockData';
 
 /**
  * アプリ全体のプロバイダを集約するルートコンポーネント
@@ -21,6 +22,11 @@ interface AppProvidersProps {
 
 const AppProviders = ({ children }: AppProvidersProps) => {
   const theme = createAppTheme();
+
+  useEffect(() => {
+    // モックデータを初期化
+    initializeMockData();
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>

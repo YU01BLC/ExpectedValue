@@ -43,16 +43,51 @@ export const generateTicketCombinations = (
   } else if (method === 'formation') {
     // フォーメーション: 各列の馬の組み合わせ
     if (betType.includes('quinella') || betType.includes('wide')) {
-      // 2頭の組み合わせ: 1列目 × 2列目
+      // 2頭の組み合わせ: 1列目 × 2列目（重複排除、順序関係なし）
       const firstColumn = columnHorses[0] || [];
       const secondColumn = columnHorses[1] || [];
+      const addedCombinations = new Set<string>();
+
       firstColumn.forEach((first) => {
         secondColumn.forEach((second) => {
-          combinations.push([`${first}番`, `${second}番`]);
+          if (first !== second) {
+            // 馬連・ワイドでは順序が関係ないので、ソートして重複チェック
+            const sorted = [first, second].sort((a, b) => a - b);
+            const key = `${sorted[0]}-${sorted[1]}`;
+
+            if (!addedCombinations.has(key)) {
+              addedCombinations.add(key);
+              combinations.push([`${first}番`, `${second}番`]);
+            }
+          }
         });
       });
-    } else if (betType.includes('trio') || betType.includes('trifecta')) {
-      // 3頭の組み合わせ: 1列目 × 2列目 × 3列目
+    } else if (betType.includes('trio')) {
+      // 三連複フォーメーション: 1列目 × 2列目 × 3列目（重複なし、順序関係なし）
+      const firstColumn = columnHorses[0] || [];
+      const secondColumn = columnHorses[1] || [];
+      const thirdColumn = columnHorses[2] || [];
+      const addedCombinations = new Set<string>();
+
+      firstColumn.forEach((first) => {
+        secondColumn.forEach((second) => {
+          thirdColumn.forEach((third) => {
+            // 同じ馬番号が重複しない場合のみ処理
+            if (first !== second && first !== third && second !== third) {
+              // 三連複では順序が関係ないので、ソートして重複チェック
+              const sorted = [first, second, third].sort((a, b) => a - b);
+              const key = `${sorted[0]}-${sorted[1]}-${sorted[2]}`;
+
+              if (!addedCombinations.has(key)) {
+                addedCombinations.add(key);
+                combinations.push([`${first}番`, `${second}番`, `${third}番`]);
+              }
+            }
+          });
+        });
+      });
+    } else if (betType.includes('trifecta')) {
+      // 三連単フォーメーション: 1列目 × 2列目 × 3列目（順序重要）
       const firstColumn = columnHorses[0] || [];
       const secondColumn = columnHorses[1] || [];
       const thirdColumn = columnHorses[2] || [];

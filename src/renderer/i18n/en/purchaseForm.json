@@ -64,9 +64,12 @@
     "total": "Total"
   },
   "betTypes": {
+    "win": "Win",
+    "place": "Place",
     "exacta": "Exacta",
     "quinella": "Quinella",
     "wide": "Wide",
+    "wakuren": "Wakuren",
     "trio": "Trio",
     "trifecta": "Trifecta"
   },
@@ -89,5 +92,13 @@
     "firstSecondFixedHorsesRequired": "Please select the 1st place fixed horse, 2nd place fixed horse, and 3rd place flow horses",
     "multi1AxisHorsesRequired": "Please select the axis horse and opponent horses for 1-axis multi flow",
     "multi2AxisHorsesRequired": "Please select 2 axis horses and opponent horses for 2-axis multi flow"
+  },
+  "success": {
+    "title": "Purchase Complete!",
+    "message": "Your bet has been successfully purchased",
+    "totalAmount": "Total Amount",
+    "totalPoints": "Total Points",
+    "note": "You can view your purchase history on the dashboard",
+    "close": "Close"
   }
 }

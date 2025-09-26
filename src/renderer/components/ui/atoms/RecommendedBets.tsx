@@ -1,6 +1,5 @@
 import { type JSX } from 'react';
 import { Box, Typography } from '@mui/material';
-import { useTranslation } from 'react-i18next';
 
 // 推奨買い目の型定義
 export interface RecommendedBet {
@@ -16,8 +15,6 @@ interface RecommendedBetsProps {
 export const RecommendedBets = ({
   recommendedBets,
 }: RecommendedBetsProps): JSX.Element => {
-  const { t } = useTranslation('common');
-
   return (
     <Box
       sx={{
@@ -27,9 +24,6 @@ export const RecommendedBets = ({
       }}
     >
       <Box sx={{ flex: 1 }}>
-        <Typography variant='h6' sx={{ mb: 2, color: 'text.primary' }}>
-          {t('modal.recommendedBets')}
-        </Typography>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
           {recommendedBets.map((bet, index) => (
             <Box

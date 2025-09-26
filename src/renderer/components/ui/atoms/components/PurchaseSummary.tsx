@@ -31,11 +31,11 @@ export const PurchaseSummary = ({
     const parts = type.split(' ');
     if (parts.length === 1) {
       // 通常の馬券種別
-      return t(`betTypes.${parts[0]}`);
+      return t(`betTypes.${parts[0]}`, { defaultValue: type });
     } else if (parts.length === 2) {
       // 流し馬券
-      const betType = t(`betTypes.${parts[0]}`);
-      const method = t(`betMethods.${parts[1]}`);
+      const betType = t(`betTypes.${parts[0]}`, { defaultValue: parts[0] });
+      const method = t(`betMethods.${parts[1]}`, { defaultValue: parts[1] });
       return `${betType}${method}`;
     }
     return type;
@@ -122,8 +122,7 @@ export const PurchaseSummary = ({
                         color='text.secondary'
                         sx={{ mb: 0.5, display: 'block' }}
                       >
-                        {t('purchaseContent.combinations')}:{' '}
-                        {ticket.combinations.length}
+                        {t('purchaseContent.combinations')}: {ticket.points}
                         {t('points.unit')}
                       </Typography>
                       <Box
@@ -165,7 +164,7 @@ export const PurchaseSummary = ({
                     </Box>
                   }
                   secondary={`¥${ticket.amount.toLocaleString()} × ${
-                    ticket.combinations.length
+                    ticket.points
                   } = ¥${ticket.totalAmount.toLocaleString()}`}
                 />
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>

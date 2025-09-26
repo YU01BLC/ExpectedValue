@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { JSX } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, Grid } from '@mui/material';
 import { SummaryCards } from './components/SummaryCards';
 import { ChartCard } from './components/ChartCard';
 import { SearchArea, type SearchFilters } from '@/components/ui';
@@ -10,7 +10,7 @@ import { RaceAnalysisModal } from '../raceAnalysis';
 /**
  * ダッシュボードページ（単一ビュー）
  *
- * @description 上段: 3枚のカード（総回収率 / 収支 / 本日のおすすめ）、下段: 回収率推移チャート（カード右上にタブ）
+ * @description 上段: 4枚のカード（総回収率 / 収支 / 本日のおすすめ / 購入履歴）、下段: 回収率推移チャート（カード右上にタブ）
  * @returns JSX.Element
  */
 // 定数定義
@@ -41,6 +41,7 @@ const Dashboard = (): JSX.Element => {
     raceNumber: 1,
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   const dashboardSummaryData: Record<
     'day' | 'week' | 'month' | 'year',
@@ -143,6 +144,16 @@ const Dashboard = (): JSX.Element => {
     setIsModalOpen(false);
   };
 
+  const handleHistoryClick = (date: string, venue: string) => {
+    // TODO: 購入履歴の詳細表示処理を実装
+    console.log('購入履歴クリック:', { date, venue });
+  };
+
+  const handlePurchaseComplete = () => {
+    // 購入完了時に購入履歴を更新
+    setRefreshTrigger((prev) => prev + 1);
+  };
+
   return (
     <Box>
       <Box
@@ -186,6 +197,8 @@ const Dashboard = (): JSX.Element => {
       <SummaryCards
         summaryData={dashboardSummaryData[period]}
         recommendations={horseRecommendations[period]}
+        onHistoryClick={handleHistoryClick}
+        refreshTrigger={refreshTrigger}
       />
 
       <ChartCard
@@ -194,7 +207,11 @@ const Dashboard = (): JSX.Element => {
         onPeriodChange={setPeriod}
       />
 
-      <RaceAnalysisModal open={isModalOpen} onClose={handleModalClose} />
+      <RaceAnalysisModal
+        open={isModalOpen}
+        onClose={handleModalClose}
+        onPurchaseComplete={handlePurchaseComplete}
+      />
     </Box>
   );
 };

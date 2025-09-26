@@ -11,15 +11,34 @@ import { validateTicketAddition } from './utils/validation';
 import { BetSelectionForm } from './components/BetSelectionForm';
 import { PurchaseSummary } from './components/PurchaseSummary';
 import { ActionButtons } from './components/ActionButtons';
+import { PurchaseSuccessModal } from './PurchaseSuccessModal';
+import { usePurchaseCompletion } from '../../../hooks/usePurchaseCompletion';
 
 export const PurchaseForm = ({
   horses,
   onPurchase,
   onCancel,
+  raceInfo,
 }: PurchaseFormProps): JSX.Element => {
   const { t } = useTranslation('purchaseForm');
   const [tickets, setTickets] = useState<BetTicket[]>([]);
   const [error, setError] = useState('');
+
+  const {
+    handlePurchaseComplete,
+    successModalOpen,
+    successData,
+    handleSuccessModalClose,
+  } = usePurchaseCompletion({
+    onPurchaseComplete: () => {
+      // 購入完了時の処理（成功メッセージなど）
+      console.log('購入が完了しました！');
+    },
+    onModalClose: () => {
+      // モーダルを閉じる
+      onCancel();
+    },
+  });
 
   const {
     selectedBetType,
@@ -113,9 +132,11 @@ export const PurchaseForm = ({
     const newTicket: BetTicket = {
       id: `ticket-${Date.now()}`,
       type: `${selectedBetType} ${selectedMethod}`,
+      betType: selectedBetType, // 馬券種別を設定
       horses: selectedHorses,
       combinations: generatedCombinations,
       amount: amount,
+      points: combinations, // 購入点数を設定
       totalAmount: amount * combinations,
       ...nagashiDetails,
       ...formationDetails,
@@ -137,7 +158,14 @@ export const PurchaseForm = ({
       setError(t('errors.ticketsRequired'));
       return;
     }
-    onPurchase(tickets);
+
+    // 購入完了処理を実行
+    if (raceInfo) {
+      handlePurchaseComplete(tickets, raceInfo);
+    } else {
+      // レース情報がない場合は従来の処理
+      onPurchase(tickets);
+    }
   };
 
   return (
@@ -191,6 +219,16 @@ export const PurchaseForm = ({
           isPurchaseDisabled={tickets.length === 0}
         />
       </Box>
+
+      {/* 購入成功モーダル */}
+      {successData && (
+        <PurchaseSuccessModal
+          open={successModalOpen}
+          onClose={handleSuccessModalClose}
+          totalAmount={successData.totalAmount}
+          totalPoints={successData.totalPoints}
+        />
+      )}
     </Box>
   );
 };

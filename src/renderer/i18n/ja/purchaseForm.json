@@ -64,9 +64,12 @@
     "total": "合計"
   },
   "betTypes": {
+    "win": "単勝",
+    "place": "複勝",
     "exacta": "馬単",
     "quinella": "馬連",
     "wide": "ワイド",
+    "wakuren": "枠連",
     "trio": "三連複",
     "trifecta": "三連単"
   },
@@ -89,5 +92,13 @@
     "firstSecondFixedHorsesRequired": "1着固定馬、2着固定馬、3着流し馬を選択してください",
     "multi1AxisHorsesRequired": "軸1頭流しマルチの軸馬と相手馬を選択してください",
     "multi2AxisHorsesRequired": "軸2頭流しマルチの軸馬2頭と相手馬を選択してください"
+  },
+  "success": {
+    "title": "購入完了！",
+    "message": "馬券の購入が正常に完了しました",
+    "totalAmount": "購入金額",
+    "totalPoints": "購入点数",
+    "note": "購入履歴はダッシュボードで確認できます",
+    "close": "閉じる"
   }
 }
